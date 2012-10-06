@@ -1,0 +1,12 @@
+- Une botte fait-elle annuler les attaques existantes (du domaine de la botte) ? NON
+	- > ex : "Panne d'Essence" sur la pile de bataille, je pose "Citerne" (qui prévient des attaques "Panne d'essence"). Annulation de le panne d'essence ?
+
+- Les 4 protections du "Véhicule Prioritaire" incluent-elles ses "défenses naturelles" (feu rouge et limitation à 50) ? OUI
+
+- Combien de joueurs maximum (sachant qu'il y a 5 feux verts et 1 botte permettant de démarrer : "véhicule prioritaire") ? 2 à 4
+
+================================
+
+- Doit-on modéliser les attaques/parades ? NON
+- Peut-on utiliser des points d'extension/commentaires lors d'un extends ? OUI
+- Lien entre une pile (joueur ou jeu) et un joueur ? NON (déjà existante via carte)
