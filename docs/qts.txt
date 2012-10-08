@@ -14,6 +14,5 @@
 ================================
 07-10-2012
 
-- nbPlayers utile ? Déjà accessible via players.length
-- Player abstract ou non ? Si non, utile dans le cas des getters/setters
-- Où placer les classes héritées d'Exception
+- nbPlayers utile ? Déjà accessible via players.length => OUI
+- Où placer les classes héritées d'Exception => Package "exceptions"
