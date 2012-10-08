@@ -10,3 +10,10 @@
 - Doit-on modéliser les attaques/parades ? NON
 - Peut-on utiliser des points d'extension/commentaires lors d'un extends ? OUI
 - Lien entre une pile (joueur ou jeu) et un joueur ? NON (déjà existante via carte)
+
+================================
+07-10-2012
+
+- nbPlayers utile ? Déjà accessible via players.length
+- Player abstract ou non ? Si non, utile dans le cas des getters/setters
+- Où placer les classes héritées d'Exception
