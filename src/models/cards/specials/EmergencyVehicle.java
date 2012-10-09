@@ -1,6 +1,6 @@
 package models.cards.specials;
 
-public class EmergencyVehicle {
+public class EmergencyVehicle extends SpecialCard {
 
 	private EmergencyVehicle() {
 	}

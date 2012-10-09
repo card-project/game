@@ -8,7 +8,7 @@ public class Cistern extends SpecialCard {
 		private static final Cistern INSTANCE = new Cistern();
 	}
 
-	public Cistern getInstance() {
+	public static Cistern getInstance() {
 		return CisternHolder.INSTANCE;
 	}
 }

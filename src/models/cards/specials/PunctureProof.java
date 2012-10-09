@@ -1,6 +1,6 @@
 package models.cards.specials;
 
-public final class PunctureProof {
+public final class PunctureProof extends SpecialCard {
 	private PunctureProof() {
 	}
 
