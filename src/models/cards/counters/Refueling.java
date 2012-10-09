@@ -1,23 +1,15 @@
 package models.cards.counters;
 
-import java.util.LinkedList;
-
 import models.cards.attacks.GasLeak;
 
 public class Refueling extends CounterCard {
 	private static final Integer MAX_INSTANCES = 4;
 	private static final GasLeak OPPOSITE_CLASS = null;
+	private static Integer INSTANCE_COUNTER = 0;
 
-	private Refueling() {
-		
-	}
-	
-	public static LinkedList<Refueling> getInstances() {
-		LinkedList<Refueling> instances = new LinkedList<>();
-		for (int i = 0; i < MAX_INSTANCES ; i++) {
-			instances.add( new Refueling() );
+	public Refueling() {
+		if (++INSTANCE_COUNTER > MAX_INSTANCES) {
+			throw new IllegalStateException( "Too many instances" );
 		}
-		
-		return instances;
 	}
 }

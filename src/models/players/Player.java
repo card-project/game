@@ -26,19 +26,19 @@ public abstract class Player {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public void setAlias( String string ) {
 		alias = string;
 	}
-	
+
 	public String getAlias() {
 		return alias;
 	}
-	
+
 	public void draw( Card c ) {
 		this.handStack.add( c );
 	}
-	
+
 	public HandStack getHandStack() {
 		return this.handStack;
 	}
