@@ -1,6 +1,5 @@
 package models.players;
 
-import models.cards.Card;
 import models.players.strategies.Strategy;
 
 public class AIPlayer extends Player {

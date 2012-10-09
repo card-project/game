@@ -4,4 +4,10 @@
 *.jar
 *.war
 *.ear
+
+# Temporary Files #
 *~
+
+# Eclipse Files #
+.classpath
+.project

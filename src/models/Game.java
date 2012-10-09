@@ -1,14 +1,7 @@
 package models;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 
-import models.cards.AttackCard;
-import models.cards.Card;
-import models.cards.CounterCard;
-import models.cards.MilestoneCard;
-import models.cards.SpecialCard;
 import models.exceptions.AILevelOutOfBoundsException;
 import models.exceptions.AliasAlreadyChosenException;
 import models.exceptions.DistanceGoalException;
@@ -114,26 +107,12 @@ public class Game {
 		this.deckStack = new DeckStack();
 		this.discardStack = new DiscardStack();
 		
-		for ( int i = 0; i < AttackCard.MAX_INSTANCES ; i++ ) {
-			this.deckStack.add( new AttackCard() );		
-		}
-		
-		for ( int i = 0; i < CounterCard.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new CounterCard() );
-		}
-		
-		for ( int i = 0; i < MilestoneCard.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new MilestoneCard() );
-		}
-		
-		for ( int i = 0; i < SpecialCard.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new SpecialCard() );
-		}
+		// TODO initiate cards.
 		
 		Collections.shuffle( this.deckStack );
 	}
 
-	public void preparePlayers() {
+	public void preparePlayersHand() {
 		// Draw initial hand (4 cards) to each player.
 		for( Player p : players ) {
 			for (int i = 0; i < MAX_HAND_CARDS; i++) {

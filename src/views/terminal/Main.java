@@ -2,7 +2,6 @@ package views.terminal;
 
 import java.util.Scanner;
 
-
 import models.Game;
 import models.exceptions.AILevelOutOfBoundsException;
 import models.exceptions.AliasAlreadyChosenException;
@@ -122,7 +121,7 @@ public class Main {
 		/* PLAYERS HAND */
 		
 		System.out.println( "Distributing cards to players..." );
-		currentGame.preparePlayers( );
+		currentGame.preparePlayersHand( );
 		
 		for( Player p : currentGame.getPlayers() ) {
 			System.out.println( p.getHandStack() );
