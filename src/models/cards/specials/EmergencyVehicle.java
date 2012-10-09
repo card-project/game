@@ -2,15 +2,14 @@ package models.cards.specials;
 
 
 public class EmergencyVehicle {
-	private static final EmergencyVehicle SINGLETON = new EmergencyVehicle();
 
-	private EmergencyVehicle() {
-		if ( SINGLETON != null ) {
-			throw new IllegalStateException( "Already instantiated" );
-		}
+	private EmergencyVehicle() { }
+	
+	private static class EmergencyVehicleHolder {
+		private static final EmergencyVehicle INSTANCE = new EmergencyVehicle();
 	}
 	
 	public static EmergencyVehicle getInstance() {
-		return SINGLETON;
+		return EmergencyVehicleHolder.INSTANCE;
 	}
 }

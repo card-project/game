@@ -2,15 +2,13 @@ package models.cards.specials;
 
 
 public class Cistern extends SpecialCard {
-	private static final Cistern SINGLETON = new Cistern();
+	private Cistern() { }
 
-	private Cistern() {
-		if ( SINGLETON != null ) {
-			throw new IllegalStateException( "Already instantiated" );
-		}
+	private static class CisternHolder {
+		private static final Cistern INSTANCE = new Cistern();
 	}
 	
 	public Cistern getInstance() {
-		return SINGLETON;
+		return CisternHolder.INSTANCE;
 	}
 }

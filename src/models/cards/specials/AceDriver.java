@@ -2,15 +2,13 @@ package models.cards.specials;
 
 
 public class AceDriver extends SpecialCard {
-	private static final AceDriver SINGLETON = new AceDriver();
-
-	private AceDriver() {
-		if ( SINGLETON != null ) {
-			throw new IllegalStateException( "Already instantiated" );
-		}
+	private AceDriver() { }
+	
+	private static class AceDriverHolder {
+		private static final AceDriver INSTANCE = new AceDriver();
 	}
 	
 	public static AceDriver getInstance() {
-		return SINGLETON;
+		return AceDriverHolder.INSTANCE;
 	}
 }
