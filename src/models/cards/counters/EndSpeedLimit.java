@@ -3,7 +3,7 @@ package models.cards.counters;
 import models.cards.attacks.SpeedLimit;
 
 public class EndSpeedLimit extends CounterCard {
-	private static final Integer MAX_INSTANCES = 4;
+	public static final Integer MAX_INSTANCES = 4;
 	private static final SpeedLimit OPPOSITE_CLASS = null;
 	private static Integer INSTANCE_COUNTER = 0;
 
