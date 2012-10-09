@@ -114,6 +114,7 @@ public class Main {
 				} while (userChoiceIsIncorrect);
 			}
 		}
+		input.close();
 
 		/* GAME PREPARATION */
 
@@ -124,12 +125,6 @@ public class Main {
 
 		System.out.println( "Distributing cards to players..." );
 		currentGame.preparePlayersHand();
-
-		for (Player p : currentGame.getPlayers()) {
-			System.out.println( p.getHandStack() );
-		}
-
-		input.close();
 
 	}
 }

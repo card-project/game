@@ -2,7 +2,25 @@ package models;
 
 import java.util.Collections;
 
+import models.cards.attacks.Accident;
+import models.cards.attacks.GasLeak;
+import models.cards.attacks.Puncture;
 import models.cards.attacks.RedLight;
+import models.cards.attacks.SpeedLimit;
+import models.cards.counters.EndSpeedLimit;
+import models.cards.counters.GreenLight;
+import models.cards.counters.Refueling;
+import models.cards.counters.Reparation;
+import models.cards.counters.SpareWheel;
+import models.cards.milestones.Milestone100;
+import models.cards.milestones.Milestone200;
+import models.cards.milestones.Milestone25;
+import models.cards.milestones.Milestone50;
+import models.cards.milestones.Milestone75;
+import models.cards.specials.AceDriver;
+import models.cards.specials.Cistern;
+import models.cards.specials.EmergencyVehicle;
+import models.cards.specials.PunctureProof;
 import models.exceptions.AILevelOutOfBoundsException;
 import models.exceptions.AliasAlreadyChosenException;
 import models.exceptions.DistanceGoalException;
@@ -124,10 +142,79 @@ public class Game {
 		this.deckStack = DeckStack.getInstance();
 		this.discardStack = DiscardStack.getInstance();
 
-		for (RedLight rl : RedLight.getInstances()) {
-
+		/* ADD ATTACK CARDS */
+		
+		for (int i = 0; i < Accident.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new Accident() );
 		}
+		
+		for (int i = 0; i < GasLeak.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new GasLeak() );
+		}
+		
+		for (int i = 0; i < Puncture.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new Puncture() );
+		}
+		
+		for (int i = 0; i < RedLight.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new RedLight() );
+		}
+		
+		for (int i = 0; i < SpeedLimit.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new SpeedLimit() );
+		}
+		
+		/* ADD COUNTER CARDS */
+		
+		for (int i = 0; i < Reparation.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new Reparation() );
+		}
+		
+		for (int i = 0; i < Refueling.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new Refueling() );
+		}
+		
+		for (int i = 0; i < SpareWheel.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new SpareWheel() );
+		}
+		
+		for (int i = 0; i < GreenLight.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new GreenLight() );
+		}
+		
+		for (int i = 0; i < EndSpeedLimit.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new EndSpeedLimit() );
+		}
+		
+		/* ADD SPECIALS CARDS */
 
+		this.deckStack.add( EmergencyVehicle.getInstance() );
+		this.deckStack.add( AceDriver.getInstance() );
+		this.deckStack.add( Cistern.getInstance() );
+		this.deckStack.add( PunctureProof.getInstance() );
+		
+		/* ADD MILESTONES CARDS */
+
+		for (int i = 0; i < Milestone25.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new Milestone25() );
+		}
+		
+		for (int i = 0; i < Milestone50.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new Milestone50() );
+		}
+		
+		for (int i = 0; i < Milestone75.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new Milestone75() );
+		}
+		
+		for (int i = 0; i < Milestone100.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new Milestone100() );
+		}
+		
+		for (int i = 0; i < Milestone200.MAX_INSTANCES ; i++) {
+			this.deckStack.add( new Milestone200() );
+		}
+		
 		Collections.shuffle( this.deckStack );
 	}
 
