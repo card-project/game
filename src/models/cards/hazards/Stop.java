@@ -8,7 +8,7 @@ public class Stop extends HazardCard {
 	private static final GoRoll OPPOSITE_CLASS = null;
 
 	public Stop() {
-		if (++INSTANCE_COUNTER > MAX_INSTANCES) {
+		if ( ++INSTANCE_COUNTER > MAX_INSTANCES ) {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}

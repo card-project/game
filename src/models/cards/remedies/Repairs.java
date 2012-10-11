@@ -8,7 +8,7 @@ public class Repairs extends RemedyCard {
 	private static final Accident OPPOSITE_CLASS = null;
 
 	public Repairs() {
-		if (++INSTANCE_COUNTER > MAX_INSTANCES) {
+		if ( ++INSTANCE_COUNTER > MAX_INSTANCES ) {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}

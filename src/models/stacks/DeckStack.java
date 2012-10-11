@@ -2,7 +2,7 @@ package models.stacks;
 
 public class DeckStack extends GameStack {
 	private DeckStack() {
-		
+
 	}
 
 	private static class DeckStackHolder {

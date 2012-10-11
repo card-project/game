@@ -8,7 +8,7 @@ public class SpeedLimit extends HazardCard {
 	private static final EndOfLimit OPPOSITE_CLASS = null;
 
 	public SpeedLimit() {
-		if (++INSTANCE_COUNTER > MAX_INSTANCES) {
+		if ( ++INSTANCE_COUNTER > MAX_INSTANCES ) {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}

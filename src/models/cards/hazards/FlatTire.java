@@ -8,7 +8,7 @@ public class FlatTire extends HazardCard {
 	private static final SpareTire OPPOSITE_CLASS = null;
 
 	public FlatTire() {
-		if (++INSTANCE_COUNTER > MAX_INSTANCES) {
+		if ( ++INSTANCE_COUNTER > MAX_INSTANCES ) {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}

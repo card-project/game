@@ -8,7 +8,7 @@ public class OutOfGas extends HazardCard {
 	private static final Gasoline OPPOSITE_CLASS = null;
 
 	public OutOfGas() {
-		if (++INSTANCE_COUNTER > MAX_INSTANCES) {
+		if ( ++INSTANCE_COUNTER > MAX_INSTANCES ) {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}

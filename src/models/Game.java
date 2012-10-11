@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Collections;
+import java.util.Scanner;
 
 import models.cards.distance.Distance100;
 import models.cards.distance.Distance200;
@@ -54,26 +55,26 @@ public class Game {
 	public Player[] getPlayers() {
 		return this.players;
 	}
-	
+
 	public Turn[] getTurns() {
 		return this.turns;
 	}
-	
+
 	public DeckStack getDeckStack() {
 		return this.deckStack;
 	}
-	
+
 	public DiscardStack getDiscardStack() {
 		return this.discardStack;
 	}
-	
+
 	public Integer getGoal() {
 		return this.goal;
 	}
-	
+
 	public void setNbPlayers( Integer numberOfPlayers )
 			throws PlayersNumberException {
-		if (numberOfPlayers < MIN_PLAYERS || numberOfPlayers > MAX_PLAYERS) {
+		if ( numberOfPlayers < MIN_PLAYERS || numberOfPlayers > MAX_PLAYERS ) {
 			throw new PlayersNumberException(
 					"Players number must be included between 2 and 6." );
 		} else {
@@ -84,25 +85,25 @@ public class Game {
 
 	public void setHumanPlayers( Integer numberOfHumanPlayers )
 			throws PlayersNumberException, TooManyHumanPlayersException {
-		if (numberOfHumanPlayers < MIN_HUMAN_PLAYERS
-				|| numberOfHumanPlayers > MAX_PLAYERS) {
+		if ( numberOfHumanPlayers < MIN_HUMAN_PLAYERS
+				|| numberOfHumanPlayers > MAX_PLAYERS ) {
 			throw new PlayersNumberException(
 					"Players number must be included between 0 and "
 							+ nbPlayers + "." );
-		} else if (numberOfHumanPlayers > this.nbPlayers) {
+		} else if ( numberOfHumanPlayers > this.nbPlayers ) {
 			throw new TooManyHumanPlayersException(
 					"Number of human players must not exceed the number of players." );
 		} else {
-			for (int i = 0; i < this.players.length; i++) {
-				this.players[i] = (i < numberOfHumanPlayers) ? new HumanPlayer()
+			for ( int i = 0; i < this.players.length; i++ ) {
+				this.players[i] = ( i < numberOfHumanPlayers ) ? new HumanPlayer()
 						: new AIPlayer();
 			}
 		}
 	}
 
 	public void setGoal( Integer distanceGoal ) throws DistanceGoalException {
-		if (distanceGoal < MIN_DISTANCE_GOAL
-				|| distanceGoal > MAX_DISTANCE_GOAL || distanceGoal % 25 != 0) {
+		if ( distanceGoal < MIN_DISTANCE_GOAL
+				|| distanceGoal > MAX_DISTANCE_GOAL || distanceGoal % 25 != 0 ) {
 			throw new DistanceGoalException(
 					"Distance goal must be included between 700 and 1000km and a multiple of 25." );
 		} else {
@@ -112,15 +113,15 @@ public class Game {
 
 	public void setPlayerName( Player player, String chosenAlias )
 			throws AliasAlreadyChosenException {
-		for (int i = 0; i < this.players.length; i++) {
-			if (chosenAlias.equals( this.players[i].getAlias() )) {
+		for ( int i = 0; i < this.players.length; i++ ) {
+			if ( chosenAlias.equals( this.players[i].getAlias() ) ) {
 				throw new AliasAlreadyChosenException(
 						"Alias already chosen by another player." );
 			}
 		}
 
-		for (int i = 0; i < this.players.length; i++) {
-			if (this.players[i].equals( player )) {
+		for ( int i = 0; i < this.players.length; i++ ) {
+			if ( this.players[i].equals( player ) ) {
 				this.players[i].setAlias( chosenAlias );
 			}
 		}
@@ -129,25 +130,25 @@ public class Game {
 	public void setAIPlayersAlias() {
 		Boolean aliasIsAlreadyChosen;
 		String[] aiAliases = { "ann", "bob", "celo", "dan", "emile", "fanny" };
-		for (int i = 0; i < players.length; i++) {
-			if (players[i] instanceof AIPlayer) {
+		for ( int i = 0; i < players.length; i++ ) {
+			if ( players[i] instanceof AIPlayer ) {
 				do {
 					try {
 						aliasIsAlreadyChosen = false;
 						this.setPlayerName(
 								players[i],
-								aiAliases[(int) (Math.random() * aiAliases.length)] );
-					} catch (AliasAlreadyChosenException e) {
+								aiAliases[(int) ( Math.random() * aiAliases.length )] );
+					} catch ( AliasAlreadyChosenException e ) {
 						aliasIsAlreadyChosen = true;
 					}
-				} while (aliasIsAlreadyChosen);
+				} while ( aliasIsAlreadyChosen );
 			}
 		}
 	}
 
 	public void setAIPlayerLevel( AIPlayer p, Integer chosenLevel )
 			throws AILevelOutOfBoundsException {
-		if (chosenLevel < MIN_AI_LEVEL || chosenLevel > MAX_AI_LEVEL) {
+		if ( chosenLevel < MIN_AI_LEVEL || chosenLevel > MAX_AI_LEVEL ) {
 			throw new AILevelOutOfBoundsException(
 					"Level chosen must be included between 1 and 3." );
 		} else {
@@ -160,91 +161,112 @@ public class Game {
 		this.discardStack = DiscardStack.getInstance();
 
 		/* ADD ATTACK CARDS */
-		
-		for (int i = 0; i < Accident.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < Accident.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new Accident() );
 		}
-		
-		for (int i = 0; i < OutOfGas.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < OutOfGas.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new OutOfGas() );
 		}
-		
-		for (int i = 0; i < FlatTire.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < FlatTire.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new FlatTire() );
 		}
-		
-		for (int i = 0; i < Stop.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < Stop.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new Stop() );
 		}
-		
-		for (int i = 0; i < SpeedLimit.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < SpeedLimit.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new SpeedLimit() );
 		}
-		
+
 		/* ADD COUNTER CARDS */
-		
-		for (int i = 0; i < Repairs.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < Repairs.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new Repairs() );
 		}
-		
-		for (int i = 0; i < Gasoline.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < Gasoline.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new Gasoline() );
 		}
-		
-		for (int i = 0; i < SpareTire.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < SpareTire.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new SpareTire() );
 		}
-		
-		for (int i = 0; i < GoRoll.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < GoRoll.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new GoRoll() );
 		}
-		
-		for (int i = 0; i < EndOfLimit.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < EndOfLimit.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new EndOfLimit() );
 		}
-		
+
 		/* ADD SPECIALS CARDS */
 
 		this.deckStack.add( RightOfWay.getInstance() );
 		this.deckStack.add( DrivingAce.getInstance() );
 		this.deckStack.add( ExtraTank.getInstance() );
 		this.deckStack.add( PunctureProof.getInstance() );
-		
+
 		/* ADD MILESTONES CARDS */
 
-		for (int i = 0; i < Distance25.MAX_INSTANCES ; i++) {
+		for ( int i = 0; i < Distance25.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new Distance25() );
 		}
-		
-		for (int i = 0; i < Distance50.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < Distance50.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new Distance50() );
 		}
-		
-		for (int i = 0; i < Distance75.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < Distance75.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new Distance75() );
 		}
-		
-		for (int i = 0; i < Distance100.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < Distance100.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new Distance100() );
 		}
-		
-		for (int i = 0; i < Distance200.MAX_INSTANCES ; i++) {
+
+		for ( int i = 0; i < Distance200.MAX_INSTANCES; i++ ) {
 			this.deckStack.add( new Distance200() );
 		}
-		
+
 		Collections.shuffle( this.deckStack );
 	}
 
 	public void preparePlayersHand() {
 		// Draw initial hand (4 cards) for each player.
-		for (Player p : players) {
-			for (int i = 0; i < MAX_HAND_CARDS; i++) {
+		for ( Player p : players ) {
+			for ( int i = 0; i < MAX_HAND_CARDS; i++ ) {
 				p.draw( this.deckStack );
 			}
 		}
 	}
 
 	public Integer getFirstPlayerIndex() {
-		return (int) (Math.random() * nbPlayers );
+		return (int) ( Math.random() * nbPlayers );
+	}
+	
+	public static void main( String[] args ) {
+		try ( Scanner test = new Scanner( System.in ) ) {
+			Integer t = test.nextInt();
+			System.out.println( t );
+			test.close();
+		}
+		
+		try ( Scanner test = new Scanner( System.in ) ) {
+			String t = test.nextLine();
+			System.out.println( t );
+			test.close();
+		}
+		
+		try ( Scanner test = new Scanner( System.in ) ) {
+			String t = test.nextLine();
+			System.out.println( t );
+			test.close();
+		}
+			
 	}
 }

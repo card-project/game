@@ -33,17 +33,20 @@ public abstract class Player {
 		return null;
 	}
 
-	public void draw( GameStack drawStackChosen ) {
-		Stack.transferTopCard( drawStackChosen, this.handStack );
+	public Card draw( GameStack drawStackChosen ) {
+		return Stack.transferTopCard( drawStackChosen, this.handStack );
 	}
-	
+
 	public void discard( Card cardToDiscard, DiscardStack discardStack ) {
 		Stack.transferCard( cardToDiscard, this.handStack, discardStack );
 	}
-	
-	public void discard( Integer cardToDiscardIndex, DiscardStack discardStack ) throws DiscardChoiceOutOfBoundsException {
-		if ( cardToDiscardIndex < Game.MIN_HAND_CARDS + 1 || cardToDiscardIndex > Game.MAX_HAND_CARDS + 1 ) {
-			throw new DiscardChoiceOutOfBoundsException( "Choice must be included between 1 and 5." );
+
+	public void discard( Integer cardToDiscardIndex, DiscardStack discardStack )
+			throws DiscardChoiceOutOfBoundsException {
+		if ( cardToDiscardIndex < Game.MIN_HAND_CARDS + 1
+				|| cardToDiscardIndex > Game.MAX_HAND_CARDS + 1 ) {
+			throw new DiscardChoiceOutOfBoundsException(
+					"Choice must be included between 1 and 5." );
 		} else {
 			discard( this.handStack.get( cardToDiscardIndex ), discardStack );
 		}
@@ -56,7 +59,7 @@ public abstract class Player {
 	public Integer getKilometers() {
 		return this.kilometers;
 	}
-	
+
 	public String getAlias() {
 		return this.alias;
 	}
@@ -64,14 +67,20 @@ public abstract class Player {
 	public HandStack getHandStack() {
 		return this.handStack;
 	}
-	
+
 	public String toString() {
-		return this.alias + " - " 
-				+ ( this.kilometers == null ? "0" : this.kilometers) + "km " + '\n'
-				+ "HAND : " + this.handStack
-				+ ( !safetyStack.isEmpty() ? '\n' + "SPECIAL : " + safetyStack : "" )
-				+ ( !battleStack.isEmpty() ? '\n' +  "BATTLE: " + battleStack : "" )
-				// TODO 2 Milestone200 examplaries 
-				;
+		return this.alias
+				+ " - "
+				+ ( this.kilometers == null ? "0" : this.kilometers )
+				+ "km "
+				+ '\n'
+				+ "HAND : "
+				+ this.handStack
+				+ ( !safetyStack.isEmpty() ? '\n' + "SPECIAL : " + safetyStack
+						: "" )
+				+ ( !battleStack.isEmpty() ? '\n' + "BATTLE: " + battleStack
+						: "" )
+		// TODO 2 Milestone200 examplaries
+		;
 	}
 }

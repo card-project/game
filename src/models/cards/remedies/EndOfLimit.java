@@ -8,7 +8,7 @@ public class EndOfLimit extends RemedyCard {
 	private static Integer INSTANCE_COUNTER = 0;
 
 	public EndOfLimit() {
-		if (++INSTANCE_COUNTER > MAX_INSTANCES) {
+		if ( ++INSTANCE_COUNTER > MAX_INSTANCES ) {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}
