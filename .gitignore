@@ -9,5 +9,6 @@
 *~
 
 # Eclipse Files #
-.classpath
-.project
+*.classpath
+*.project
+.settings*
