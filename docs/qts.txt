@@ -16,3 +16,8 @@
 
 - nbPlayers utile ? Déjà accessible via players.length => OUI
 - Où placer les classes héritées d'Exception => Package "exceptions"
+
+================================
+10-10-2012
+
+- Doublon kilometers/milestoneStack ? => NON

@@ -1,7 +1,7 @@
 package models.moves;
 
-import models.cards.specials.SpecialCard;
+import models.cards.safeties.SafetiesCard;
 
 public class TrickyMove extends Move {
-	private SpecialCard cardToPlay;
+	private SafetiesCard cardToPlay;
 }
