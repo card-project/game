@@ -1,6 +1,7 @@
 package models.cards.distances;
 
 
+
 public class Distance200 extends DistanceCard {
 	public static final Integer MAX_INSTANCES = 3;
 	private static Integer INSTANCE_COUNTER = 0;

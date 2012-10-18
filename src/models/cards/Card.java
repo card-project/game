@@ -2,7 +2,7 @@ package models.cards;
 
 public abstract class Card {
 	protected static Integer MAX_INSTANCES = 66;
-	
+	private int a= 0;
 	// FIXME BEGIN
 	
 	// Remove if disagree : delete "leaf" classes. 

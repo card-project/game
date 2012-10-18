@@ -2,8 +2,15 @@ package models.players;
 
 import models.Game;
 import models.cards.Card;
+import models.cards.distances.DistanceCard;
+import models.cards.hazards.HazardCard;
+import models.cards.hazards.SpeedLimit;
+import models.cards.remedies.RemedyCard;
+import models.cards.safeties.SafetyCard;
 import models.exceptions.DiscardChoiceOutOfBoundsException;
 import models.exceptions.PlayedCardIndexOutOfBoundsException;
+import models.moves.BasicMove;
+import models.moves.Move;
 import models.stacks.BattleStack;
 import models.stacks.DiscardStack;
 import models.stacks.DistanceStack;
@@ -41,8 +48,23 @@ public abstract class Player {
 		return Stack.transferTopCard( drawStackChosen, this.handStack );
 	}
 
-	public void play( Card c ) {
-		
+	public void play( Move m ) {
+		if ( m instanceof BasicMove ) {
+			BasicMove bm = (BasicMove) m;
+			if ( bm.getCardToPlay() instanceof HazardCard ) {
+				if ( bm.getCardToPlay() instanceof SpeedLimit ) {
+					bm.getTarget().getDistanceStack().addFirst( bm.getCardToPlay() );
+				} else {
+					bm.getTarget().getBattleStack().addFirst( bm.getCardToPlay() );
+				}
+			} else if ( bm.getCardToPlay() instanceof RemedyCard ) {
+				bm.getSource().getBattleStack().addFirst( bm.getCardToPlay() );
+			} else if ( bm.getCardToPlay() instanceof DistanceCard ) {
+				bm.getSource().getDistanceStack().addFirst( bm.getCardToPlay() );
+			} else if ( bm.getCardToPlay() instanceof SafetyCard ) {
+				bm.getSource().getSafetyStack().addFirst( bm.getCardToPlay() );
+			}
+		}
 	}
 	
 	public void discard( Card cardToDiscard, DiscardStack discardStack ) {

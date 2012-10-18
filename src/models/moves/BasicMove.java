@@ -11,7 +11,11 @@ import models.cards.hazards.HazardCard;
 import models.cards.hazards.OutOfGas;
 import models.cards.hazards.SpeedLimit;
 import models.cards.hazards.Stop;
+import models.cards.remedies.Gasoline;
+import models.cards.remedies.GoRoll;
 import models.cards.remedies.RemedyCard;
+import models.cards.remedies.Repairs;
+import models.cards.remedies.SpareTire;
 import models.cards.safeties.DrivingAce;
 import models.cards.safeties.ExtraTank;
 import models.cards.safeties.PunctureProof;
@@ -21,6 +25,10 @@ import models.exceptions.IllegalMoveException;
 import models.players.Player;
 import models.stacks.Stack;
 
+/**
+ * @author G4llic4
+ *
+ */
 public class BasicMove extends Move {
 	private Card cardToPlay;
 	private Player source;
@@ -33,15 +41,23 @@ public class BasicMove extends Move {
 	public Card getCardToPlay() {
 		return cardToPlay;
 	}
-
+	
+	/**
+	 * @param c
+	 * @throws IllegalMoveException
+	 */
 	public void setCardToPlay( Card c ) throws IllegalMoveException {
 		if ( c instanceof HazardCard ) {
 			if ( c instanceof SpeedLimit ) {
-				if ( target.getDistanceStack().getFirst() instanceof SpeedLimit ) {
-					throw new IllegalMoveException( "Stack already attacked." );
-				} else if ( target.getSafetyStack().contains( RightOfWay.getInstance() ) ) {
+				if ( target.getSafetyStack().contains( RightOfWay.getInstance() ) ) {
 					throw new IllegalMoveException( "Player is protected." );
-				}  
+				} else {
+					for( Card _c : target.getDistanceStack() ) {
+						if ( _c instanceof SpeedLimit ) {
+							throw new IllegalMoveException( "Player already attacked." );
+						}
+					}
+				}
 			} else if ( target.getBattleStack().getFirst() instanceof HazardCard ) {
 				throw new IllegalMoveException( "Player already attacked." );
 			} else if ( target.getSafetyStack().contains( DrivingAce.getInstance() ) 
@@ -60,13 +76,28 @@ public class BasicMove extends Move {
 		} else if ( c instanceof RemedyCard ) {
 			if ( ! ( source.getBattleStack().getFirst() instanceof HazardCard ) ) {
 				throw new IllegalMoveException( "Stack must be attacked." );
+			} else {
+				if ( c instanceof Gasoline && ! ( source.getBattleStack().getFirst() instanceof OutOfGas ) ) {
+					throw new IllegalMoveException( "Remedy mistmatches." );
+				} else if ( c instanceof Gasoline && ! ( source.getBattleStack().getFirst() instanceof OutOfGas ) ) {
+					throw new IllegalMoveException( "Remedy mistmatches." );
+				} else if ( c instanceof GoRoll && ! ( source.getBattleStack().getFirst() instanceof Stop ) ) {
+					throw new IllegalMoveException( "Remedy mistmatches." );
+				} else if ( c instanceof Repairs && ! ( source.getBattleStack().getFirst() instanceof Accident ) ) {
+					throw new IllegalMoveException( "Remedy mistmatches." );
+				} else if ( c instanceof SpareTire && ! ( source.getBattleStack().getFirst() instanceof FlatTire ) ) {
+					throw new IllegalMoveException( "Remedy mistmatches." );
+				}
 			}
 		} else if ( c instanceof DistanceCard ) {
 			if ( source.getBattleStack().getFirst() instanceof HazardCard ) {
 				throw new IllegalMoveException( "You are attacked." );
-			} else if ( ! ( c instanceof Distance25 || c instanceof Distance50 ) 
-					&& source.getDistanceStack().contains( /* FIXME SpeedLimit*/ ) ) {
-				// TODO
+			} else if ( ! ( c instanceof Distance25 || c instanceof Distance50 ) ) {
+				for ( Card _c : source.getDistanceStack() ) {
+					if ( _c instanceof SpeedLimit ) {
+						throw new IllegalMoveException( "Stack is slowed by a Speed Limit." );
+					}
+				}
 			} else if ( c instanceof Distance200 && source.getDistanceStack().maxNumberOfDistance200IsReached() ) {
 				throw new IllegalMoveException( "Maximum number of Distance 200 is reached." );
 			}
@@ -75,6 +106,14 @@ public class BasicMove extends Move {
 		} 
 
 		this.cardToPlay = c;
+	}
+	
+	public Player getTarget() {
+		return target;
+	}
+
+	public void setTarget( Player player ) {
+		this.target = player;
 	}
 
 	public Player getSource() {

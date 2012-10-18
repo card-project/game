@@ -2,6 +2,10 @@ package models.cards.hazards;
 
 import models.cards.remedies.SpareTire;
 
+/**
+ * @author G4llic4
+ *
+ */
 public class FlatTire extends HazardCard {
 	private static Integer INSTANCE_COUNTER = 0;
 	public static final Integer MAX_INSTANCES = 2;

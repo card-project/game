@@ -5,10 +5,12 @@ import java.util.Scanner;
 
 import models.Game;
 import models.cards.Card;
+import models.cards.hazards.HazardCard;
 import models.exceptions.AILevelOutOfBoundsException;
 import models.exceptions.AliasAlreadyChosenException;
 import models.exceptions.DiscardChoiceOutOfBoundsException;
 import models.exceptions.DistanceGoalException;
+import models.exceptions.IllegalMoveException;
 import models.exceptions.PlayedCardIndexOutOfBoundsException;
 import models.exceptions.PlayersNumberException;
 import models.exceptions.TooManyHumanPlayersException;
@@ -200,6 +202,7 @@ public class Main {
 		System.out.println( "-> PLAYING STEP" );
 		
 		Boolean playingCardChoiceIsCorrect;
+		BasicMove currentMove = new BasicMove( player );
 		do {
 			playingCardChoiceIsCorrect= true;
 			Card chosenCard = null;
@@ -209,6 +212,7 @@ public class Main {
 			do {
 				playingCardIndexIsCorrect = true;
 				try {
+					System.out.println( player.getHandStack() );
 					System.out.println( "Which card do you play ? Choose its index (from 1 to 5)." );
 					int chosenCardIndex = Integer.valueOf( new Scanner ( System.in ).nextLine() );
 					chosenCard = player.pickCardToPlay( chosenCardIndex );
@@ -216,13 +220,37 @@ public class Main {
 					playingCardIndexIsCorrect = false;
 					System.out.println( e.getMessage() );
 				}
-			} while ( !playingCardIndexIsCorrect );
+			} while ( ! playingCardIndexIsCorrect );
 			
-			// STEP 2.2 : Check whether the destination stack is allowed
-			BasicMove currentMove = new BasicMove( player );
-			currentMove.setCardToPlay( chosenCard );
+			// STEP 2.1.1 : if the card is an hazard, choose its target
+			if ( chosenCard instanceof HazardCard ) {
+				Boolean targetChoiceIsCorrect;
+				do {
+					targetChoiceIsCorrect = true;
+					System.out.println( "Who do you play this card on ? Choose his index." );
+					for ( int i = 0; i < g.getPlayers().length; i++ ) {
+						System.out.println( i + 1 + " - " + g.getPlayers()[i].getAlias() );
+					}
+					int targetPlayerIndex = Integer.valueOf ( new Scanner ( System.in ).nextLine() );
+					if ( targetPlayerIndex < 0 || targetPlayerIndex > g.getPlayers().length - 1 ) {
+						targetChoiceIsCorrect = false;
+					} else {
+						currentMove.setTarget( g.getPlayers()[ targetPlayerIndex - 1] );
+					}
+				} while ( ! targetChoiceIsCorrect );
+			}
 			
+			// STEP 2.2 : Check whether the move is allowed
+			try {
+				currentMove.setCardToPlay( chosenCard );
+			} catch ( IllegalMoveException e ) {
+				playingCardChoiceIsCorrect = false;
+				System.out.println( "Impossible move : " + e.getMessage() );
+			}
 		} while ( !playingCardChoiceIsCorrect );
+		
+		// STEP 2.3 : Play the card
+		player.play( currentMove );
 		
 		// STEP 3 : Discard a card
 		
