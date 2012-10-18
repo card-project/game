@@ -2,8 +2,8 @@ package models.players;
 
 import models.Game;
 import models.cards.Card;
-import models.cards.distance.DistanceCard;
 import models.exceptions.DiscardChoiceOutOfBoundsException;
+import models.exceptions.PlayedCardIndexOutOfBoundsException;
 import models.stacks.BattleStack;
 import models.stacks.DiscardStack;
 import models.stacks.DistanceStack;
@@ -13,6 +13,7 @@ import models.stacks.SafetyStack;
 import models.stacks.Stack;
 
 public abstract class Player {
+
 	protected String alias;
 	protected Integer score;
 	protected Integer kilometers;
@@ -28,19 +29,26 @@ public abstract class Player {
 		this.distanceStack = new DistanceStack();
 	}
 
-	public DistanceCard playCard() {
-		// TODO
-		return null;
+	public Card pickCardToPlay( int cardIndex ) throws PlayedCardIndexOutOfBoundsException {
+		if ( cardIndex < Game.MIN_HAND_CARDS || cardIndex > Game.MAX_INGAME_HAND_CARDS ) {
+			throw new PlayedCardIndexOutOfBoundsException( "Choice must be between 1 and 5. " );
+		} else {
+			return this.handStack.get( cardIndex );
+		}
 	}
-
+	
 	public Card draw( GameStack drawStackChosen ) {
 		return Stack.transferTopCard( drawStackChosen, this.handStack );
 	}
 
+	public void play( Card c ) {
+		
+	}
+	
 	public void discard( Card cardToDiscard, DiscardStack discardStack ) {
 		Stack.transferCard( cardToDiscard, this.handStack, discardStack );
 	}
-
+	
 	public void discard( Integer cardToDiscardIndex, DiscardStack discardStack )
 			throws DiscardChoiceOutOfBoundsException {
 		if ( cardToDiscardIndex < Game.MIN_HAND_CARDS + 1
@@ -68,6 +76,35 @@ public abstract class Player {
 		return this.handStack;
 	}
 
+	
+	public BattleStack getBattleStack() {
+		return battleStack;
+	}
+
+	public void setBattleStack( BattleStack battleStack ) {
+		this.battleStack = battleStack;
+	}
+
+	public DistanceStack getDistanceStack() {
+		return distanceStack;
+	}
+
+	public void setDistanceStack( DistanceStack distanceStack ) {
+		this.distanceStack = distanceStack;
+	}
+
+	public void setHandStack( HandStack handStack ) {
+		this.handStack = handStack;
+	}
+
+	public SafetyStack getSafetyStack() {
+		return safetyStack;
+	}
+
+	public void setSafetyStack( SafetyStack safetyStack ) {
+		this.safetyStack = safetyStack;
+	}
+	
 	public String toString() {
 		return this.alias
 				+ " - "
@@ -80,7 +117,6 @@ public abstract class Player {
 						: "" )
 				+ ( !battleStack.isEmpty() ? '\n' + "BATTLE: " + battleStack
 						: "" )
-		// TODO 2 Milestone200 examplaries
 		;
 	}
 }

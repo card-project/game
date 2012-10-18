@@ -1,27 +1,24 @@
 package models;
 
 import java.util.Collections;
-import java.util.Scanner;
 
-import models.cards.distance.Distance100;
-import models.cards.distance.Distance200;
-import models.cards.distance.Distance25;
-import models.cards.distance.Distance50;
-import models.cards.distance.Distance75;
+import models.cards.CardFactory;
+import models.cards.CardType;
+import models.cards.distances.Distance100;
+import models.cards.distances.Distance200;
+import models.cards.distances.Distance25;
+import models.cards.distances.Distance50;
+import models.cards.distances.Distance75;
 import models.cards.hazards.Accident;
-import models.cards.hazards.OutOfGas;
 import models.cards.hazards.FlatTire;
-import models.cards.hazards.Stop;
+import models.cards.hazards.OutOfGas;
 import models.cards.hazards.SpeedLimit;
+import models.cards.hazards.Stop;
 import models.cards.remedies.EndOfLimit;
-import models.cards.remedies.GoRoll;
 import models.cards.remedies.Gasoline;
+import models.cards.remedies.GoRoll;
 import models.cards.remedies.Repairs;
 import models.cards.remedies.SpareTire;
-import models.cards.safeties.DrivingAce;
-import models.cards.safeties.ExtraTank;
-import models.cards.safeties.RightOfWay;
-import models.cards.safeties.PunctureProof;
 import models.exceptions.AILevelOutOfBoundsException;
 import models.exceptions.AliasAlreadyChosenException;
 import models.exceptions.DistanceGoalException;
@@ -44,6 +41,8 @@ public class Game {
 	public static final Integer MAX_AI_LEVEL = 3;
 	public static final Integer MIN_HAND_CARDS = 0;
 	public static final Integer MAX_HAND_CARDS = 4;
+	public static final Integer MAX_INGAME_HAND_CARDS = 5;
+	public static final Integer STEP_SKIPPING_INDEX = 42;
 
 	private Integer goal;
 	public Integer nbPlayers;
@@ -160,79 +159,79 @@ public class Game {
 		this.deckStack = DeckStack.getInstance();
 		this.discardStack = DiscardStack.getInstance();
 
-		/* ADD ATTACK CARDS */
+		/* ADD HAZARDS CARDS */
 
 		for ( int i = 0; i < Accident.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new Accident() );
+			this.deckStack.add( CardFactory.createCard( CardType.Accident ) );
 		}
 
 		for ( int i = 0; i < OutOfGas.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new OutOfGas() );
+			this.deckStack.add( CardFactory.createCard( CardType.OutOfGas ) );
 		}
 
 		for ( int i = 0; i < FlatTire.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new FlatTire() );
+			this.deckStack.add( CardFactory.createCard( CardType.FlatTire ) );
 		}
 
 		for ( int i = 0; i < Stop.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new Stop() );
+			this.deckStack.add( CardFactory.createCard( CardType.Stop ) );
 		}
 
 		for ( int i = 0; i < SpeedLimit.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new SpeedLimit() );
+			this.deckStack.add( CardFactory.createCard( CardType.SpeedLimit ) );
 		}
 
-		/* ADD COUNTER CARDS */
+		/* ADD REMEDIES CARDS */
 
 		for ( int i = 0; i < Repairs.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new Repairs() );
+			this.deckStack.add( CardFactory.createCard( CardType.Repairs ) );
 		}
 
 		for ( int i = 0; i < Gasoline.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new Gasoline() );
+			this.deckStack.add( CardFactory.createCard( CardType.Gasoline ) );
 		}
 
 		for ( int i = 0; i < SpareTire.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new SpareTire() );
+			this.deckStack.add( CardFactory.createCard( CardType.SpareTire ) );
 		}
 
 		for ( int i = 0; i < GoRoll.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new GoRoll() );
+			this.deckStack.add( CardFactory.createCard( CardType.GoRoll ) );
 		}
 
 		for ( int i = 0; i < EndOfLimit.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new EndOfLimit() );
+			this.deckStack.add( CardFactory.createCard( CardType.EndOfLimit ) );
 		}
 
-		/* ADD SPECIALS CARDS */
+		/* ADD SAFETIES CARDS */
 
-		this.deckStack.add( RightOfWay.getInstance() );
-		this.deckStack.add( DrivingAce.getInstance() );
-		this.deckStack.add( ExtraTank.getInstance() );
-		this.deckStack.add( PunctureProof.getInstance() );
+		this.deckStack.add( CardFactory.createCard( CardType.RightOfWay ) );
+		this.deckStack.add( CardFactory.createCard( CardType.DrivingAce ));
+		this.deckStack.add( CardFactory.createCard( CardType.ExtraTank ) );
+		this.deckStack.add( CardFactory.createCard( CardType.PunctureProof ) );
 
-		/* ADD MILESTONES CARDS */
+		/* ADD DISTANCES CARDS */
 
 		for ( int i = 0; i < Distance25.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new Distance25() );
+			this.deckStack.add( CardFactory.createCard( CardType.Distance25 ) );
 		}
 
 		for ( int i = 0; i < Distance50.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new Distance50() );
+			this.deckStack.add( CardFactory.createCard( CardType.Distance50 ) );
 		}
 
 		for ( int i = 0; i < Distance75.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new Distance75() );
+			this.deckStack.add( CardFactory.createCard( CardType.Distance75 ) );
 		}
 
 		for ( int i = 0; i < Distance100.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new Distance100() );
+			this.deckStack.add( CardFactory.createCard( CardType.Distance100 ) );
 		}
 
 		for ( int i = 0; i < Distance200.MAX_INSTANCES; i++ ) {
-			this.deckStack.add( new Distance200() );
+			this.deckStack.add( CardFactory.createCard( CardType.Distance200 ) );
 		}
-
+		
 		Collections.shuffle( this.deckStack );
 	}
 
@@ -249,24 +248,5 @@ public class Game {
 		return (int) ( Math.random() * nbPlayers );
 	}
 	
-	public static void main( String[] args ) {
-		try ( Scanner test = new Scanner( System.in ) ) {
-			Integer t = test.nextInt();
-			System.out.println( t );
-			test.close();
-		}
-		
-		try ( Scanner test = new Scanner( System.in ) ) {
-			String t = test.nextLine();
-			System.out.println( t );
-			test.close();
-		}
-		
-		try ( Scanner test = new Scanner( System.in ) ) {
-			String t = test.nextLine();
-			System.out.println( t );
-			test.close();
-		}
-			
-	}
+	
 }

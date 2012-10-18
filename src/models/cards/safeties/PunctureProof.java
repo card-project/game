@@ -1,6 +1,7 @@
 package models.cards.safeties;
 
-public final class PunctureProof extends SafetiesCard {
+
+public final class PunctureProof extends SafetyCard {
 	private PunctureProof() {
 	}
 

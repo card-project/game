@@ -4,7 +4,7 @@ import models.cards.hazards.SpeedLimit;
 
 public class EndOfLimit extends RemedyCard {
 	public static final Integer MAX_INSTANCES = 4;
-	private static final SpeedLimit OPPOSITE_CLASS = null;
+	public static final SpeedLimit OPPOSITE_CLASS = null;
 	private static Integer INSTANCE_COUNTER = 0;
 
 	public EndOfLimit() {

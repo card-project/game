@@ -1,6 +1,7 @@
 package models.cards.safeties;
 
-public class ExtraTank extends SafetiesCard {
+
+public class ExtraTank extends SafetyCard {
 	private ExtraTank() {
 	}
 

@@ -9,15 +9,17 @@ import models.exceptions.AILevelOutOfBoundsException;
 import models.exceptions.AliasAlreadyChosenException;
 import models.exceptions.DiscardChoiceOutOfBoundsException;
 import models.exceptions.DistanceGoalException;
+import models.exceptions.PlayedCardIndexOutOfBoundsException;
 import models.exceptions.PlayersNumberException;
 import models.exceptions.TooManyHumanPlayersException;
+import models.moves.BasicMove;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
 
 public class Main {
 	public static void main( String[] args ) {
-
+		
 		Game g = new Game();
 
 		Main.setGameOptions( g );
@@ -156,8 +158,7 @@ public class Main {
 			}
 
 			// STEP 4 : Check if game is over
-			if ( currentPlayer.getKilometers() == g.getGoal()
-					|| g.getDeckStack().isEmpty() ) {
+			if ( currentPlayer.getKilometers() == g.getGoal() || g.getDeckStack().isEmpty() ) {
 				gameIsOver = true;
 			} else {
 				// STEP 5 : Switch to the next player
@@ -169,8 +170,8 @@ public class Main {
 	}
 	
 	private static void humanPlay( Game g, HumanPlayer player ) {
-		System.out.println( '\n' + player.toString() + ( !g.getDiscardStack().isEmpty() ? '\n'
-					+ "DISCARD STACK : " + g.getDiscardStack() : "" ) );
+		System.out.println( '\n' + player.toString() 
+			+ ( !g.getDiscardStack().isEmpty() ? '\n' + "DISCARD STACK : " + g.getDiscardStack() : "" ) );
 
 		// STEP 1 : Draw a card (discard or deck stack)
 		
@@ -181,45 +182,69 @@ public class Main {
 			Card c = player.draw( g.getDeckStack() );
 			System.out.println( "DRAWN : " + c );
 		} else {
-			Boolean userChoiceIsIncorrect = false;
+			Boolean drawingCardChoiceIsCorrect = true;
 			do {
 				System.out.println( "[D]eck or [d]iscard ?" );
-				@SuppressWarnings("resource")
 				String userChoice = new Scanner( System.in ).nextLine();
 				if ( userChoice.isEmpty() || userChoice.equals( "D" ) ) {
 					player.draw( g.getDeckStack() );
 				} else if ( userChoice.equals( "d" ) ) {
 					player.draw( g.getDiscardStack() );
 				} else {
-					userChoiceIsIncorrect = true;
+					drawingCardChoiceIsCorrect = false;
 				}
-			} while ( userChoiceIsIncorrect );
+			} while ( !drawingCardChoiceIsCorrect );
 		}
 
 		// STEP 2 : Play a card
 		System.out.println( "-> PLAYING STEP" );
 		
-
+		Boolean playingCardChoiceIsCorrect;
+		do {
+			playingCardChoiceIsCorrect= true;
+			Card chosenCard = null;
+			
+			// STEP 2.1 : Pick a card to play
+			Boolean playingCardIndexIsCorrect;
+			do {
+				playingCardIndexIsCorrect = true;
+				try {
+					System.out.println( "Which card do you play ? Choose its index (from 1 to 5)." );
+					int chosenCardIndex = Integer.valueOf( new Scanner ( System.in ).nextLine() );
+					chosenCard = player.pickCardToPlay( chosenCardIndex );
+				} catch ( PlayedCardIndexOutOfBoundsException e ) {
+					playingCardIndexIsCorrect = false;
+					System.out.println( e.getMessage() );
+				}
+			} while ( !playingCardIndexIsCorrect );
+			
+			// STEP 2.2 : Check whether the destination stack is allowed
+			BasicMove currentMove = new BasicMove( player );
+			currentMove.setCardToPlay( chosenCard );
+			
+		} while ( !playingCardChoiceIsCorrect );
+		
 		// STEP 3 : Discard a card
+		
+		System.out.println( "-> DISCARDING STEP" );
+
 		if ( player.getHandStack().size() > Game.MAX_HAND_CARDS ) {
-			System.out.println( "-> DISCARDING STEP" );
-			Boolean userChoiceIsIncorrect = null;
+			Boolean discardingCardChoiceIsCorrect;
 			do {
 				System.out.println( "Too many cards in hand, you must discard one."
 					+ "\n Which card do you discard ? Choose its index (from 1 to 5)."
 					+ '\n' + player.getHandStack() + '\n' );
-				
-				userChoiceIsIncorrect = false;
+				discardingCardChoiceIsCorrect = true;
 				try {
 					player.discard( new Scanner( System.in ).nextInt(), g.getDiscardStack() );
 				} catch ( InputMismatchException e ) {
-					userChoiceIsIncorrect = true;
+					discardingCardChoiceIsCorrect = false;
 					System.out.println( "Please enter a number." );
 				} catch ( DiscardChoiceOutOfBoundsException e ) {
-					userChoiceIsIncorrect = true;
+					discardingCardChoiceIsCorrect = true;
 					System.out.println( e.getMessage() );
 				}
-			} while ( userChoiceIsIncorrect );
+			} while ( !discardingCardChoiceIsCorrect );
 		}
 	}
 	

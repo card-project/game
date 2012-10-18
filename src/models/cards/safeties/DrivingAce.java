@@ -1,6 +1,7 @@
 package models.cards.safeties;
 
-public class DrivingAce extends SafetiesCard {
+
+public class DrivingAce extends SafetyCard {
 	private DrivingAce() {
 	}
 

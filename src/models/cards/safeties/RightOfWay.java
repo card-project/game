@@ -1,6 +1,7 @@
 package models.cards.safeties;
 
-public class RightOfWay extends SafetiesCard {
+
+public class RightOfWay extends SafetyCard {
 
 	private RightOfWay() {
 	}
