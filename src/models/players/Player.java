@@ -11,6 +11,7 @@ import models.exceptions.DiscardChoiceOutOfBoundsException;
 import models.exceptions.PlayedCardIndexOutOfBoundsException;
 import models.moves.BasicMove;
 import models.moves.Move;
+import models.moves.TrickyMove;
 import models.stacks.BattleStack;
 import models.stacks.DiscardStack;
 import models.stacks.DistanceStack;
@@ -54,16 +55,23 @@ public abstract class Player {
 			if ( bm.getCardToPlay() instanceof HazardCard ) {
 				if ( bm.getCardToPlay() instanceof SpeedLimit ) {
 					bm.getTarget().getDistanceStack().addFirst( bm.getCardToPlay() );
+					bm.getSource().getHandStack().remove( bm.getCardToPlay() );
 				} else {
 					bm.getTarget().getBattleStack().addFirst( bm.getCardToPlay() );
+					bm.getSource().getHandStack().remove( bm.getCardToPlay() );
 				}
 			} else if ( bm.getCardToPlay() instanceof RemedyCard ) {
 				bm.getSource().getBattleStack().addFirst( bm.getCardToPlay() );
+				bm.getSource().getHandStack().remove( bm.getCardToPlay() );
 			} else if ( bm.getCardToPlay() instanceof DistanceCard ) {
 				bm.getSource().getDistanceStack().addFirst( bm.getCardToPlay() );
+				bm.getSource().getHandStack().remove( bm.getCardToPlay() );
 			} else if ( bm.getCardToPlay() instanceof SafetyCard ) {
 				bm.getSource().getSafetyStack().addFirst( bm.getCardToPlay() );
+				bm.getSource().getHandStack().remove( bm.getCardToPlay() );
 			}
+		} else if ( m instanceof TrickyMove ) {
+			// TODO
 		}
 	}
 	
