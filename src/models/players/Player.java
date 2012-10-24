@@ -1,14 +1,11 @@
 package models.players;
 
-import models.Game;
 import models.cards.Card;
 import models.cards.distances.DistanceCard;
 import models.cards.hazards.HazardCard;
 import models.cards.hazards.SpeedLimit;
 import models.cards.remedies.RemedyCard;
 import models.cards.safeties.SafetyCard;
-import models.exceptions.DiscardChoiceOutOfBoundsException;
-import models.exceptions.PlayedCardIndexOutOfBoundsException;
 import models.moves.BasicMove;
 import models.moves.Move;
 import models.moves.TrickyMove;
@@ -22,6 +19,8 @@ import models.stacks.Stack;
 
 public abstract class Player {
 
+	// ------------ ATTRIBUTES ------------ //
+	
 	protected String alias;
 	protected Integer score;
 	protected Integer kilometers;
@@ -30,6 +29,8 @@ public abstract class Player {
 	protected SafetyStack safetyStack;
 	protected HandStack handStack;
 
+	// ------------ CONSTRUCTORS ------------ //
+	
 	public Player() {
 		this.handStack = new HandStack();
 		this.battleStack = new BattleStack();
@@ -37,12 +38,10 @@ public abstract class Player {
 		this.distanceStack = new DistanceStack();
 	}
 
-	public Card pickCardToPlay( int cardIndex ) throws PlayedCardIndexOutOfBoundsException {
-		if ( cardIndex < Game.MIN_HAND_CARDS || cardIndex > Game.MAX_INGAME_HAND_CARDS ) {
-			throw new PlayedCardIndexOutOfBoundsException( "Choice must be between 1 and 5. " );
-		} else {
-			return this.handStack.get( cardIndex );
-		}
+	// ------------ METHODS ------------ //
+	
+	public Card pickCardToPlay( int cardIndex ) {
+		return this.handStack.get( cardIndex );
 	}
 	
 	public Card draw( GameStack drawStackChosen ) {
@@ -50,49 +49,27 @@ public abstract class Player {
 	}
 
 	public void play( Move m ) {
-		if ( m instanceof BasicMove ) {
-			BasicMove bm = (BasicMove) m;
-			if ( bm.getCardToPlay() instanceof HazardCard ) {
-				if ( bm.getCardToPlay() instanceof SpeedLimit ) {
-					bm.getTarget().getDistanceStack().addFirst( bm.getCardToPlay() );
-					bm.getSource().getHandStack().remove( bm.getCardToPlay() );
-				} else {
-					bm.getTarget().getBattleStack().addFirst( bm.getCardToPlay() );
-					bm.getSource().getHandStack().remove( bm.getCardToPlay() );
-				}
-			} else if ( bm.getCardToPlay() instanceof RemedyCard ) {
-				bm.getSource().getBattleStack().addFirst( bm.getCardToPlay() );
-				bm.getSource().getHandStack().remove( bm.getCardToPlay() );
-			} else if ( bm.getCardToPlay() instanceof DistanceCard ) {
-				bm.getSource().getDistanceStack().addFirst( bm.getCardToPlay() );
-				bm.getSource().getHandStack().remove( bm.getCardToPlay() );
-			} else if ( bm.getCardToPlay() instanceof SafetyCard ) {
-				bm.getSource().getSafetyStack().addFirst( bm.getCardToPlay() );
-				bm.getSource().getHandStack().remove( bm.getCardToPlay() );
-			}
-		} else if ( m instanceof TrickyMove ) {
-			// TODO
-		}
+
 	}
 	
 	public void discard( Card cardToDiscard, DiscardStack discardStack ) {
 		Stack.transferCard( cardToDiscard, this.handStack, discardStack );
 	}
 	
-	public void discard( Integer cardToDiscardIndex, DiscardStack discardStack )
-			throws DiscardChoiceOutOfBoundsException {
-		if ( cardToDiscardIndex < Game.MIN_HAND_CARDS + 1
-				|| cardToDiscardIndex > Game.MAX_HAND_CARDS + 1 ) {
-			throw new DiscardChoiceOutOfBoundsException(
-					"Choice must be included between 1 and 5." );
-		} else {
-			discard( this.handStack.get( cardToDiscardIndex ), discardStack );
-		}
+	public void discard( Integer cardToDiscardIndex, DiscardStack discardStack ) {
+		discard( this.handStack.get( cardToDiscardIndex ), discardStack );
 	}
 
-	public void setAlias( String string ) {
-		this.alias = string;
+
+	public String toString() {
+		return this.alias +  " - "
+				+ ( this.kilometers == null ? "0" : this.kilometers ) + "km " + '\n'
+				+ "HAND : "	+ this.handStack
+				+ ( !safetyStack.isEmpty() ? '\n' + "SPECIAL : " + safetyStack : "" )
+				+ ( !battleStack.isEmpty() ? '\n' + "BATTLE: " + battleStack : "" );
 	}
+	
+	// ------------ GETTERS ------------ //
 
 	public Integer getKilometers() {
 		return this.kilometers;
@@ -101,52 +78,18 @@ public abstract class Player {
 	public String getAlias() {
 		return this.alias;
 	}
-
+	
 	public HandStack getHandStack() {
 		return this.handStack;
 	}
 
-	
 	public BattleStack getBattleStack() {
 		return battleStack;
 	}
-
-	public void setBattleStack( BattleStack battleStack ) {
-		this.battleStack = battleStack;
-	}
-
-	public DistanceStack getDistanceStack() {
-		return distanceStack;
-	}
-
-	public void setDistanceStack( DistanceStack distanceStack ) {
-		this.distanceStack = distanceStack;
-	}
-
-	public void setHandStack( HandStack handStack ) {
-		this.handStack = handStack;
-	}
-
-	public SafetyStack getSafetyStack() {
-		return safetyStack;
-	}
-
-	public void setSafetyStack( SafetyStack safetyStack ) {
-		this.safetyStack = safetyStack;
-	}
 	
-	public String toString() {
-		return this.alias
-				+ " - "
-				+ ( this.kilometers == null ? "0" : this.kilometers )
-				+ "km "
-				+ '\n'
-				+ "HAND : "
-				+ this.handStack
-				+ ( !safetyStack.isEmpty() ? '\n' + "SPECIAL : " + safetyStack
-						: "" )
-				+ ( !battleStack.isEmpty() ? '\n' + "BATTLE: " + battleStack
-						: "" )
-		;
+	// ------------ SETTERS ------------ //
+	
+	public void setAlias( String string ) {
+		this.alias = string;
 	}
 }
