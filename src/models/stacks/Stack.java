@@ -25,11 +25,11 @@ public abstract class Stack extends LinkedList<Card> {
 		return s + this.getLast();
 	}
 
-	public Card dragTopCard( Stack destination ) {
-		return drag( this.getFirst(), destination );
+	public Card shiftTopCard( Stack destination ) {
+		return shift( this.getFirst(), destination );
 	}
 
-	public Card drag( Card c, Stack destination ) {
+	public Card shift( Card c, Stack destination ) {
 		this.remove( c );
 		destination.addFirst( c );
 		return c;
