@@ -12,13 +12,11 @@ import models.players.AIPlayer;
  * It is the only class which handles the menu standard output.
  *   
  * @author Simon RENOULT
- * @version 1.0
+ * @version 1.1
  */
-public class TUIMenuView {
+public class TUIMenuView extends TUIView {
 	
 	// ------------ ATTRIBUTES ------------ //
-	
-	private Scanner input;
 	
 	// ------------ CONSTRUCTORS ------------ //
 	
@@ -27,19 +25,10 @@ public class TUIMenuView {
 	 * attribute on the standard input stream <em>System.in</em>. 
 	 */
 	public TUIMenuView() {
-		input = new Scanner( System.in );
+		super.input = new Scanner( System.in );
 	}
 	
 	// ------------ METHODS ------------ //
-	
-	/**
-	 * Warn the user through the command line.
-	 * 
-	 * @param warning Notification to show up.
-	 */
-	public void warn( String warning ) {
-		System.out.println( "! " + warning );
-	}
 	
 	/**
 	 * Ask the user the number of players.
@@ -60,7 +49,6 @@ public class TUIMenuView {
 		System.out.print( "How many human players ? " );
 		return Integer.valueOf( input.nextLine() );
 	}
-
 	
 	/**
 	 * Ask the user distance goal.
@@ -71,7 +59,6 @@ public class TUIMenuView {
 		System.out.print( "How far do you want to go ? " );
 		return Integer.valueOf( input.nextLine() );
 	}
-
 	
 	/**
 	 * Ask a player alias.
@@ -82,7 +69,6 @@ public class TUIMenuView {
 		System.out.print( "What is player " + (playerIndex + 1) + " alias ? " );
 		return input.nextLine();
 	}
-
 	
 	/**
 	 * Ask the virtual player level.
