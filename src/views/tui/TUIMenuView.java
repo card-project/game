@@ -12,7 +12,7 @@ import models.players.AIPlayer;
  * It is the only class which handles the menu standard output.
  *   
  * @author Simon RENOULT
- * @version 0.1
+ * @version 1.0
  */
 public class TUIMenuView {
 	
