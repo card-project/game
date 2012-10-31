@@ -14,7 +14,7 @@ import views.tui.TUIMenu;
  * distance goal, players number, etc.
  * 
  * @author Simon RENOULT
- * @version 0.1
+ * @version 1.0
  */
 public class TUIMenuController {
 

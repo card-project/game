@@ -68,7 +68,7 @@ public class TUIMenu {
 	 * @return The number goal distance as an integer.
 	 */
 	public int askDistanceGoal() {
-		System.out.print( "How far do you want to go ?" );
+		System.out.print( "How far do you want to go ? " );
 		return Integer.valueOf( input.nextLine() );
 	}
 
@@ -79,7 +79,7 @@ public class TUIMenu {
 	 * @return The chosen alias as an integer.
 	 */
 	public String askPlayerAlias( int playerIndex ) {
-		System.out.print( "What is " + playerIndex + " ?" );
+		System.out.print( "What is player " + (playerIndex + 1) + " alias ? " );
 		return input.nextLine();
 	}
 
@@ -90,7 +90,7 @@ public class TUIMenu {
 	 * @return The chosen level as an integer.
 	 */
 	public int askAIPlayerLevel( AIPlayer p ) {
-		System.out.print( "What is " + p.getAlias() + " level ? " );
+		System.out.print( "What is " + p.getAlias() + " (AI) level ? " );
 		return Integer.valueOf( input.nextLine() );
 	}
 }
