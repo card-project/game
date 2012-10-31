@@ -17,6 +17,10 @@ import models.stacks.HandStack;
 import models.stacks.SafetyStack;
 import models.stacks.Stack;
 
+/**
+ * @author Simon RENOULT
+ * @version 1.0
+ */
 public abstract class Player {
 
 	// ------------ ATTRIBUTES ------------ //
@@ -45,7 +49,7 @@ public abstract class Player {
 	}
 	
 	public Card draw( GameStack drawStackChosen ) {
-		return Stack.transferTopCard( drawStackChosen, this.handStack );
+		return drawStackChosen.shiftTopCard( this.handStack );
 	}
 
 	public void play( Move m ) {
@@ -53,7 +57,7 @@ public abstract class Player {
 	}
 	
 	public void discard( Card cardToDiscard, DiscardStack discardStack ) {
-		Stack.transferCard( cardToDiscard, this.handStack, discardStack );
+		this.handStack.shift( cardToDiscard, discardStack );
 	}
 	
 	public void discard( Integer cardToDiscardIndex, DiscardStack discardStack ) {
