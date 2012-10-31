@@ -20,6 +20,11 @@ import models.cards.remedies.GoRoll;
 import models.cards.remedies.Repairs;
 import models.cards.remedies.SpareTire;
 
+/**
+ * @author Simon RENOULT
+ * @version 1.0
+ *
+ */
 public class DeckStack extends GameStack {
 	/**
 	 * 
@@ -100,8 +105,6 @@ public class DeckStack extends GameStack {
 		for ( int i = 0; i < Distance200.MAX_INSTANCES; i++ ) {
 			this.add( CardFactory.createCard( CardType.Distance200 ) );
 		}
-		
-		Collections.shuffle( this );
 	}
 
 	private static class DeckStackHolder {
@@ -110,5 +113,9 @@ public class DeckStack extends GameStack {
 
 	public static DeckStack getInstance() {
 		return DeckStackHolder.INSTANCE;
+	}
+
+	public void shuffle() {
+		Collections.shuffle( this );
 	}
 }
