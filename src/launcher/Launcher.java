@@ -1,4 +1,4 @@
-package Launcher;
+package launcher;
 
 import controllers.tui.TUIController;
 import models.Game;
