@@ -4,6 +4,12 @@ import java.util.LinkedList;
 
 import models.cards.Card;
 
+/**
+ * Top abstract stacks mother class. Is a kind of LinkedList.
+ * 
+ * @author Simon RENOULT
+ * @version 1.1
+ */
 public abstract class Stack extends LinkedList<Card> {
 	/**
 	 * 
@@ -19,12 +25,12 @@ public abstract class Stack extends LinkedList<Card> {
 		return s + this.getLast();
 	}
 
-	public static Card transferTopCard( Stack source, Stack destination ) {
-		return transferCard( source.getFirst(), source, destination );
+	public Card dragTopCard( Stack destination ) {
+		return drag( this.getFirst(), destination );
 	}
 
-	public static Card transferCard( Card c, Stack source, Stack destination ) {
-		source.remove( c );
+	public Card drag( Card c, Stack destination ) {
+		this.remove( c );
 		destination.addFirst( c );
 		return c;
 	}
