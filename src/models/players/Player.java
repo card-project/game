@@ -1,33 +1,23 @@
 package models.players;
 
 import models.cards.Card;
-import models.cards.distances.DistanceCard;
-import models.cards.hazards.HazardCard;
-import models.cards.hazards.SpeedLimit;
-import models.cards.remedies.RemedyCard;
-import models.cards.safeties.SafetyCard;
-import models.moves.BasicMove;
 import models.moves.Move;
-import models.moves.TrickyMove;
 import models.stacks.BattleStack;
 import models.stacks.DiscardStack;
 import models.stacks.DistanceStack;
 import models.stacks.GameStack;
 import models.stacks.HandStack;
 import models.stacks.SafetyStack;
-import models.stacks.Stack;
 
 /**
  * @author Simon RENOULT
- * @version 1.0
+ * @version 1.1
  */
 public abstract class Player {
 
 	// ------------ ATTRIBUTES ------------ //
 	
 	protected String alias;
-	protected Integer score;
-	protected Integer kilometers;
 	protected BattleStack battleStack;
 	protected DistanceStack distanceStack;
 	protected SafetyStack safetyStack;
@@ -43,11 +33,7 @@ public abstract class Player {
 	}
 
 	// ------------ METHODS ------------ //
-	
-	public Card pickCardToPlay( int cardIndex ) {
-		return this.handStack.get( cardIndex );
-	}
-	
+		
 	public Card draw( GameStack drawStackChosen ) {
 		return drawStackChosen.shiftTopCard( this.handStack );
 	}
@@ -67,7 +53,7 @@ public abstract class Player {
 
 	public String toString() {
 		return this.alias +  " - "
-				+ ( this.kilometers == null ? "0" : this.kilometers ) + "km " + '\n'
+				+ this.distanceStack.getDistance() + "km " + '\n'
 				+ "HAND : "	+ this.handStack
 				+ ( !safetyStack.isEmpty() ? '\n' + "SPECIAL : " + safetyStack : "" )
 				+ ( !battleStack.isEmpty() ? '\n' + "BATTLE: " + battleStack : "" );
@@ -75,10 +61,18 @@ public abstract class Player {
 	
 	// ------------ GETTERS ------------ //
 
-	public Integer getKilometers() {
-		return this.kilometers;
+	public DistanceStack getDistanceStack() {
+		return distanceStack;
+	}
+	
+	public SafetyStack getSafetyStack() {
+		return safetyStack;
 	}
 
+	public void setBattleStack( BattleStack battleStack ) {
+		this.battleStack = battleStack;
+	}
+	
 	public String getAlias() {
 		return this.alias;
 	}
