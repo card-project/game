@@ -4,11 +4,7 @@ import java.util.Collections;
 
 import models.cards.CardFactory;
 import models.cards.CardType;
-import models.cards.distances.Distance100;
-import models.cards.distances.Distance200;
-import models.cards.distances.Distance25;
-import models.cards.distances.Distance50;
-import models.cards.distances.Distance75;
+import models.cards.distances.DistanceCard;
 import models.cards.hazards.Accident;
 import models.cards.hazards.FlatTire;
 import models.cards.hazards.OutOfGas;
@@ -22,7 +18,7 @@ import models.cards.remedies.SpareTire;
 
 /**
  * @author Simon RENOULT
- * @version 1.0
+ * @version 1.1
  *
  */
 public class DeckStack extends GameStack {
@@ -86,23 +82,23 @@ public class DeckStack extends GameStack {
 
 		/* ADD DISTANCES CARDS */
 
-		for ( int i = 0; i < Distance25.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < DistanceCard.MAX_25 ; i++ ) {
 			this.add( CardFactory.createCard( CardType.Distance25 ) );
 		}
 
-		for ( int i = 0; i < Distance50.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < DistanceCard.MAX_50 ; i++ ) {
 			this.add( CardFactory.createCard( CardType.Distance50 ) );
 		}
 
-		for ( int i = 0; i < Distance75.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < DistanceCard.MAX_75 ; i++ ) {
 			this.add( CardFactory.createCard( CardType.Distance75 ) );
 		}
 
-		for ( int i = 0; i < Distance100.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < DistanceCard.MAX_100 ; i++ ) {
 			this.add( CardFactory.createCard( CardType.Distance100 ) );
 		}
 
-		for ( int i = 0; i < Distance200.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < DistanceCard.MAX_200 ; i++ ) {
 			this.add( CardFactory.createCard( CardType.Distance200 ) );
 		}
 	}
