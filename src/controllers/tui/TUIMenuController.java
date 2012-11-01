@@ -5,7 +5,7 @@ import models.exceptions.AliasAlreadyChosenException;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
-import views.tui.TUIMenu;
+import views.tui.TUIMenuView;
 
 /**
  * TUI (Textual User Interface) view menu.
@@ -14,27 +14,27 @@ import views.tui.TUIMenu;
  * distance goal, players number, etc.
  * 
  * @author Simon RENOULT
- * @version 1.0
+ * @version 1.0.1
  */
 public class TUIMenuController {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private TUIMenu menu;
+	private TUIMenuView menu;
 	private Game currentGame;
 	
 	// ------------ CONSTRUCTORS ------------ //
 	
 	/**
 	 * Build the unique TUIMenuController object and assign
-	 * the {@link TUIMenu} and {@link Game} defined in the
+	 * the {@link TUIMenuView} and {@link Game} defined in the
 	 * mother class to current object attributes.
 	 * 
-	 * @param m {@link TUIMenu} to work on.
+	 * @param mv {@link TUIMenuView} to work on.
 	 * @param g {@link Game} to work on.
 	 */
-	public TUIMenuController( TUIMenu m, Game g ) {
-		this.menu = m;
+	public TUIMenuController( TUIMenuView mv, Game g ) {
+		this.menu = mv;
 		this.currentGame = g;
 	}
 	
@@ -43,7 +43,7 @@ public class TUIMenuController {
 	
 	/**
 	 * Unique public object method, it allows the user
-	 * to set game options through the {@link TUIMenu}. 
+	 * to set game options through the {@link TUIMenuView}. 
 	 */
 	public void run() {
 		this.defineGlobalPlayersNumber();
@@ -57,7 +57,7 @@ public class TUIMenuController {
 
 	private void defineGlobalPlayersNumber() {
 		int playersNumber = 0;
-		Boolean userChoiceIsCorrect;
+		boolean userChoiceIsCorrect;
 		do {
 			userChoiceIsCorrect = true;
 			
@@ -79,7 +79,7 @@ public class TUIMenuController {
 	
 	private void defineHumanPlayersNumber() {
 		int humanPlayersNumber = 0;
-		Boolean userChoiceIsCorrect;
+		boolean userChoiceIsCorrect;
 		do {
 			userChoiceIsCorrect = true;
 			
@@ -101,7 +101,7 @@ public class TUIMenuController {
 	
 	private void defineDistanceGoal() {
 		int distanceGoal = 0;
-		Boolean userChoiceIsCorrect;
+		boolean userChoiceIsCorrect;
 		do {
 			userChoiceIsCorrect = true;
 			
@@ -124,7 +124,7 @@ public class TUIMenuController {
 	private void defineHumanPlayersAlias() {
 		for ( int i = 0; i < currentGame.getNbPlayers() ; i++ ) {
 			if ( currentGame.getPlayers()[i] instanceof HumanPlayer ) {
-				Boolean aliasIsAlreadyChosen;
+				boolean aliasIsAlreadyChosen;
 				do {
 					aliasIsAlreadyChosen = false;
 					try {
@@ -145,7 +145,7 @@ public class TUIMenuController {
 	private void defineAIPlayersLevel() {
 		for( Player p : currentGame.getPlayers() ) {
 			if ( p instanceof AIPlayer ) {
-				Boolean userChoiceIsCorrect;
+				boolean userChoiceIsCorrect;
 				int chosenLevel = 0;
 				do {
 					userChoiceIsCorrect = true;
