@@ -1,10 +1,6 @@
 package models.cards;
 
-import models.cards.distances.Distance100;
-import models.cards.distances.Distance200;
-import models.cards.distances.Distance25;
-import models.cards.distances.Distance50;
-import models.cards.distances.Distance75;
+import models.cards.distances.DistanceCard;
 import models.cards.hazards.Accident;
 import models.cards.hazards.FlatTire;
 import models.cards.hazards.OutOfGas;
@@ -21,20 +17,28 @@ import models.cards.safeties.PunctureProof;
 import models.cards.safeties.RightOfWay;
 
 
+/**
+ * Card class factory.
+ * 
+ * Allow lighter/softer dependencies between classes.
+ * 
+ * @author Simon RENOULT
+ * @version 1.0
+ */
 public class CardFactory {
 	public static Card createCard( CardType ct ) {
 		switch ( ct ) {
 		// Distances
 		case Distance25:
-			return new Distance25();
+			return new DistanceCard( 25 );
 		case Distance50:
-			return new Distance50();
+			return new DistanceCard( 50 );
 		case Distance75:
-			return new Distance75();
+			return new DistanceCard( 75 );
 		case Distance100:
-			return new Distance100();
+			return new DistanceCard( 100 );
 		case Distance200:
-			return new Distance200();
+			return new DistanceCard( 200 );
 		// Hazards
 		case Accident:
 			return new Accident();
