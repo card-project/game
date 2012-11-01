@@ -8,6 +8,10 @@ import models.stacks.DeckStack;
 import models.stacks.DiscardStack;
 import models.stacks.HandStack;
 
+/**
+ * @author Simon RENOULT
+ * @vresion 0.1
+ */
 public class Game {
 
 	// ------------ ATTRIBUTES ------------ // 
@@ -27,6 +31,14 @@ public class Game {
 	}
 	
 	// ------------ METHODS ------------ // 
+	
+	public void distributeCardsToPlayers() {
+		for( Player p : this.players ) {
+			for ( int i = 0; i < HandStack.MAX_CARD_NB ; i++ ) {
+				this.deckStack.shiftTopCard( p.getHandStack() );
+			}
+		}
+	}
 	
 	// ------------ SETTERS ------------ // 
 
@@ -81,7 +93,7 @@ public class Game {
 	public void preparePlayersHand() {
 		// Draw initial hand (4 cards) for each player.
 		for ( Player p : players ) {
-			for ( int i = 0; i < HandStack.REGULAR_CARD_NB ; i++ ) {
+			for ( int i = 0; i < HandStack.MAX_CARD_NB ; i++ ) {
 				p.draw( this.deckStack );
 			}
 		}
