@@ -11,7 +11,7 @@ import models.stacks.SafetyStack;
 
 /**
  * @author Simon RENOULT
- * @version 1.1
+ * @version 1.1.2
  */
 public abstract class Player {
 
@@ -53,7 +53,7 @@ public abstract class Player {
 
 	public String toString() {
 		return this.alias +  " - "
-				+ this.distanceStack.getDistance() + "km " + '\n'
+				+ this.distanceStack.getTravelledDistance() + "km " + '\n'
 				+ "HAND : "	+ this.handStack
 				+ ( !safetyStack.isEmpty() ? '\n' + "SPECIAL : " + safetyStack : "" )
 				+ ( !battleStack.isEmpty() ? '\n' + "BATTLE: " + battleStack : "" );
