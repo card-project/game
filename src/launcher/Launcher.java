@@ -1,7 +1,7 @@
 package launcher;
 
-import controllers.tui.TUIController;
 import models.Game;
+import controllers.tui.TUIController;
 
 /**
  * 
@@ -12,7 +12,7 @@ import models.Game;
  * and the game played.
  * 
  * @author Simon RENOULT
- * @version 0.1
+ * @version 1.0
  */
 public class Launcher {
 
