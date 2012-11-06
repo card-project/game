@@ -33,11 +33,12 @@ public class Game {
 	// ------------ METHODS ------------ // 
 	
 	public void distributeCardsToPlayers() {
-		for( Player p : this.players ) {
-			for ( int i = 0; i < HandStack.MAX_CARD_NB ; i++ ) {
-				this.deckStack.shiftTopCard( p.getHandStack() );
+		for ( Player p : players ) {
+			for ( int i = 0; i < HandStack.MAX_CARD_NB; i++ ) {
+				p.draw( this.deckStack );
 			}
 		}
+		
 	}
 	
 	// ------------ SETTERS ------------ // 
