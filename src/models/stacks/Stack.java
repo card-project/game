@@ -11,27 +11,28 @@ import models.cards.Card;
  * @version 1.1
  */
 public abstract class Stack extends LinkedList<Card> {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1306537448576986203L;
 
 	public String toString() {
-		String s = new String();
-		for ( int i = 0; i < this.size() - 1; i++ ) {
-			s += this.get( i ).toString() + " | ";
+		String s = "| ";
+		for( Card c : this ) {
+			s += c.toString() + " | ";
 		}
 
-		return s + this.getLast();
+		return s;
 	}
 
-	public Card shiftTopCard( Stack destination ) {
+	public Card shiftTopCardTo( Stack destination ) {
 		return shift( this.getFirst(), destination );
 	}
 
 	public Card shift( Card c, Stack destination ) {
-		this.remove( c );
 		destination.addFirst( c );
+		this.remove( c );
 		return c;
 	}
 }
