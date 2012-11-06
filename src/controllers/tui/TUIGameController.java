@@ -1,6 +1,7 @@
 package controllers.tui;
 
 import models.Game;
+import models.cards.Card;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
@@ -86,6 +87,8 @@ public class TUIGameController {
 			}
 		} while ( ! userChoiceIsCorrect );
 		
+		System.out.println( firstPlayerIndex );
+		
 		return firstPlayerIndex;
 	}
 	
@@ -99,7 +102,7 @@ public class TUIGameController {
 	}
 	
 	private int getRandomFirstPlayerIndex() {
-		return (int) ( Math.random() * ( currentGame.getNbPlayers() ));
+		return (int) ( Math.random() * ( currentGame.getNbPlayers() ) );
 	}
 	
 	public void playCurrentGame( int firstPlayerIndex ) {
@@ -109,21 +112,24 @@ public class TUIGameController {
 		do {
 			currentPlayer = currentGame.getPlayers()[currentPlayerIndex];
 			
-			// STEP 1 : draw
+			// STEP 1 : Show initial hand
+			menu.inform( "Your hand : " + currentPlayer.getHandStack().toString() );
+			
+			// STEP 2 : draw
 			this.draw ( currentPlayer );
 			
-			// STEP 2 : play
+			// STEP 3 : play
 			// TODO
 			
-			// STEP 3 : discard
+			// STEP 4 : discard
 			if ( currentPlayer.getHandStack().size() > HandStack.MAX_CARD_NB ) {
 				this.discard ( currentPlayer );
 			}
 			
-			// STEP 4 : check if game is over
+			// STEP 5 : check if game is over
 			gameIsOver = currentPlayer.getDistanceStack().getTravelledDistance() == currentGame.getGoal();
 			
-			// STEP 5 : switch to next player
+			// STEP 6 : switch to next player
 			if ( ! gameIsOver ) {
 				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getNbPlayers() - 1 ) ? currentPlayerIndex : 0 ;
 			}
@@ -137,27 +143,31 @@ public class TUIGameController {
 		if ( p instanceof AIPlayer ) {
 			( ( AIPlayer ) p ).draw();
 		} else if ( p instanceof HumanPlayer ) {
+			Card drawnCrad = null;
+			
 			if ( currentGame.getDiscardStack().isEmpty() ) {
 				menu.inform( "Discard stack is empty. Deck stack has been automatically chosen." );
-				p.draw( currentGame.getDeckStack() );
+				drawnCrad = p.draw( currentGame.getDeckStack() );
 			} else if ( currentGame.getDeckStack().isEmpty() ) {
 				menu.inform( "Deck stack is empty. Discard stack has been automatically chosen." );
-				p.draw( currentGame.getDiscardStack() );
+				drawnCrad = p.draw( currentGame.getDiscardStack() );
 			} else {
 				boolean userChoiceIsCorrect = true;
 				String userChoice = "";
 				do {
 					userChoice = menu.askDrawingStack();
 					if ( userChoice.equals( "D" ) ) {
-						p.draw( currentGame.getDeckStack() );
+						drawnCrad = p.draw( currentGame.getDeckStack() );
 					} else if (userChoice.equals( "d" ) ) {
-						p.draw( currentGame.getDiscardStack() );
+						drawnCrad = p.draw( currentGame.getDiscardStack() );
 					} else {
 						menu.warn( "Try again." );
 						userChoiceIsCorrect = false;
 					}
 				} while ( ! userChoiceIsCorrect );
 			}
+			
+			menu.inform( "Drawn card : " + drawnCrad );
 		}
 	}
 	
