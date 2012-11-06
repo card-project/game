@@ -35,7 +35,7 @@ public abstract class Player {
 	// ------------ METHODS ------------ //
 		
 	public Card draw( GameStack drawStackChosen ) {
-		return drawStackChosen.shiftTopCard( this.handStack );
+		return drawStackChosen.shiftTopCardTo( this.handStack );
 	}
 
 	public void play( Move m ) {
