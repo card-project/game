@@ -5,13 +5,14 @@ import models.cards.distances.DistanceCard;
 
 /**
  * @author Simon RENOULT
- * @version 1.0
+ * @version 1.0.1
  */
 public class DistanceStack extends PlayerStack {
 
 	// ------------ ATTRIBUTES ------------ //
 	
 	private static final long serialVersionUID = -8792591903898303572L;
+	private static final int MAX_DISTANCE200 = 2;
 
 	// ------------ METHODS ------------ //
 	
@@ -29,6 +30,11 @@ public class DistanceStack extends PlayerStack {
 		return currentDistance;
 	}
 	
+	/**
+	 * Check whether the max number of Distance 200 is reached.
+	 * 
+	 * @return <em>True</em> if the limit is reached. <em>False</em> instead.
+	 */
 	public Boolean maxNumberOfDistance200IsReached() {
 		int distance200Counter = 0;
 		for ( Card c : super.cards ) {
@@ -38,6 +44,6 @@ public class DistanceStack extends PlayerStack {
 			}
 		}
 		
-		return distance200Counter == 2;
+		return distance200Counter == MAX_DISTANCE200;
 	}
 }

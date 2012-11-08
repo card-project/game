@@ -12,7 +12,7 @@ import controllers.tui.TUIController;
  * and the game played.
  * 
  * @author Simon RENOULT
- * @version 1.0
+ * @version 1.0.1
  */
 public class Launcher {
 
@@ -23,7 +23,10 @@ public class Launcher {
 	 * @param args
 	 */
 	public static void main( String[] args ) {
-		new TUIController( new Game() ).run();
+		Game g = new Game();
+		
+		// new GUIController ( g ).run();
+		new TUIController( g ).run();
 	}
 
 }

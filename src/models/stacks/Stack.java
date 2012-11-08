@@ -8,17 +8,14 @@ import models.cards.Card;
  * Top abstract stacks mother class. Is a kind of LinkedList.
  * 
  * @author Simon RENOULT
- * @version 1.1
+ * @version 1.1.1
  */
 public abstract class Stack {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1306537448576986203L;
-
 	// ------------ ATTRIBUTES ------------ //
 	
+	private static final long serialVersionUID = -1306537448576986203L;
+
 	protected LinkedList<Card> cards;
 	
 	// ------------ CONSTRUCTORS ------------ //
