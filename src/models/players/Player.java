@@ -47,7 +47,7 @@ public abstract class Player {
 	}
 	
 	public void discard( Integer cardToDiscardIndex, DiscardStack discardStack ) {
-		discard( this.handStack.get( cardToDiscardIndex ), discardStack );
+		discard( this.handStack.getCards().get( cardToDiscardIndex ), discardStack );
 	}
 
 
@@ -55,8 +55,8 @@ public abstract class Player {
 		return this.alias +  " - "
 				+ this.distanceStack.getTravelledDistance() + "km " + '\n'
 				+ "HAND : "	+ this.handStack
-				+ ( !safetyStack.isEmpty() ? '\n' + "SPECIAL : " + safetyStack : "" )
-				+ ( !battleStack.isEmpty() ? '\n' + "BATTLE: " + battleStack : "" );
+				+ ( !safetyStack.getCards().isEmpty() ? '\n' + "SPECIAL : " + safetyStack : "" )
+				+ ( !battleStack.getCards().isEmpty() ? '\n' + "BATTLE: " + battleStack : "" );
 	}
 	
 	// ------------ GETTERS ------------ //
@@ -89,5 +89,12 @@ public abstract class Player {
 	
 	public void setAlias( String string ) {
 		this.alias = string;
+	}
+	
+	public static void main( String[] args ) {
+		Integer a = 1;
+		Integer b = 2;
+
+		System.out.println( a.getClass() == b.getClass() );
 	}
 }

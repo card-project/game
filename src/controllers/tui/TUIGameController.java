@@ -122,7 +122,7 @@ public class TUIGameController {
 			// TODO
 			
 			// STEP 4 : discard
-			if ( currentPlayer.getHandStack().size() > HandStack.MAX_CARD_NB ) {
+			if ( currentPlayer.getHandStack().getCards().size() > HandStack.MAX_CARD_NB ) {
 				this.discard ( currentPlayer );
 			}
 			
@@ -145,10 +145,10 @@ public class TUIGameController {
 		} else if ( p instanceof HumanPlayer ) {
 			Card drawnCrad = null;
 			
-			if ( currentGame.getDiscardStack().isEmpty() ) {
+			if ( currentGame.getDiscardStack().getCards().isEmpty() ) {
 				menu.inform( "Discard stack is empty. Deck stack has been automatically chosen." );
 				drawnCrad = p.draw( currentGame.getDeckStack() );
-			} else if ( currentGame.getDeckStack().isEmpty() ) {
+			} else if ( currentGame.getDeckStack().getCards().isEmpty() ) {
 				menu.inform( "Deck stack is empty. Discard stack has been automatically chosen." );
 				drawnCrad = p.draw( currentGame.getDiscardStack() );
 			} else {

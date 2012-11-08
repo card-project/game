@@ -22,96 +22,100 @@ import models.cards.remedies.SpareTire;
  *
  */
 public class DeckStack extends GameStack {
-	/**
-	 * 
-	 */
+
+	// ------------ ATTRIBUTES ------------ //
+	
 	private static final long serialVersionUID = 6591146537976403648L;
 
+	private static class DeckStackHolder {
+		private final static DeckStack INSTANCE = new DeckStack();
+	}
+	
+	// ------------ CONSTRUCTORS ------------ //
+	
 	private DeckStack() {
-
+		
 		/* ADD HAZARDS CARDS */
 
 		for ( int i = 0; i < Accident.MAX_INSTANCES; i++ ) {
-			this.add( CardFactory.createCard( CardType.Accident ) );
+			super.cards.add( CardFactory.createCard( CardType.Accident ) );
 		}
 
 		for ( int i = 0; i < OutOfGas.MAX_INSTANCES; i++ ) {
-			this.add( CardFactory.createCard( CardType.OutOfGas ) );
+			super.cards.add( CardFactory.createCard( CardType.OutOfGas ) );
 		}
 
 		for ( int i = 0; i < FlatTire.MAX_INSTANCES; i++ ) {
-			this.add( CardFactory.createCard( CardType.FlatTire ) );
+			super.cards.add( CardFactory.createCard( CardType.FlatTire ) );
 		}
 
 		for ( int i = 0; i < Stop.MAX_INSTANCES; i++ ) {
-			this.add( CardFactory.createCard( CardType.Stop ) );
+			super.cards.add( CardFactory.createCard( CardType.Stop ) );
 		}
 
 		for ( int i = 0; i < SpeedLimit.MAX_INSTANCES; i++ ) {
-			this.add( CardFactory.createCard( CardType.SpeedLimit ) );
+			super.cards.add( CardFactory.createCard( CardType.SpeedLimit ) );
 		}
 
 		/* ADD REMEDIES CARDS */
 
 		for ( int i = 0; i < Repairs.MAX_INSTANCES; i++ ) {
-			this.add( CardFactory.createCard( CardType.Repairs ) );
+			super.cards.add( CardFactory.createCard( CardType.Repairs ) );
 		}
 
 		for ( int i = 0; i < Gasoline.MAX_INSTANCES; i++ ) {
-			this.add( CardFactory.createCard( CardType.Gasoline ) );
+			super.cards.add( CardFactory.createCard( CardType.Gasoline ) );
 		}
 
 		for ( int i = 0; i < SpareTire.MAX_INSTANCES; i++ ) {
-			this.add( CardFactory.createCard( CardType.SpareTire ) );
+			super.cards.add( CardFactory.createCard( CardType.SpareTire ) );
 		}
 
 		for ( int i = 0; i < GoRoll.MAX_INSTANCES; i++ ) {
-			this.add( CardFactory.createCard( CardType.GoRoll ) );
+			super.cards.add( CardFactory.createCard( CardType.GoRoll ) );
 		}
 
 		for ( int i = 0; i < EndOfLimit.MAX_INSTANCES; i++ ) {
-			this.add( CardFactory.createCard( CardType.EndOfLimit ) );
+			super.cards.add( CardFactory.createCard( CardType.EndOfLimit ) );
 		}
 
 		/* ADD SAFETIES CARDS */
 
-		this.add( CardFactory.createCard( CardType.RightOfWay ) );
-		this.add( CardFactory.createCard( CardType.DrivingAce ));
-		this.add( CardFactory.createCard( CardType.ExtraTank ) );
-		this.add( CardFactory.createCard( CardType.PunctureProof ) );
+		super.cards.add( CardFactory.createCard( CardType.RightOfWay ) );
+		super.cards.add( CardFactory.createCard( CardType.DrivingAce ));
+		super.cards.add( CardFactory.createCard( CardType.ExtraTank ) );
+		super.cards.add( CardFactory.createCard( CardType.PunctureProof ) );
 
 		/* ADD DISTANCES CARDS */
 
 		for ( int i = 0; i < DistanceCard.MAX_25 ; i++ ) {
-			this.add( CardFactory.createCard( CardType.Distance25 ) );
+			super.cards.add( CardFactory.createCard( CardType.Distance25 ) );
 		}
 
 		for ( int i = 0; i < DistanceCard.MAX_50 ; i++ ) {
-			this.add( CardFactory.createCard( CardType.Distance50 ) );
+			super.cards.add( CardFactory.createCard( CardType.Distance50 ) );
 		}
 
 		for ( int i = 0; i < DistanceCard.MAX_75 ; i++ ) {
-			this.add( CardFactory.createCard( CardType.Distance75 ) );
+			super.cards.add( CardFactory.createCard( CardType.Distance75 ) );
 		}
 
 		for ( int i = 0; i < DistanceCard.MAX_100 ; i++ ) {
-			this.add( CardFactory.createCard( CardType.Distance100 ) );
+			super.cards.add( CardFactory.createCard( CardType.Distance100 ) );
 		}
 
 		for ( int i = 0; i < DistanceCard.MAX_200 ; i++ ) {
-			this.add( CardFactory.createCard( CardType.Distance200 ) );
+			super.cards.add( CardFactory.createCard( CardType.Distance200 ) );
 		}
 	}
 
-	private static class DeckStackHolder {
-		private final static DeckStack INSTANCE = new DeckStack();
-	}
+	// ------------ METHODS ------------ //
 
 	public static DeckStack getInstance() {
 		return DeckStackHolder.INSTANCE;
 	}
 
 	public void shuffle() {
-		Collections.shuffle( this );
+		Collections.shuffle( super.cards );
 	}
 }
