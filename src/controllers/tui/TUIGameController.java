@@ -14,7 +14,7 @@ import views.tui.TUIGameView;
  * Allow users to play the game.
  * 
  * @author Simon RENOULT
- * @version 0.1.1
+ * @version 0.1.2
  *
  */
 public class TUIGameController {
@@ -49,7 +49,6 @@ public class TUIGameController {
 	public void run() {
 		this.prepareGame();
 		this.playCurrentGame( this.defineFirstPlayerIndex() );
-		
 	}
 
 	/**
@@ -84,9 +83,9 @@ public class TUIGameController {
 			}
 			
 			if ( userChoiceIsCorrect ) {
-				if ( firstPlayerIndex < 0 || firstPlayerIndex > currentGame.getNbPlayers() ) {
+				if ( firstPlayerIndex < 0 || firstPlayerIndex > currentGame.getPlayers().length ) {
 					userChoiceIsCorrect = false;
-					menu.warn( "Please enter a number between 0 and " + currentGame.getNbPlayers() );
+					menu.warn( "Please enter a number between 0 and " + currentGame.getPlayers().length );
 				} else if ( firstPlayerIndex == randomIndex ) {
 					firstPlayerIndex = this.getRandomFirstPlayerIndex();
 				} else {
@@ -96,8 +95,6 @@ public class TUIGameController {
 				}
 			}
 		} while ( ! userChoiceIsCorrect );
-		
-		System.out.println( firstPlayerIndex );
 		
 		return firstPlayerIndex;
 	}
@@ -118,7 +115,7 @@ public class TUIGameController {
 	 * @return
 	 */
 	private int getRandomFirstPlayerIndex() {
-		return (int) ( Math.random() * ( currentGame.getNbPlayers() ) );
+		return (int) ( Math.random() * ( currentGame.getPlayers().length ) );
 	}
 	
 	/**
@@ -155,7 +152,7 @@ public class TUIGameController {
 			
 			// STEP 6 : switch to next player
 			if ( ! gameIsOver ) {
-				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getNbPlayers() - 1 ) ? currentPlayerIndex : 0 ;
+				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getPlayers().length - 1 ) ? currentPlayerIndex : 0 ;
 			}
 			
 		} while ( ! gameIsOver );
@@ -229,8 +226,7 @@ public class TUIGameController {
 				}
 				
 				if ( discardCardIndex < HandStack.MIN_CARD_NB || discardCardIndex > HandStack.MAX_IN_PLAY_CARD ) {
-					menu.warn( "Please enter a number between " + 
-							HandStack.MIN_CARD_NB +
+					menu.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
 							" and " + HandStack.MAX_IN_PLAY_CARD );
 					userChoiceIsCorrect = false;
 				}

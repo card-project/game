@@ -10,14 +10,13 @@ import models.stacks.HandStack;
 
 /**
  * @author Simon RENOULT
- * @vresion 0.1.1
+ * @vresion 0.1.2
  */
 public class Game {
 
 	// ------------ ATTRIBUTES ------------ // 
 	
 	private Integer goal;
-	public Integer nbPlayers;
 	private Player[] players;
 	private Turn[] turns;
 	private DiscardStack discardStack;
@@ -45,8 +44,7 @@ public class Game {
 	// ------------ SETTERS ------------ // 
 
 	public void setPlayersNumber( int playersNumber ) {
-		this.nbPlayers = playersNumber;
-		this.players = new Player [nbPlayers];
+		this.players = new Player [playersNumber];
 	}
 
 	public void setHumanPlayers( int humanPlayersNumber ) {
@@ -93,10 +91,6 @@ public class Game {
 	}
 	
 	// ------------ GETTERS------------ // 
-	
-	public int getNbPlayers() {
-		return this.nbPlayers;
-	}
 	
 	public Player[] getPlayers() {
 		return this.players;

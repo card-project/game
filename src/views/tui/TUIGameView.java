@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  * @author Simon RENOULT
- * @version 0.1
+ * @version 0.1.1
  */
 public class TUIGameView extends TUIView {
 	
@@ -38,7 +38,7 @@ public class TUIGameView extends TUIView {
 	public int askDiscardingCardChoice() {
 		System.out.println( "Too many card in your hand." +
 				" Which one do you discard ?" +
-				"Choose its index from 1 to 4.");
+				" Choose its index from 1 to 4.");
 		return Integer.valueOf( super.input.nextLine() );
 	}
 

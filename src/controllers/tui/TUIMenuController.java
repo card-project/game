@@ -14,7 +14,7 @@ import views.tui.TUIMenuView;
  * distance goal, players number, etc.
  * 
  * @author Simon RENOULT
- * @version 1.0.2
+ * @version 1.0.3
  */
 public class TUIMenuController {
 
@@ -89,8 +89,8 @@ public class TUIMenuController {
 				userChoiceIsCorrect = false;
 			}
 			
-			if ( userChoiceIsCorrect && ( humanPlayersNumber < 1 || humanPlayersNumber > currentGame.getNbPlayers() ) ) {
-				menu.warn( "Please enter a number between 1 and " + currentGame.getNbPlayers() + "." );
+			if ( userChoiceIsCorrect && ( humanPlayersNumber < 1 || humanPlayersNumber > currentGame.getPlayers().length ) ) {
+				menu.warn( "Please enter a number between 1 and " + currentGame.getPlayers().length + "." );
 				userChoiceIsCorrect = false;
 			}
 		} while ( ! userChoiceIsCorrect );
@@ -121,7 +121,7 @@ public class TUIMenuController {
 	}
 
 	private void defineHumanPlayersAlias() {
-		for ( int i = 0; i < currentGame.getNbPlayers() ; i++ ) {
+		for ( int i = 0; i < currentGame.getPlayers().length ; i++ ) {
 			if ( currentGame.getPlayers()[i] instanceof HumanPlayer ) {
 				boolean aliasIsAlreadyChosen;
 				do {
