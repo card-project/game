@@ -8,7 +8,7 @@ import models.cards.Card;
  * Top abstract stacks mother class. Is a kind of LinkedList.
  * 
  * @author Simon RENOULT
- * @version 1.1.1
+ * @version 1.2.1
  */
 public abstract class Stack {
 	
@@ -40,20 +40,29 @@ public abstract class Stack {
 	}
 
 	public Card shift( Card c, Stack destination ) {
-		destination.getCards().addFirst( c );
-		this.getCards().remove( c );
+		destination.addFirst( c );
+		this.cards.remove( c );
 		return c;
 	}
-
+	
+	public void addFirst( Card c ) {
+		this.cards.addFirst( c );
+	}
+	
+	public Card get( int index ) {
+		return this.cards.get( index );
+	}
+	
+	public boolean isEmpty() {
+		return this.cards.isEmpty();
+	}
+	
+	public int size() {
+		return this.cards.size();
+	}
+	
 	// ------------ GETTERS ------------ //
 	
-	public LinkedList<Card> getCards() {
-		return cards;
-	}
-
 	// ------------ SETTERS ------------ //
 	
-	public void setCards( LinkedList<Card> cards ) {
-		this.cards = cards;
-	}
 }
