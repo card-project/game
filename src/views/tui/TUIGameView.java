@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  * @author Simon RENOULT
- * @version 0.1.1
+ * @version 0.2.1
  */
 public class TUIGameView extends TUIView {
 	
@@ -24,7 +24,7 @@ public class TUIGameView extends TUIView {
 
 	public int askFirstPlayer( String playerList ) {
 		System.out.print( playerList + '\n' +
-			"Which player starts ? Choose its index (0 for random). " );
+				"Which player starts ? Choose its index (0 for random). " );
 		
 		return Integer.valueOf( super.input.nextLine() );
 	}
@@ -35,11 +35,24 @@ public class TUIGameView extends TUIView {
 		return super.input.nextLine();
 	}
 
-	public int askDiscardingCardChoice() {
-		System.out.println( "Too many card in your hand." +
+	public int askPlayingCard( String cardList ) {
+		System.out.println( cardList + '\n' +
+				"Which card do you play ? " +
+				"Choose its index from 1 to 5." );
+		
+		return Integer.valueOf( super.input.nextLine() );
+	}
+
+	public void askTargetingOpponent( String playerListString ) {
+		System.out.println( "What player do you target ? " + '\n' +
+				playerListString );
+	}
+	
+	public int askDiscardingCardChoice( String cardList ) {
+		System.out.println( cardList + '\n' +
+				"Too many card in your hand." +
 				" Which one do you discard ?" +
 				" Choose its index from 1 to 4.");
 		return Integer.valueOf( super.input.nextLine() );
 	}
-
 }
