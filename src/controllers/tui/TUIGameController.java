@@ -2,6 +2,8 @@ package controllers.tui;
 
 import models.Game;
 import models.cards.Card;
+import models.cards.hazards.HazardCard;
+import models.moves.BasicMove;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
@@ -14,7 +16,7 @@ import views.tui.TUIGameView;
  * Allow users to play the game.
  * 
  * @author Simon RENOULT
- * @version 0.1.2
+ * @version 0.2.2
  *
  */
 public class TUIGameController {
@@ -76,7 +78,7 @@ public class TUIGameController {
 			userChoiceIsCorrect = true;
 			try {
 				
-				firstPlayerIndex = menu.askFirstPlayer( this.getPlayerListString() );
+				firstPlayerIndex = menu.askFirstPlayer( this.getPlayerListWithIndexString() );
 			} catch ( NumberFormatException e ) {
 				menu.warn( "Please enter a number" );
 				userChoiceIsCorrect = false;
@@ -102,7 +104,7 @@ public class TUIGameController {
 	/**
 	 * @return
 	 */
-	private String getPlayerListString() {
+	private String getPlayerListWithIndexString() {
 		String playerList = "| ";
 		for ( int i = 0; i < currentGame.getPlayers().length; i++, playerList += " | " ) {
 			playerList += (i+1) + " : " + currentGame.getPlayers()[i].getAlias();
@@ -134,16 +136,20 @@ public class TUIGameController {
 			currentPlayer = currentGame.getPlayers()[currentPlayerIndex];
 			
 			// STEP 1 : Show initial hand
-			menu.inform( "Your hand : " + currentPlayer.getHandStack().toString() );
+			menu.inform( "Your hand : " + currentPlayer.getHandStack() );
 			
 			// STEP 2 : draw
+			menu.inform( "-- > DRAWING STEP" );
 			this.draw ( currentPlayer );
 			
 			// STEP 3 : play
+			menu.inform( "-- > PLAYING STEP" );
 			// TODO
+			this.play( currentPlayer );
 			
 			// STEP 4 : discard
-			if ( currentPlayer.getHandStack().getCards().size() > HandStack.MAX_CARD_NB ) {
+			if ( currentPlayer.getHandStack().size() > HandStack.MAX_CARD_NB ) {
+				menu.inform( "-- > DISCARDING STEP" );
 				this.discard ( currentPlayer );
 			}
 			
@@ -173,10 +179,10 @@ public class TUIGameController {
 			
 			Card drawnCrad = null;
 			
-			if ( currentGame.getDiscardStack().getCards().isEmpty() ) {
+			if ( currentGame.getDiscardStack().isEmpty() ) {
 				menu.inform( "Discard stack is empty. Deck stack has been automatically chosen." );
 				drawnCrad = p.draw( currentGame.getDeckStack() );
-			} else if ( currentGame.getDeckStack().getCards().isEmpty() ) {
+			} else if ( currentGame.getDeckStack().isEmpty() ) {
 				menu.inform( "Deck stack is empty. Discard stack has been automatically chosen." );
 				drawnCrad = p.draw( currentGame.getDiscardStack() );
 			} else {
@@ -202,7 +208,84 @@ public class TUIGameController {
 		}
 	}
 	
-
+	/**
+	 * Playing card method.
+	 * Allow a player to play a card. 
+	 * 
+	 * @param p Player who plays.
+	 */
+	private void play( Player p ) {
+		if ( p instanceof AIPlayer ) {
+			( ( AIPlayer ) p ).play( );
+		} else if ( p instanceof HumanPlayer ) {
+			
+			BasicMove bm = new BasicMove( p );
+			boolean userChoiceIsCorrect = true;
+			int cardIndex = 0;
+			
+			// STEP 1 : choose a card
+			do {
+				
+				userChoiceIsCorrect = true;
+				
+				try {
+					cardIndex = menu.askPlayingCard( p.getHandStack().toString() );
+				} catch ( NumberFormatException e ) {
+					menu.warn( "Please enter a number." );
+					userChoiceIsCorrect = false;	
+				}
+				
+				if ( cardIndex < HandStack.MIN_CARD_NB || cardIndex > HandStack.MAX_IN_PLAY_CARD ) {
+					menu.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
+							" and " + HandStack.MAX_IN_PLAY_CARD );
+					userChoiceIsCorrect = false;
+				}
+				
+			} while ( ! userChoiceIsCorrect );
+			
+			bm.setCardToPlay( p.getHandStack().get( cardIndex - 1 ) );
+			
+			// STEP 2 : check its type
+			// STEP 2.1 : hazard case
+			if ( bm.getCardToPlay() instanceof HazardCard ) {
+				// STEP 2.1.1 : choose an opponent
+				do {
+					
+					userChoiceIsCorrect = true;
+					
+					try {
+						menu.askTargetingOpponent( this.getOpponentWithIndexString( p ) );
+					} catch ( NumberFormatException e ) {
+						menu.warn( "Please enter a number." );
+						userChoiceIsCorrect = false;
+					}
+					
+				} while ( ! userChoiceIsCorrect );
+			}
+			// STEP 2.2 : conventional case
+			else {
+				
+			}
+			
+			
+			// STEP 3 : play the card
+		}
+	}
+	
+	private String getOpponentWithIndexString( Player currentPlayer ) {
+		String playerList = "| ";
+		
+		for( int i = 0 ; i < currentGame.getPlayers().length ; i++ )  {
+			if ( ! currentGame.getPlayers()[i].equals( currentPlayer ) ) {
+				playerList += i + " : " + currentGame.getPlayers()[i].getAlias();  
+			}
+		}
+		
+		playerList += " |";
+		
+		return playerList;
+	}
+	
 	/**
 	 * Discarding method. 
 	 * Allow a player (AI or real) to discard a card.
@@ -211,7 +294,7 @@ public class TUIGameController {
 	 */
 	private void discard( Player p ) {
 		if ( p instanceof AIPlayer ) {
-			( ( AIPlayer ) p ).discard();
+			( ( AIPlayer ) p ).discard( currentGame.getDiscardStack() );
 		} else if ( p instanceof HumanPlayer ) {
 			
 			boolean userChoiceIsCorrect = true;
@@ -219,7 +302,7 @@ public class TUIGameController {
 			
 			do {
 				try {
-					discardCardIndex = menu.askDiscardingCardChoice();
+					discardCardIndex = menu.askDiscardingCardChoice( p.getHandStack().toString() );
 				} catch ( NumberFormatException e ) {
 					menu.warn( "Please enter a number." );
 					userChoiceIsCorrect = false;
