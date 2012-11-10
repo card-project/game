@@ -1,8 +1,10 @@
 package models.players;
 
 import models.cards.Card;
+import models.cards.distances.DistanceCard;
 import models.moves.Move;
 import models.players.strategies.Strategy;
+import models.stacks.DiscardStack;
 
 /**
  * Virtual player.
@@ -19,17 +21,16 @@ public class AIPlayer extends Player {
 
 	// ------------ METHODS ------------ //
 	
-	public void discard() {
-		
+	public void discard( DiscardStack discardStack ) {
+		super.discard( strategy.chooseCardToDiscard(), discardStack );
 	}
 	
-	public Card draw() {
-		return null;
-		
+	public void draw() {
+		super.draw( strategy.chooseStackToDraw() );
 	}
 	
-	public void player( Move m ) {
-		
+	public void play( ) {
+		//strategy.chooseCardToPlay();
 	}
 	
 	@Override
