@@ -14,7 +14,7 @@ import views.tui.TUIMenuView;
  * distance goal, players number, etc.
  * 
  * @author Simon RENOULT
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class TUIMenuController {
 
@@ -52,7 +52,6 @@ public class TUIMenuController {
 		this.defineHumanPlayersAlias();
 		this.defineAIPlayersAlias();
 		this.defineAIPlayersLevel();
-		this.distributeCardsToPlayers();
 	}
 
 	private void defineGlobalPlayersNumber() {
@@ -166,8 +165,5 @@ public class TUIMenuController {
 			}
 		}
 	}
-
-	public void distributeCardsToPlayers() {
-		currentGame.preparePlayersHand();
-	}
+	
 }

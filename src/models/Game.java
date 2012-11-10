@@ -10,7 +10,7 @@ import models.stacks.HandStack;
 
 /**
  * @author Simon RENOULT
- * @vresion 0.1
+ * @vresion 0.1.1
  */
 public class Game {
 
@@ -33,6 +33,7 @@ public class Game {
 	// ------------ METHODS ------------ // 
 	
 	public void distributeCardsToPlayers() {
+		// Draw initial hand (4 cards) for each player.
 		for ( Player p : players ) {
 			for ( int i = 0; i < HandStack.MAX_CARD_NB; i++ ) {
 				p.draw( this.deckStack );
@@ -89,15 +90,6 @@ public class Game {
 	
 	public void setAIPlayerLevel( AIPlayer p, Integer chosenLevel ) {
 		p.setLevel( chosenLevel );
-	}
-	
-	public void preparePlayersHand() {
-		// Draw initial hand (4 cards) for each player.
-		for ( Player p : players ) {
-			for ( int i = 0; i < HandStack.MAX_CARD_NB ; i++ ) {
-				p.draw( this.deckStack );
-			}
-		}
 	}
 	
 	// ------------ GETTERS------------ // 
