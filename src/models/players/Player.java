@@ -11,7 +11,7 @@ import models.stacks.SafetyStack;
 
 /**
  * @author Simon RENOULT
- * @version 1.1.2
+ * @version 1.1.3
  */
 public abstract class Player {
 
@@ -47,7 +47,7 @@ public abstract class Player {
 	}
 	
 	public void discard( Integer cardToDiscardIndex, DiscardStack discardStack ) {
-		discard( this.handStack.getCards().get( cardToDiscardIndex ), discardStack );
+		discard( this.handStack.get( cardToDiscardIndex ), discardStack );
 	}
 
 
@@ -55,8 +55,8 @@ public abstract class Player {
 		return this.alias +  " - "
 				+ this.distanceStack.getTravelledDistance() + "km " + '\n'
 				+ "HAND : "	+ this.handStack
-				+ ( !safetyStack.getCards().isEmpty() ? '\n' + "SPECIAL : " + safetyStack : "" )
-				+ ( !battleStack.getCards().isEmpty() ? '\n' + "BATTLE: " + battleStack : "" );
+				+ ( !safetyStack.isEmpty() ? '\n' + "SPECIAL : " + safetyStack : "" )
+				+ ( !battleStack.isEmpty() ? '\n' + "BATTLE: " + battleStack : "" );
 	}
 	
 	// ------------ GETTERS ------------ //

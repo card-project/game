@@ -1,8 +1,5 @@
 package models.players;
 
-import models.cards.Card;
-import models.cards.distances.DistanceCard;
-import models.moves.Move;
 import models.players.strategies.Strategy;
 import models.stacks.DiscardStack;
 
@@ -10,7 +7,7 @@ import models.stacks.DiscardStack;
  * Virtual player.
  * 
  * @author Simon RENOULT
- * @version 0.1
+ * @version 0.1.1
  */
 public class AIPlayer extends Player {
 
@@ -21,10 +18,6 @@ public class AIPlayer extends Player {
 
 	// ------------ METHODS ------------ //
 	
-	public void discard( DiscardStack discardStack ) {
-		super.discard( strategy.chooseCardToDiscard(), discardStack );
-	}
-	
 	public void draw() {
 		super.draw( strategy.chooseStackToDraw() );
 	}
@@ -32,6 +25,10 @@ public class AIPlayer extends Player {
 	public void play( ) {
 		//strategy.chooseCardToPlay();
 	}
+	
+	public void discard( DiscardStack d ) {
+		super.discard( strategy.chooseCardToDiscard(), d );
+	}	
 	
 	@Override
 	public String toString() {
