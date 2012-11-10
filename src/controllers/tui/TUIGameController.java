@@ -14,7 +14,7 @@ import views.tui.TUIGameView;
  * Allow users to play the game.
  * 
  * @author Simon RENOULT
- * @version 0.1
+ * @version 0.1.1
  *
  */
 public class TUIGameController {
@@ -42,8 +42,9 @@ public class TUIGameController {
 	// ------------ METHODS ------------ //
 
 	/**
-	 * Unique public object method, it allows the use to
-	 * play the game.
+	 * Unique public object method, it allows the user
+	 * to play the game. 
+	 * 
 	 */
 	public void run() {
 		this.prepareGame();
@@ -51,6 +52,9 @@ public class TUIGameController {
 		
 	}
 
+	/**
+	 * Initialize some {@link Game} object attributes. 
+	 */
 	private void prepareGame() {
 		currentGame.getDeckStack().shuffle();
 		menu.inform( "Shuffling deck..." );
@@ -59,10 +63,16 @@ public class TUIGameController {
 		menu.inform( "Distributing cards to players..." );
 	}
 	
+	/**
+	 * Define the first player index.
+	 * 
+	 * @return The first player index as an <em>Integer</em>. 
+	 */
 	public int defineFirstPlayerIndex() {
 		boolean userChoiceIsCorrect;
 		int randomIndex = 0, 
 			firstPlayerIndex = randomIndex;
+		
 		do {
 			userChoiceIsCorrect = true;
 			try {
@@ -92,6 +102,9 @@ public class TUIGameController {
 		return firstPlayerIndex;
 	}
 	
+	/**
+	 * @return
+	 */
 	private String getPlayerListString() {
 		String playerList = "| ";
 		for ( int i = 0; i < currentGame.getPlayers().length; i++, playerList += " | " ) {
@@ -101,14 +114,25 @@ public class TUIGameController {
 		return playerList;
 	}
 	
+	/**
+	 * @return
+	 */
 	private int getRandomFirstPlayerIndex() {
 		return (int) ( Math.random() * ( currentGame.getNbPlayers() ) );
 	}
 	
+	/**
+	 * Main game loop. 
+	 * Chain the drawing, playing and discarding steps.
+	 * 
+	 * @param firstPlayerIndex Index of the first player.
+	 */
 	public void playCurrentGame( int firstPlayerIndex ) {
+		
 		boolean gameIsOver = false;
 		int currentPlayerIndex = firstPlayerIndex;
 		Player currentPlayer;
+		
 		do {
 			currentPlayer = currentGame.getPlayers()[currentPlayerIndex];
 			
@@ -139,10 +163,17 @@ public class TUIGameController {
 		menu.inform( currentPlayer.getAlias() + " has won !" );
 	}
 
+	/**
+	 * Drawing method. 
+	 * Allow a player (AI or real) to draw a card.
+	 * 
+	 * @param p Player who draws. 
+	 */
 	private void draw ( Player p ) {
 		if ( p instanceof AIPlayer ) {
 			( ( AIPlayer ) p ).draw();
 		} else if ( p instanceof HumanPlayer ) {
+			
 			Card drawnCrad = null;
 			
 			if ( currentGame.getDiscardStack().getCards().isEmpty() ) {
@@ -152,8 +183,10 @@ public class TUIGameController {
 				menu.inform( "Deck stack is empty. Discard stack has been automatically chosen." );
 				drawnCrad = p.draw( currentGame.getDiscardStack() );
 			} else {
+			
 				boolean userChoiceIsCorrect = true;
 				String userChoice = "";
+				
 				do {
 					userChoice = menu.askDrawingStack();
 					if ( userChoice.equals( "D" ) ) {
@@ -165,18 +198,28 @@ public class TUIGameController {
 						userChoiceIsCorrect = false;
 					}
 				} while ( ! userChoiceIsCorrect );
+		
 			}
 			
 			menu.inform( "Drawn card : " + drawnCrad );
 		}
 	}
 	
+
+	/**
+	 * Discarding method. 
+	 * Allow a player (AI or real) to discard a card.
+	 * 
+	 * @param p Player who discards. 
+	 */
 	private void discard( Player p ) {
 		if ( p instanceof AIPlayer ) {
 			( ( AIPlayer ) p ).discard();
-		} else if ( p instanceof HumanPlayer ){
+		} else if ( p instanceof HumanPlayer ) {
+			
 			boolean userChoiceIsCorrect = true;
 			int discardCardIndex = 0;
+			
 			do {
 				try {
 					discardCardIndex = menu.askDiscardingCardChoice();

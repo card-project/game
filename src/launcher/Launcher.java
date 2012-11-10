@@ -12,12 +12,12 @@ import controllers.tui.TUIController;
  * and the game played.
  * 
  * @author Simon RENOULT
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class Launcher {
 
 	/**
-	 * Initiation of a new {@link Game} model and transfer to a new
+	 * Initialization of a new {@link Game} model and transfer to a new
 	 * {@link TUIController}.
 	 * 
 	 * @param args
