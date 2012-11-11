@@ -43,9 +43,12 @@ public class TUIGameView extends TUIView {
 		return Integer.valueOf( super.input.nextLine() );
 	}
 
-	public void askTargetingOpponent( String playerListString ) {
-		System.out.println( "What player do you target ? " + '\n' +
+	public int askTargetingOpponent( String playerListString ) {
+		System.out.println( "What player do you target ? " +
+				"Please choose its index." + '\n' +
 				playerListString );
+		
+		return Integer.valueOf( super.input.nextLine() );
 	}
 	
 	public int askDiscardingCardChoice( String cardList ) {

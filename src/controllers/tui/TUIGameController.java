@@ -1,8 +1,16 @@
 package controllers.tui;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import models.Game;
 import models.cards.Card;
+import models.cards.distances.DistanceCard;
 import models.cards.hazards.HazardCard;
+import models.cards.remedies.RemedyCard;
+import models.cards.safeties.SafetyCard;
 import models.moves.BasicMove;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
@@ -249,36 +257,63 @@ public class TUIGameController {
 			// STEP 2.1 : hazard case
 			if ( bm.getCardToPlay() instanceof HazardCard ) {
 				// STEP 2.1.1 : choose an opponent
+				
+				int opponentIndex = 0;
+				HashMap<Integer, Player> opponentMap = this.getOpponentsAliasMap( p );
+				
 				do {
 					
 					userChoiceIsCorrect = true;
 					
 					try {
-						menu.askTargetingOpponent( this.getOpponentWithIndexString( p ) );
+						opponentIndex = menu.askTargetingOpponent( this.getOpponentsString( opponentMap ) );
 					} catch ( NumberFormatException e ) {
 						menu.warn( "Please enter a number." );
 						userChoiceIsCorrect = false;
 					}
 					
+					if ( ! opponentMap.containsKey( opponentIndex ) ) {
+						menu.warn( "Please choose a correct index." );
+						userChoiceIsCorrect = false;
+					}
+					
 				} while ( ! userChoiceIsCorrect );
+				
+				bm.setTarget( opponentMap.get( opponentIndex ) );
 			}
 			// STEP 2.2 : conventional case
 			else {
-				
+				if ( bm.getCardToPlay() instanceof DistanceCard ) {
+					
+				} else if ( bm.getCardToPlay() instanceof RemedyCard ) {
+					
+				} else if ( bm.getCardToPlay() instanceof SafetyCard ) {
+					
+				}
 			}
 			
-			
 			// STEP 3 : play the card
+			p.play( bm );
 		}
 	}
 	
-	private String getOpponentWithIndexString( Player currentPlayer ) {
-		String playerList = "| ";
+	private HashMap<Integer, Player> getOpponentsAliasMap( Player currentPlayer ) {
+		HashMap<Integer, Player> opponentsMap = new HashMap<>();
 		
 		for( int i = 0 ; i < currentGame.getPlayers().length ; i++ )  {
-			if ( ! currentGame.getPlayers()[i].equals( currentPlayer ) ) {
-				playerList += i + " : " + currentGame.getPlayers()[i].getAlias();  
+			if ( ! ( currentPlayer.equals( currentGame.getPlayers()[i] ) ) ) {
+				opponentsMap.put( i, currentGame.getPlayers()[i] );
 			}
+		}
+		
+		return opponentsMap;
+	}
+	
+	private String getOpponentsString( HashMap<Integer, Player> opponentsMap ) {
+		String playerList = "| ";
+		
+		for ( Entry<Integer, Player> entry : opponentsMap.entrySet() ) { 
+			playerList += entry.getKey() + " : " + entry.getValue().getAlias() + " | ";
 		}
 		
 		playerList += " |";
