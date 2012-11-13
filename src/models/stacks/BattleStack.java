@@ -30,8 +30,4 @@ public class BattleStack extends PlayerStack {
 	public void setFirstGoRollIsPlaced( boolean firstGoRollIsPlaced ) {
 		this.firstGoRollIsPlaced = firstGoRollIsPlaced;
 	}
-	
-	
-
-	
 }

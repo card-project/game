@@ -12,4 +12,8 @@ public class OutOfGas extends HazardCard {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}
+	
+	public String toString() {
+		return "Out Of Gas";
+	}
 }

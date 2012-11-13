@@ -11,5 +11,8 @@ public class SpareTire extends RemedyCard {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}
-
+	
+	public String toString() {
+		return "Spare Tire";
+	}
 }

@@ -12,5 +12,9 @@ public class SpeedLimit extends HazardCard {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}
+	
+	public String toString() {
+		return "Speed Limit";
+	}
 
 }

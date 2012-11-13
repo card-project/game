@@ -29,4 +29,8 @@ public class DistanceCard extends Card {
 	public void setRange( int range ) {
 		this.range = range;
 	}
+	
+	public String toString() {
+		return "Distance " + this.range;
+	}
 }

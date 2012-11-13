@@ -12,4 +12,8 @@ public class Repairs extends RemedyCard {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}
+	
+	public String toString() {
+		return "Repairs";
+	}
 }

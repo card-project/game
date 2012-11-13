@@ -12,4 +12,8 @@ public class Gasoline extends RemedyCard {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}
+	
+	public String toString() {
+		return "Gasoline";
+	}
 }

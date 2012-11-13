@@ -12,4 +12,8 @@ public class Accident extends HazardCard {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}
+	
+	public String toString() {
+		return "Accident";
+	}
 }

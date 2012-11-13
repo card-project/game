@@ -12,4 +12,8 @@ public class EndOfLimit extends RemedyCard {
 			throw new IllegalStateException( "Too many instances" );
 		}
 	}
+	
+	public String toString() {
+		return "End Of Limit";
+	}
 }

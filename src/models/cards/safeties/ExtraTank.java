@@ -12,4 +12,8 @@ public class ExtraTank extends SafetyCard {
 	public static ExtraTank getInstance() {
 		return CisternHolder.INSTANCE;
 	}
+	
+	public String toString() {
+		return "Extra Tank";
+	}
 }

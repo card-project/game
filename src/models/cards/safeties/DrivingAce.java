@@ -12,4 +12,8 @@ public class DrivingAce extends SafetyCard {
 	public static DrivingAce getInstance() {
 		return AceDriverHolder.INSTANCE;
 	}
+	
+	public String toString() {
+		return "Driving Ace";
+	}
 }

@@ -13,4 +13,8 @@ public class RightOfWay extends SafetyCard {
 	public static RightOfWay getInstance() {
 		return EmergencyVehicleHolder.INSTANCE;
 	}
+	
+	public String toString() {
+		return "Right Of Way";
+	}
 }

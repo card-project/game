@@ -12,4 +12,8 @@ public final class PunctureProof extends SafetyCard {
 	public static PunctureProof getInstance() {
 		return PunctureProofHolder.INSTANCE;
 	}
+
+	public String toString() {
+		return "Puncture Proof";
+	}
 }
