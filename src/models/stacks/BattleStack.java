@@ -1,6 +1,6 @@
 package models.stacks;
 
-import models.cards.Card;
+import models.cards.hazards.HazardCard;
 
 
 public class BattleStack extends PlayerStack {
@@ -11,23 +11,23 @@ public class BattleStack extends PlayerStack {
 	 * 
 	 */
 	private static final long serialVersionUID = 7428996656985484083L;
-	private boolean firstGoRollIsPlaced;
+	private boolean initialGoRollIsPlayed;
 	
 	// ------------ METHODS ------------ //
-	
-	public Card get() {
-		return super.cards.getFirst();
+
+	public boolean isAttacked() {
+		return this.getFirst() instanceof HazardCard;
 	}
 	
 	// ------------ GETTERS ------------ //
 	
-	public boolean isFirstGoRollIsPlaced() {
-		return firstGoRollIsPlaced;
+	public boolean initialGoRollIsPlayed() {
+		return initialGoRollIsPlayed;
 	}
 	
 	// ------------ SETTERS ------------ //
 	
-	public void setFirstGoRollIsPlaced( boolean firstGoRollIsPlaced ) {
-		this.firstGoRollIsPlaced = firstGoRollIsPlaced;
+	public void setInitialGoRollIsPlayed( boolean initialGoRollIsPlayed ) {
+		this.initialGoRollIsPlayed = initialGoRollIsPlayed;
 	}
 }

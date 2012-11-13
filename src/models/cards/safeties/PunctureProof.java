@@ -1,7 +1,16 @@
 package models.cards.safeties;
 
+import models.cards.OppositeCardType;
+
 
 public final class PunctureProof extends SafetyCard {
+	
+	// ------------ ATTRIBUTES ------------ //
+
+	private final static OppositeCardType[] OPPOSITE_CARD_TYPES = {OppositeCardType.Tire};
+
+	// ------------ CONSTRUCTORS ------------ //
+	
 	private PunctureProof() {
 	}
 
@@ -9,6 +18,8 @@ public final class PunctureProof extends SafetyCard {
 		private static final PunctureProof INSTANCE = new PunctureProof();
 	}
 
+	// ------------ METHODS ------------ //
+	
 	public static PunctureProof getInstance() {
 		return PunctureProofHolder.INSTANCE;
 	}

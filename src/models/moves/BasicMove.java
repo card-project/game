@@ -44,6 +44,20 @@ public class BasicMove extends Move {
 		return false;
 	}
 	
+	private boolean cardAndPlayerStackAreCompatible() {
+		if ( this.target.equals( this.source ) ) {
+			if ( this.cardToPlay instanceof DistanceCard ) {
+				
+			}
+		} else if ( ! target.equals( this.source ) ){
+			if ( this.cardToPlay instanceof HazardCard ) {
+				
+			}
+		}
+		
+		return false;
+	}
+	
 	// ------------ GETTERS ------------ //
 	
 	public Card getCardToPlay() {

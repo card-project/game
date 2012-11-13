@@ -1,6 +1,7 @@
 package models.cards.distances;
 
 import models.cards.Card;
+import models.cards.OppositeCardType;
 
 /**
  * Distance card "factory".
@@ -10,6 +11,10 @@ import models.cards.Card;
  */
 public class DistanceCard extends Card {
 	
+	// ------------ ATTRIBUTES ------------ //
+	
+	private static final OppositeCardType OPPOSITE_CLASS = OppositeCardType.GoStop;
+	
 	public static final int MAX_25 = 6;
 	public static final int MAX_50 = 6;
 	public static final int MAX_75 = 6;
@@ -18,19 +23,27 @@ public class DistanceCard extends Card {
 	
 	private int range;
 
+	// ------------ CONSTRUCTORS ------------ //
+	
 	public DistanceCard( int rangeValue ) {
 		this.range = rangeValue;
 	}
 	
-	public int getRange() {
-		return range;
-	}
-
-	public void setRange( int range ) {
-		this.range = range;
-	}
+	// ------------ METHODS ------------ //
 	
 	public String toString() {
 		return "Distance " + this.range;
+	}
+	
+	// ------------ GETTERS ------------ //
+	
+	public int getRange() {
+		return range;
+	}
+	
+	// ------------ SETTERS ------------ //
+
+	public void setRange( int range ) {
+		this.range = range;
 	}
 }

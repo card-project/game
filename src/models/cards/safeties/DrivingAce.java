@@ -1,7 +1,16 @@
 package models.cards.safeties;
 
+import models.cards.OppositeCardType;
+
 
 public class DrivingAce extends SafetyCard {
+	
+	// ------------ ATTRIBUTES ------------ //
+	
+	private final static OppositeCardType[] OPPOSITE_CARD_TYPES = {OppositeCardType.StateOfCar};
+	
+	// ------------ CONSTRUCTORS ------------ //
+	
 	private DrivingAce() {
 	}
 
@@ -12,6 +21,8 @@ public class DrivingAce extends SafetyCard {
 	public static DrivingAce getInstance() {
 		return AceDriverHolder.INSTANCE;
 	}
+	
+	// ------------ METHODS ------------ //
 	
 	public String toString() {
 		return "Driving Ace";

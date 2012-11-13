@@ -53,6 +53,10 @@ public abstract class Stack {
 		return this.cards.get( index );
 	}
 	
+	public Card getFirst() {
+		return this.cards.getFirst();
+	}
+	
 	public boolean isEmpty() {
 		return this.cards.isEmpty();
 	}

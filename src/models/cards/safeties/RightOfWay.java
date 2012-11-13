@@ -1,8 +1,16 @@
 package models.cards.safeties;
 
+import models.cards.OppositeCardType;
+
 
 public class RightOfWay extends SafetyCard {
 
+	// ------------ ATTRIBUTES ------------ //
+
+	private final static OppositeCardType[] OPPOSITE_CARD_TYPES = {OppositeCardType.GoStop, OppositeCardType.Speed};
+
+	// ------------ CONSTRUCTORS ------------ //
+	
 	private RightOfWay() {
 	}
 
@@ -13,6 +21,8 @@ public class RightOfWay extends SafetyCard {
 	public static RightOfWay getInstance() {
 		return EmergencyVehicleHolder.INSTANCE;
 	}
+	
+	// ------------ METHODS ------------ //
 	
 	public String toString() {
 		return "Right Of Way";
