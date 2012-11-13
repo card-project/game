@@ -1,6 +1,7 @@
 package controllers.tui;
 
 import models.Game;
+import views.tui.TUIGamePreparationView;
 import views.tui.TUIGameView;
 import views.tui.TUIMenuView;
 
@@ -38,7 +39,8 @@ public class TUIController {
 	 */
 	public void run() {
 		new TUIMenuController( new TUIMenuView(), currentGame ).run();
-		new TUIGameController( new TUIGameView(), currentGame ).run();
+		int firstPlayerIndex = new TUIGamePreparationController( new TUIGamePreparationView(), currentGame ).defineFirstPlayerIndex();
+		new TUIGameController( new TUIGameView(), currentGame ).run( firstPlayerIndex );
 	}
 
 }

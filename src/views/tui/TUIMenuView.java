@@ -25,7 +25,7 @@ public class TUIMenuView extends TUIView {
 	 * attribute on the standard input stream <em>System.in</em>. 
 	 */
 	public TUIMenuView() {
-		super.input = new Scanner( System.in );
+
 	}
 	
 	// ------------ METHODS ------------ //

@@ -12,6 +12,12 @@ public abstract class TUIView {
 	
 	protected Scanner input;
 	
+	// ------------ CONSTRUCTORS ------------ //
+	
+	public TUIView() {
+		this.input = new Scanner( System.in );
+	}
+	
 	// ------------ METHODS ------------ //
 	
 	/**

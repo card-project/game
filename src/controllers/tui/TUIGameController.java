@@ -52,76 +52,8 @@ public class TUIGameController {
 	 * to play the game. 
 	 * 
 	 */
-	public void run() {
-		this.prepareGame();
-		this.playCurrentGame( this.defineFirstPlayerIndex() );
-	}
-
-	/**
-	 * Initialize some {@link Game} object attributes. 
-	 */
-	private void prepareGame() {
-		currentGame.getDeckStack().shuffle();
-		menu.inform( "Shuffling deck..." );
-		
-		currentGame.distributeCardsToPlayers();
-		menu.inform( "Distributing cards to players..." );
-	}
-	
-	/**
-	 * Define the first player index.
-	 * 
-	 * @return The first player index as an <em>Integer</em>. 
-	 */
-	public int defineFirstPlayerIndex() {
-		boolean userChoiceIsCorrect;
-		int randomIndex = 0, 
-			firstPlayerIndex = randomIndex;
-		
-		do {
-			userChoiceIsCorrect = true;
-			try {
-				
-				firstPlayerIndex = menu.askFirstPlayer( this.getPlayerListWithIndexString() );
-			} catch ( NumberFormatException e ) {
-				menu.warn( "Please enter a number" );
-				userChoiceIsCorrect = false;
-			}
-			
-			if ( userChoiceIsCorrect ) {
-				if ( firstPlayerIndex < 0 || firstPlayerIndex > currentGame.getPlayers().length ) {
-					userChoiceIsCorrect = false;
-					menu.warn( "Please enter a number between 0 and " + currentGame.getPlayers().length );
-				} else if ( firstPlayerIndex == randomIndex ) {
-					firstPlayerIndex = this.getRandomFirstPlayerIndex();
-				} else {
-					// Need to decrement as the player chooses between 1 and X
-					// instead of 0 and X-1.
-					firstPlayerIndex--;
-				}
-			}
-		} while ( ! userChoiceIsCorrect );
-		
-		return firstPlayerIndex;
-	}
-	
-	/**
-	 * @return
-	 */
-	private String getPlayerListWithIndexString() {
-		String playerList = "| ";
-		for ( int i = 0; i < currentGame.getPlayers().length; i++, playerList += " | " ) {
-			playerList += (i+1) + " : " + currentGame.getPlayers()[i].getAlias();
-		}
-		
-		return playerList;
-	}
-	
-	/**
-	 * @return
-	 */
-	private int getRandomFirstPlayerIndex() {
-		return (int) ( Math.random() * ( currentGame.getPlayers().length ) );
+	public void run( int firstPlayerIndex ) {
+		this.playCurrentGame( firstPlayerIndex );
 	}
 	
 	/**

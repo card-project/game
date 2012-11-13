@@ -22,13 +22,6 @@ public class TUIGameView extends TUIView {
 	
 	// ------------ METHODS ------------ //
 
-	public int askFirstPlayer( String playerList ) {
-		System.out.print( playerList + '\n' +
-				"Which player starts ? Choose its index (0 for random). " );
-		
-		return Integer.valueOf( super.input.nextLine() );
-	}
-
 	public String askDrawingStack() {
 		System.out.print( "Which stack do you chosse to draw on ? " +
 				"[D]eck or [d]iscard ? " );
