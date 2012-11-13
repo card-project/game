@@ -270,9 +270,7 @@ public class TUIGameController {
 		for ( Entry<Integer, Player> entry : opponentsMap.entrySet() ) { 
 			playerList += entry.getKey() + " : " + entry.getValue().getAlias() + " | ";
 		}
-		
-		playerList += " |";
-		
+				
 		return playerList;
 	}
 	

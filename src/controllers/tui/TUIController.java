@@ -39,8 +39,11 @@ public class TUIController {
 	 */
 	public void run() {
 		new TUIMenuController( new TUIMenuView(), currentGame ).run();
-		int firstPlayerIndex = new TUIGamePreparationController( new TUIGamePreparationView(), currentGame ).defineFirstPlayerIndex();
-		new TUIGameController( new TUIGameView(), currentGame ).run( firstPlayerIndex );
+
+		TUIGamePreparationController tgpc = new TUIGamePreparationController( new TUIGamePreparationView(), currentGame );
+		tgpc.run();
+		
+		new TUIGameController( new TUIGameView(), currentGame ).run( tgpc.getFirstPlayerIndex() );
 	}
 
 }

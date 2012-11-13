@@ -32,7 +32,7 @@ public class TUIGamePreparationController {
 	/**
 	 * Initialize some {@link Game} object attributes. 
 	 */
-	private void run() {
+	public void run() {
 		currentGame.getDeckStack().shuffle();
 		menu.inform( "Shuffling deck..." );
 		
@@ -45,7 +45,7 @@ public class TUIGamePreparationController {
 	 * 
 	 * @return The first player index as an <em>Integer</em>. 
 	 */
-	public int defineFirstPlayerIndex() {
+	public int getFirstPlayerIndex() {
 		boolean userChoiceIsCorrect;
 		final int RANDOM_INDEX = 0; 
 		int	firstPlayerIndex = RANDOM_INDEX;
@@ -76,9 +76,7 @@ public class TUIGamePreparationController {
 			}
 			
 		} while ( ! userChoiceIsCorrect );
-		
-		System.out.println( firstPlayerIndex );
-		
+				
 		return firstPlayerIndex;
 	}
 	

@@ -10,7 +10,8 @@ public class TUIGamePreparationView extends TUIView {
 	
 	public int askFirstPlayer( String playerList ) {
 		System.out.print( playerList + '\n' +
-				"Which player starts ? Choose its index (0 for random). " );
+				"Which player starts ? Choose its index (0 for random)." + '\n' +
+				"> " );
 		
 		return Integer.valueOf( super.input.nextLine() );
 	}
