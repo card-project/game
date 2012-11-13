@@ -1,16 +1,12 @@
 package controllers.tui;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import models.Game;
 import models.cards.Card;
-import models.cards.distances.DistanceCard;
 import models.cards.hazards.HazardCard;
-import models.cards.remedies.RemedyCard;
-import models.cards.safeties.SafetyCard;
+import models.exceptions.IllegalMoveException;
 import models.moves.BasicMove;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
@@ -24,7 +20,7 @@ import views.tui.TUIGameView;
  * Allow users to play the game.
  * 
  * @author Simon RENOULT
- * @version 0.2.2
+ * @version 0.3.2
  *
  */
 public class TUIGameController {
@@ -146,16 +142,16 @@ public class TUIGameController {
 			// STEP 1 : Show initial hand
 			menu.inform( "Your hand : " + currentPlayer.getHandStack() );
 			
-			// STEP 2 : draw
+			// STEP 2 : draw a card
 			menu.inform( "-- > DRAWING STEP" );
 			this.draw ( currentPlayer );
 			
-			// STEP 3 : play
+			// STEP 3 : play a card
 			menu.inform( "-- > PLAYING STEP" );
 			// TODO
 			this.play( currentPlayer );
 			
-			// STEP 4 : discard
+			// STEP 4 : discard a card
 			if ( currentPlayer.getHandStack().size() > HandStack.MAX_CARD_NB ) {
 				menu.inform( "-- > DISCARDING STEP" );
 				this.discard ( currentPlayer );
@@ -215,7 +211,7 @@ public class TUIGameController {
 			menu.inform( "Drawn card : " + drawnCrad );
 		}
 	}
-	
+
 	/**
 	 * Playing card method.
 	 * Allow a player to play a card. 
@@ -228,67 +224,27 @@ public class TUIGameController {
 		} else if ( p instanceof HumanPlayer ) {
 			
 			BasicMove bm = new BasicMove( p );
-			boolean userChoiceIsCorrect = true;
-			int cardIndex = 0;
 			
-			// STEP 1 : choose a card
-			do {
-				
-				userChoiceIsCorrect = true;
-				
-				try {
-					cardIndex = menu.askPlayingCard( p.getHandStack().toString() );
-				} catch ( NumberFormatException e ) {
-					menu.warn( "Please enter a number." );
-					userChoiceIsCorrect = false;	
-				}
-				
-				if ( cardIndex < HandStack.MIN_CARD_NB || cardIndex > HandStack.MAX_IN_PLAY_CARD ) {
-					menu.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
-							" and " + HandStack.MAX_IN_PLAY_CARD );
-					userChoiceIsCorrect = false;
-				}
-				
-			} while ( ! userChoiceIsCorrect );
+			// STEP 1 : Choose card to play.			
+			bm.setCardToPlay( this.chooseCardToPlay( p ) );
 			
-			bm.setCardToPlay( p.getHandStack().get( cardIndex - 1 ) );
+			// STEP 2 : Check its type.
 			
-			// STEP 2 : check its type
-			// STEP 2.1 : hazard case
+			// STEP 2.1 : Hazard card has been chosen.
 			if ( bm.getCardToPlay() instanceof HazardCard ) {
-				// STEP 2.1.1 : choose an opponent
-				
-				int opponentIndex = 0;
-				HashMap<Integer, Player> opponentMap = this.getOpponentsAliasMap( p );
-				
-				do {
-					
-					userChoiceIsCorrect = true;
-					
-					try {
-						opponentIndex = menu.askTargetingOpponent( this.getOpponentsString( opponentMap ) );
-					} catch ( NumberFormatException e ) {
-						menu.warn( "Please enter a number." );
-						userChoiceIsCorrect = false;
-					}
-					
-					if ( ! opponentMap.containsKey( opponentIndex ) ) {
-						menu.warn( "Please choose a correct index." );
-						userChoiceIsCorrect = false;
-					}
-					
-				} while ( ! userChoiceIsCorrect );
-				
-				bm.setTarget( opponentMap.get( opponentIndex ) );
+				// STEP 2.1.1 : Choose an opponent.
+				try {
+					bm.setTarget( this.chooseTarget( p ) );
+				} catch ( IllegalAccessError | IllegalMoveException e ) {
+					e.printStackTrace();
+				}
 			}
-			// STEP 2.2 : conventional case
+			// STEP 2.2 : Remedy/Distance/Safety card has been chosen.
 			else {
-				if ( bm.getCardToPlay() instanceof DistanceCard ) {
-					
-				} else if ( bm.getCardToPlay() instanceof RemedyCard ) {
-					
-				} else if ( bm.getCardToPlay() instanceof SafetyCard ) {
-					
+				try {
+					bm.setTarget( p );
+				} catch ( IllegalAccessError | IllegalMoveException e ) {
+					e.printStackTrace();
 				}
 			}
 			
@@ -297,6 +253,73 @@ public class TUIGameController {
 		}
 	}
 	
+	/**
+	 * @param p
+	 * @return
+	 */
+	private Card chooseCardToPlay( Player p ) {
+
+		boolean userChoiceIsCorrect = true;
+		int cardIndex = 0;
+		
+		do {
+			
+			userChoiceIsCorrect = true;
+			
+			try {
+				cardIndex = menu.askPlayingCard( p.getHandStack().toString() );
+			} catch ( NumberFormatException e ) {
+				menu.warn( "Please enter a number." );
+				userChoiceIsCorrect = false;	
+			}
+			
+			if ( cardIndex < HandStack.MIN_CARD_NB || cardIndex > HandStack.MAX_IN_PLAY_CARD ) {
+				menu.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
+						" and " + HandStack.MAX_IN_PLAY_CARD );
+				userChoiceIsCorrect = false;
+			}
+			
+		} while ( ! userChoiceIsCorrect );
+		
+		return p.getHandStack().get( cardIndex - 1 );
+	}
+	
+	/**
+	 * @param p
+	 * @return
+	 */
+	private Player chooseTarget( Player p ) {
+
+		boolean userChoiceIsCorrect = true;
+		int opponentIndex = 0;
+		HashMap<Integer, Player> opponentMap = this.getOpponentsAliasMap( p );
+		
+		do {
+			
+			userChoiceIsCorrect = true;
+			
+			try {
+				opponentIndex = menu.askTargetingOpponent( this.getOpponentsString( opponentMap ) );
+			} catch ( NumberFormatException e ) {
+				menu.warn( "Please enter a number." );
+				userChoiceIsCorrect = false;
+			}
+			
+			if ( ! opponentMap.containsKey( opponentIndex ) ) {
+				menu.warn( "Please choose a correct index." );
+				userChoiceIsCorrect = false;
+			}
+			
+		} while ( ! userChoiceIsCorrect );
+		
+		return opponentMap.get( opponentIndex - 1 );
+	}
+	
+	
+	/**
+	 * @param currentPlayer
+	 * @return
+	 */
 	private HashMap<Integer, Player> getOpponentsAliasMap( Player currentPlayer ) {
 		HashMap<Integer, Player> opponentsMap = new HashMap<>();
 		
