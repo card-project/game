@@ -47,11 +47,13 @@ public class TUIGamePreparationController {
 	 */
 	public int defineFirstPlayerIndex() {
 		boolean userChoiceIsCorrect;
-		int randomIndex = 0, 
-			firstPlayerIndex = randomIndex;
+		final int RANDOM_INDEX = 0; 
+		int	firstPlayerIndex = RANDOM_INDEX;
 		
 		do {
+			
 			userChoiceIsCorrect = true;
+			
 			try {
 				
 				firstPlayerIndex = menu.askFirstPlayer( this.getPlayerListWithIndexString() );
@@ -64,7 +66,7 @@ public class TUIGamePreparationController {
 				if ( firstPlayerIndex < 0 || firstPlayerIndex > currentGame.getPlayers().length ) {
 					userChoiceIsCorrect = false;
 					menu.warn( "Please enter a number between 0 and " + currentGame.getPlayers().length );
-				} else if ( firstPlayerIndex == randomIndex ) {
+				} else if ( firstPlayerIndex == RANDOM_INDEX ) {
 					firstPlayerIndex = this.getRandomFirstPlayerIndex();
 				} else {
 					// Need to decrement as the player chooses between 1 and X
@@ -72,7 +74,10 @@ public class TUIGamePreparationController {
 					firstPlayerIndex--;
 				}
 			}
+			
 		} while ( ! userChoiceIsCorrect );
+		
+		System.out.println( firstPlayerIndex );
 		
 		return firstPlayerIndex;
 	}

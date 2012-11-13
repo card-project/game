@@ -1,6 +1,5 @@
 package views.tui;
 
-import java.util.Scanner;
 
 /**
  * @author Simon RENOULT
@@ -11,14 +10,6 @@ public class TUIGameView extends TUIView {
 	// ------------ ATTRIBUTES ------------ //
 		
 	// ------------ CONSTRUCTORS ------------ //
-	
-	/**
-	 * Build a TUIGameView object and initialize the scanner 
-	 * attribute on the standard input stream <em>System.in</em>. 
-	 */
-	public TUIGameView() {
-		super.input = new Scanner( System.in );
-	}
 	
 	// ------------ METHODS ------------ //
 

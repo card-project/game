@@ -1,7 +1,5 @@
 package views.tui;
 
-import java.util.Scanner;
-
 import models.players.AIPlayer;
 
 /**
@@ -19,14 +17,6 @@ public class TUIMenuView extends TUIView {
 	// ------------ ATTRIBUTES ------------ //
 	
 	// ------------ CONSTRUCTORS ------------ //
-	
-	/**
-	 * Build a TUIMenuView object and initialize the scanner 
-	 * attribute on the standard input stream <em>System.in</em>. 
-	 */
-	public TUIMenuView() {
-
-	}
 	
 	// ------------ METHODS ------------ //
 	
