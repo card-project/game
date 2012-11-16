@@ -17,6 +17,7 @@ public class TUIGameView extends TUIView {
 		System.out.print( "Which stack do you chosse to draw on ? " +
 				"[D]eck or [d]iscard ? " + '\n' +
 				"> " );
+
 		return super.input.nextLine();
 	}
 
