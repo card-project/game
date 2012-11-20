@@ -4,21 +4,13 @@ import java.util.Collections;
 
 import models.cards.CardFactory;
 import models.cards.CardType;
-import models.cards.distances.DistanceCard;
-import models.cards.hazards.Accident;
-import models.cards.hazards.FlatTire;
-import models.cards.hazards.OutOfGas;
-import models.cards.hazards.SpeedLimit;
-import models.cards.hazards.Stop;
-import models.cards.remedies.EndOfLimit;
-import models.cards.remedies.Gasoline;
-import models.cards.remedies.GoRoll;
-import models.cards.remedies.Repairs;
-import models.cards.remedies.SpareTire;
+import models.cards.DistanceCard;
+import models.cards.HazardCard;
+import models.cards.RemedyCard;
 
 /**
  * @author Simon RENOULT
- * @version 1.1
+ * @version 1.2
  *
  */
 public class DeckStack extends GameStack {
@@ -37,45 +29,45 @@ public class DeckStack extends GameStack {
 		
 		/* ADD HAZARDS CARDS */
 
-		for ( int i = 0; i < Accident.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < HazardCard.MAX_ACCIDENT ; i++ ) {
 			super.cards.add( CardFactory.createCard( CardType.Accident ) );
 		}
 
-		for ( int i = 0; i < OutOfGas.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < HazardCard.MAX_OUT_OF_GAS ; i++ ) {
 			super.cards.add( CardFactory.createCard( CardType.OutOfGas ) );
 		}
 
-		for ( int i = 0; i < FlatTire.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < HazardCard.MAX_FLAT_TIRE ; i++ ) {
 			super.cards.add( CardFactory.createCard( CardType.FlatTire ) );
 		}
 
-		for ( int i = 0; i < Stop.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < HazardCard.MAX_STOP ; i++ ) {
 			super.cards.add( CardFactory.createCard( CardType.Stop ) );
 		}
 
-		for ( int i = 0; i < SpeedLimit.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < HazardCard.MAX_SPEED_LIMIT ; i++ ) {
 			super.cards.add( CardFactory.createCard( CardType.SpeedLimit ) );
 		}
 
 		/* ADD REMEDIES CARDS */
 
-		for ( int i = 0; i < Repairs.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < RemedyCard.MAX_REPAIRS; i++ ) {
 			super.cards.add( CardFactory.createCard( CardType.Repairs ) );
 		}
 
-		for ( int i = 0; i < Gasoline.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < RemedyCard.MAX_GASOLINE; i++ ) {
 			super.cards.add( CardFactory.createCard( CardType.Gasoline ) );
 		}
 
-		for ( int i = 0; i < SpareTire.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < RemedyCard.MAX_SPARE_TIRE; i++ ) {
 			super.cards.add( CardFactory.createCard( CardType.SpareTire ) );
 		}
 
-		for ( int i = 0; i < GoRoll.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < RemedyCard.MAX_GO_ROLL; i++ ) {
 			super.cards.add( CardFactory.createCard( CardType.GoRoll ) );
 		}
 
-		for ( int i = 0; i < EndOfLimit.MAX_INSTANCES; i++ ) {
+		for ( int i = 0; i < RemedyCard.MAX_END_OF_LIMIT ; i++ ) {
 			super.cards.add( CardFactory.createCard( CardType.EndOfLimit ) );
 		}
 
