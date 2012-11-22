@@ -1,5 +1,10 @@
 package views.tui;
 
+/**
+ * @author Simon RENOULT
+ * @version 1.0
+ *
+ */
 public class TUIGamePreparationView extends TUIView {
 
 	// ------------ ATTRIBUTES ------------ //
@@ -9,10 +14,7 @@ public class TUIGamePreparationView extends TUIView {
 	// ------------ METHODS ------------ //
 	
 	public int askFirstPlayer( String playerList ) {
-		System.out.print( playerList + '\n' +
-				"Which player starts ? Choose its index (0 for random)." + '\n' +
-				"> " );
-		
-		return Integer.valueOf( super.input.nextLine() );
+		super.ask( playerList, "Which player starts ? Choose its index (0 for random)." );
+		return getAnswerAsInteger();
 	}
 }

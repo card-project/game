@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  * @author Simon RENOULT
- * @version 1.0
+ * @version 1.1
  */
 public abstract class TUIView {
 	
@@ -30,11 +30,49 @@ public abstract class TUIView {
 	}
 	
 	/**
+	 * Ask something to the user.
+	 * 
+	 * @param question
+	 */
+	public void ask( String question ) {
+		System.out.print( question + '\n' + "> ");
+	}
+	
+	/**
+	 * Ask somethinf to the user with a precondition.
+	 * 
+	 * @param previousInformation
+	 * @param question
+	 */
+	public void ask( String previousInformation, String question ) {
+		this.inform( previousInformation );
+		this.ask( question );
+	}
+	
+	/**
 	 * Warn the user through the command line.
 	 * 
 	 * @param warning Notification to show up.
 	 */
 	public void warn( String warning ) {
 		System.out.println( "! " + warning );
+	}
+	
+	/**
+	 * Return the standard input as an integer.
+	 * 
+	 * @return
+	 */
+	public int getAnswerAsInteger() {
+		return Integer.valueOf( this.input.nextLine() );
+	}
+	
+	/**
+	 * Return the standard input as a String.
+	 * 
+	 * @return
+	 */
+	public String getAnswerAsString() {
+		return this.input.nextLine();
 	}
 }

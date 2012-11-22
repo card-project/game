@@ -10,7 +10,7 @@ import models.players.AIPlayer;
  * It is the only class which handles the menu standard output.
  *   
  * @author Simon RENOULT
- * @version 1.1
+ * @version 1.2
  */
 public class TUIMenuView extends TUIView {
 	
@@ -26,8 +26,8 @@ public class TUIMenuView extends TUIView {
 	 * @return The number of players as an integer.
 	 */
 	public int askGlobalPlayersNumber() {
-		System.out.print( "How many players ? " );
-		return Integer.valueOf( input.nextLine() );
+		super.ask( "How many players ?" );
+		return super.getAnswerAsInteger();
 	}
 	
 	/**
@@ -36,8 +36,8 @@ public class TUIMenuView extends TUIView {
 	 * @return The number of human players as an integer.
 	 */
 	public int askHumanPlayersNumber() {
-		System.out.print( "How many human players ? " );
-		return Integer.valueOf( input.nextLine() );
+		super.ask( "How many human players ?" );
+		return super.getAnswerAsInteger();
 	}
 	
 	/**
@@ -46,8 +46,8 @@ public class TUIMenuView extends TUIView {
 	 * @return The number goal distance as an integer.
 	 */
 	public int askDistanceGoal() {
-		System.out.print( "How far do you want to go ? " );
-		return Integer.valueOf( input.nextLine() );
+		super.ask( "How far do you want to go ?" );
+		return super.getAnswerAsInteger();
 	}
 	
 	/**
@@ -56,8 +56,8 @@ public class TUIMenuView extends TUIView {
 	 * @return The chosen alias as an integer.
 	 */
 	public String askPlayerAlias( int playerIndex ) {
-		System.out.print( "What is player " + (playerIndex + 1) + " alias ? " );
-		return input.nextLine();
+		super.ask( "What is player " + (playerIndex + 1) + " alias ?" );
+		return super.getAnswerAsString();
 	}
 	
 	/**
@@ -66,7 +66,7 @@ public class TUIMenuView extends TUIView {
 	 * @return The chosen level as an integer.
 	 */
 	public int askAIPlayerLevel( AIPlayer p ) {
-		System.out.print( "What is " + p.getAlias() + " (AI) level ? " );
-		return Integer.valueOf( input.nextLine() );
+		super.ask( "What is " + p.getAlias() + " (AI) level ?"  );
+		return super.getAnswerAsInteger();
 	}
 }
