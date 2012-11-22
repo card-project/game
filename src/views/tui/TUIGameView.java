@@ -3,7 +3,7 @@ package views.tui;
 
 /**
  * @author Simon RENOULT
- * @version 0.2.1
+ * @version 0.2.2
  */
 public class TUIGameView extends TUIView {
 	
@@ -31,7 +31,7 @@ public class TUIGameView extends TUIView {
 	}
 
 	public int askTargetingOpponent( String playerListString ) {
-		System.out.println( "What player do you target ? " +
+		System.out.print( "What player do you target ? " +
 				"Please choose his or her index." + '\n' +
 				playerListString + '\n' +
 				"> " );
@@ -40,7 +40,7 @@ public class TUIGameView extends TUIView {
 	}
 	
 	public int askDiscardingCardChoice( String cardList ) {
-		System.out.println( cardList + '\n' +
+		System.out.print( cardList + '\n' +
 				"Too many card in your hand." +
 				" Which one do you discard ?" +
 				" Choose its index from 1 to 4." + '\n' +
