@@ -1,7 +1,8 @@
 package models.players;
 
 import models.cards.Card;
-import models.moves.Move;
+import models.cards.HazardCard;
+import models.moves.BasicMove;
 import models.stacks.BattleStack;
 import models.stacks.DiscardStack;
 import models.stacks.DistanceStack;
@@ -38,8 +39,8 @@ public abstract class Player {
 		return drawStackChosen.shiftTopCardTo( this.handStack );
 	}
 
-	public void play( Move m ) {
-
+	public void play( BasicMove m ) {
+		
 	}
 	
 	public void discard( Card cardToDiscard, DiscardStack discardStack ) {
@@ -50,13 +51,24 @@ public abstract class Player {
 		discard( this.handStack.get( cardToDiscardIndex ), discardStack );
 	}
 
-
 	public String toString() {
 		return this.alias +  " - "
 				+ this.distanceStack.getTravelledDistance() + "km " + '\n'
 				+ "HAND : "	+ this.handStack
 				+ ( !safetyStack.isEmpty() ? '\n' + "SPECIAL : " + safetyStack : "" )
 				+ ( !battleStack.isEmpty() ? '\n' + "BATTLE: " + battleStack : "" );
+	}
+	
+	public boolean isProtectedFrom ( HazardCard hc ) {
+		return this.getSafetyStack().performProtectionVerificationOn( hc );
+	}
+	
+	public boolean isAttacked ( ) {
+		return this.getBattleStack().isAttacked();
+	}
+	
+	public boolean isSlowed ( ) {
+		return this.getDistanceStack().isSlowed();
 	}
 	
 	// ------------ GETTERS ------------ //
@@ -82,8 +94,13 @@ public abstract class Player {
 	}
 
 	public BattleStack getBattleStack() {
-		return battleStack;
+		return this.battleStack;
 	}
+	
+	public Card getBattleStackContent() {
+		return this.getBattleStack().getFirst();
+	}
+	
 	
 	// ------------ SETTERS ------------ //
 	
