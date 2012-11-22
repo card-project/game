@@ -20,7 +20,7 @@ public class TUIMenuController {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private TUIMenuView menu;
+	private TUIMenuView tui;
 	private Game currentGame;
 	
 	// ------------ CONSTRUCTORS ------------ //
@@ -34,7 +34,7 @@ public class TUIMenuController {
 	 * @param g {@link Game} to work on.
 	 */
 	public TUIMenuController( TUIMenuView mv, Game g ) {
-		this.menu = mv;
+		this.tui = mv;
 		this.currentGame = g;
 	}
 	
@@ -61,14 +61,14 @@ public class TUIMenuController {
 			userChoiceIsCorrect = true;
 			
 			try {
-				playersNumber = menu.askGlobalPlayersNumber();
+				playersNumber = tui.askGlobalPlayersNumber();
 			} catch ( NumberFormatException e ) {
-				menu.warn( "Please enter a number." );
+				tui.warn( "Please enter a number." );
 				userChoiceIsCorrect = false;
 			}
 			
 			if ( userChoiceIsCorrect && ( playersNumber < 1 || playersNumber > 6 ) ) {
-				menu.warn( "Please enter a number between 1 and 6." );
+				tui.warn( "Please enter a number between 1 and 6." );
 				userChoiceIsCorrect = false;
 			}
 		} while ( ! userChoiceIsCorrect );
@@ -83,14 +83,14 @@ public class TUIMenuController {
 			userChoiceIsCorrect = true;
 			
 			try {
-				humanPlayersNumber = menu.askHumanPlayersNumber();
+				humanPlayersNumber = tui.askHumanPlayersNumber();
 			} catch ( NumberFormatException e ) {
-				menu.warn( "Please enter a number." );
+				tui.warn( "Please enter a number." );
 				userChoiceIsCorrect = false;
 			}
 			
 			if ( userChoiceIsCorrect && ( humanPlayersNumber < 1 || humanPlayersNumber > currentGame.getPlayers().length ) ) {
-				menu.warn( "Please enter a number between 1 and " + currentGame.getPlayers().length + "." );
+				tui.warn( "Please enter a number between 1 and " + currentGame.getPlayers().length + "." );
 				userChoiceIsCorrect = false;
 			}
 		} while ( ! userChoiceIsCorrect );
@@ -105,14 +105,14 @@ public class TUIMenuController {
 			userChoiceIsCorrect = true;
 			
 			try {
-				distanceGoal = menu.askDistanceGoal();
+				distanceGoal = tui.askDistanceGoal();
 			} catch ( NumberFormatException e ) {
-				menu.warn( "Please enter a number." );
+				tui.warn( "Please enter a number." );
 				userChoiceIsCorrect = false;
 			}
 			
 			if ( userChoiceIsCorrect && ( distanceGoal < 700 || distanceGoal > 1000 || distanceGoal%25 != 0 ) ) {
-				menu.warn( "Please enter a number between 700 and 1000 and multiple of 25." );
+				tui.warn( "Please enter a number between 700 and 1000 and multiple of 25." );
 				userChoiceIsCorrect = false;
 			}
 		} while ( ! userChoiceIsCorrect );
@@ -127,10 +127,10 @@ public class TUIMenuController {
 				do {
 					aliasIsAlreadyChosen = false;
 					try {
-						currentGame.setPlayerAlias( currentGame.getPlayers()[i], menu.askPlayerAlias( i ) );
+						currentGame.setPlayerAlias( currentGame.getPlayers()[i], tui.askPlayerAlias( i ) );
 					} catch ( AliasAlreadyChosenException e ) {
 						aliasIsAlreadyChosen = true;
-						menu.warn( e.getMessage() );
+						tui.warn( e.getMessage() );
 					}
 				} while ( aliasIsAlreadyChosen );
 			}
@@ -149,14 +149,14 @@ public class TUIMenuController {
 				do {
 					userChoiceIsCorrect = true;
 					try {
-						chosenLevel = menu.askAIPlayerLevel( (AIPlayer) p );
+						chosenLevel = tui.askAIPlayerLevel( (AIPlayer) p );
 					} catch ( NumberFormatException e ) {
-						menu.warn( "Please enter a number." );
+						tui.warn( "Please enter a number." );
 						userChoiceIsCorrect = false;
 					}
 					
 					if ( userChoiceIsCorrect && ( chosenLevel < 1 || chosenLevel > 3 ) ) {
-						menu.warn( "Please enter a number between 1 and 3." );
+						tui.warn( "Please enter a number between 1 and 3." );
 						userChoiceIsCorrect = false;
 					}
 				} while ( ! userChoiceIsCorrect );
