@@ -1,7 +1,8 @@
 package models.stacks;
 
 import models.cards.Card;
-import models.cards.distances.DistanceCard;
+import models.cards.CardType;
+import models.cards.DistanceCard;
 
 /**
  * @author Simon RENOULT
@@ -12,8 +13,11 @@ public class DistanceStack extends PlayerStack {
 	// ------------ ATTRIBUTES ------------ //
 	
 	private static final long serialVersionUID = -8792591903898303572L;
-	private static final int MAX_DISTANCE200 = 2;
-
+	
+	private static int MAX_DISTANCE200 = 2;
+	private static int BONUS_100_CPT = 0;
+	private static int BONUS_300_CPT = 0;
+	
 	// ------------ METHODS ------------ //
 	
 	/**
@@ -27,7 +31,7 @@ public class DistanceStack extends PlayerStack {
 			currentDistance += ( (DistanceCard ) c ).getRange();
 		}
 		
-		return currentDistance;
+		return currentDistance + 100 * BONUS_100_CPT + 300 * BONUS_300_CPT;
 	}
 	
 	/**
@@ -45,5 +49,30 @@ public class DistanceStack extends PlayerStack {
 		}
 		
 		return distance200Counter == MAX_DISTANCE200;
+	}
+
+	public boolean isSlowed() {
+		return exists( CardType.SpeedLimit );
+	}
+	
+	public void addFirst( DistanceCard c ) {
+		if ( c.getRange() == 200 ) {
+			if ( this.maxNumberOfDistance200IsReached() ) {
+				throw new IllegalAccessError( "Maximum number of 200 Distances is reached." );
+			} else {
+				MAX_DISTANCE200--;
+				this.cards.addFirst( c );
+			}
+		} else {
+			this.cards.addFirst( c );
+		}
+	}
+
+	public void increaseBy100() {
+		BONUS_100_CPT++;
+	}
+
+	public void increaseBy300() {
+		BONUS_300_CPT++;
 	}
 }
