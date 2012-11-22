@@ -11,6 +11,4 @@ public class SafetyCard extends Card {
 	public SafetyCard( CardFamily initialFamily, CardType cardType ) {
 		super( initialFamily, cardType );
 	}
-
-
 }

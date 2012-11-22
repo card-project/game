@@ -38,7 +38,7 @@ public abstract class Card {
 	// ------------ GETTERS ------------ //
 	
 	public CardFamily getFamily() {
-		return this.families.get( 0 );
+		return this.getFamilies().get( 0 );
 	}
 	
 	public ArrayList<CardFamily> getFamilies() {
