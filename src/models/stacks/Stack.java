@@ -1,8 +1,10 @@
 package models.stacks;
 
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 import models.cards.Card;
+import models.cards.CardType;
 
 /**
  * Top abstract stacks mother class. Is a kind of LinkedList.
@@ -54,7 +56,11 @@ public abstract class Stack {
 	}
 	
 	public Card getFirst() {
-		return this.cards.getFirst();
+		try {
+			return this.cards.getFirst();
+		} catch ( NoSuchElementException e ) {
+			return null;
+		}
 	}
 	
 	public boolean isEmpty() {
@@ -63,6 +69,16 @@ public abstract class Stack {
 	
 	public int size() {
 		return this.cards.size();
+	}
+	
+	public boolean exists( CardType type ) {
+		for( Card c : this.cards ) {
+			if ( c.getType() == type ) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	// ------------ GETTERS ------------ //

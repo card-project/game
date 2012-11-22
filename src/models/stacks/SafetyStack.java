@@ -1,28 +1,26 @@
 package models.stacks;
 
 import models.cards.Card;
-import models.cards.OppositeCardType;
-import models.cards.hazards.HazardCard;
-import models.cards.safeties.SafetyCard;
-
+import models.cards.CardFamily;
+import models.cards.HazardCard;
 
 public class SafetyStack extends PlayerStack {
-	
+
 	// ------------ ATTRIBUTES ------------ //
-		
+
 	// ------------ METHODS ------------ //
-	
-	public boolean isProtectedFrom( HazardCard hc ) {
-		for ( Card c : super.cards ) {
-			SafetyCard sc = ( SafetyCard ) c;
-			for ( OppositeCardType oct : sc.getOppositeCardTypes() ) {
-				if ( hc.getOppositeCardType() == oct ) {
+
+	public boolean performProtectionVerificationOn( HazardCard hc ) {
+
+		for ( Card c : cards ) {
+			for ( CardFamily cf : c.getFamilies() ) {
+				if ( hc.getFamilies().get( 0 ) == cf ) {
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 }
