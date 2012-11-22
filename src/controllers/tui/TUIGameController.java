@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 
 import models.Game;
 import models.cards.Card;
-import models.cards.hazards.HazardCard;
+import models.cards.HazardCard;
 import models.exceptions.IllegalMoveException;
 import models.moves.BasicMove;
 import models.players.AIPlayer;
@@ -20,14 +20,14 @@ import views.tui.TUIGameView;
  * Allow users to play the game.
  * 
  * @author Simon RENOULT
- * @version 0.3.2
+ * @version 0.3.3
  *
  */
 public class TUIGameController {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private TUIGameView menu;
+	private TUIGameView tui;
 	private Game currentGame;
 	
 	// ------------ CONSTRUCTORS ------------ //
@@ -41,7 +41,7 @@ public class TUIGameController {
 	 * @param currentGame {@link Game} to work on.
 	 */
 	public TUIGameController( TUIGameView gv, Game g ) {
-		this.menu = gv;
+		this.tui = gv;
 		this.currentGame = g;
 	}
 	
@@ -51,6 +51,7 @@ public class TUIGameController {
 	 * Unique public object method, it allows the user
 	 * to play the game. 
 	 * 
+	 * @param firstPlayerIndex Index of the first Player.
 	 */
 	public void run( int firstPlayerIndex ) {
 		this.playCurrentGame( firstPlayerIndex );
@@ -71,21 +72,24 @@ public class TUIGameController {
 		do {
 			currentPlayer = currentGame.getPlayers()[currentPlayerIndex];
 			
+			// STEP 0 : Show player's turn name.
+			tui.inform( '\n' + currentPlayer.getAlias() + '\n');
+			
 			// STEP 1 : Show initial hand
-			menu.inform( "Your hand : " + currentPlayer.getHandStack() );
+			tui.inform( "Your hand : " + currentPlayer.getHandStack() );
 			
 			// STEP 2 : draw a card
-			menu.inform( "-- > DRAWING STEP" );
+			tui.inform( "-- > DRAWING STEP" );
 			this.draw ( currentPlayer );
 			
 			// STEP 3 : play a card
-			menu.inform( "-- > PLAYING STEP" );
+			tui.inform( "-- > PLAYING STEP" );
 			// TODO
 			this.play( currentPlayer );
 			
 			// STEP 4 : discard a card
 			if ( currentPlayer.getHandStack().size() > HandStack.MAX_CARD_NB ) {
-				menu.inform( "-- > DISCARDING STEP" );
+				tui.inform( "-- > DISCARDING STEP" );
 				this.discard ( currentPlayer );
 			}
 			
@@ -99,7 +103,7 @@ public class TUIGameController {
 			
 		} while ( ! gameIsOver );
 		
-		menu.inform( currentPlayer.getAlias() + " has won !" );
+		tui.inform( currentPlayer.getAlias() + " has won !" );
 	}
 
 	/**
@@ -116,10 +120,10 @@ public class TUIGameController {
 			Card drawnCrad = null;
 			
 			if ( currentGame.getDiscardStack().isEmpty() ) {
-				menu.inform( "Discard stack is empty. Deck stack has been automatically chosen." );
+				tui.inform( "Discard stack is empty. Deck stack has been automatically chosen." );
 				drawnCrad = p.draw( currentGame.getDeckStack() );
 			} else if ( currentGame.getDeckStack().isEmpty() ) {
-				menu.inform( "Deck stack is empty. Discard stack has been automatically chosen." );
+				tui.inform( "Deck stack is empty. Discard stack has been automatically chosen." );
 				drawnCrad = p.draw( currentGame.getDiscardStack() );
 			} else {
 			
@@ -127,20 +131,20 @@ public class TUIGameController {
 				String userChoice = "";
 				
 				do {
-					userChoice = menu.askDrawingStack();
+					userChoice = tui.askDrawingStack();
 					if ( userChoice.equals( "D" ) ) {
 						drawnCrad = p.draw( currentGame.getDeckStack() );
 					} else if (userChoice.equals( "d" ) ) {
 						drawnCrad = p.draw( currentGame.getDiscardStack() );
 					} else {
-						menu.warn( "Try again." );
+						tui.warn( "Try again." );
 						userChoiceIsCorrect = false;
 					}
 				} while ( ! userChoiceIsCorrect );
 		
 			}
 			
-			menu.inform( "Drawn card : " + drawnCrad );
+			tui.inform( "Drawn card : " + drawnCrad );
 		}
 	}
 
@@ -152,42 +156,65 @@ public class TUIGameController {
 	 */
 	private void play( Player p ) {
 		if ( p instanceof AIPlayer ) {
+			
 			( ( AIPlayer ) p ).play( );
+		
 		} else if ( p instanceof HumanPlayer ) {
-			
+
 			BasicMove bm = new BasicMove( p );
+			boolean userChoiceIsCorrect;
 			
-			// STEP 1 : Choose card to play.			
-			bm.setCardToPlay( this.chooseCardToPlay( p ) );
-			
-			// STEP 2 : Check its type.
-			
-			// STEP 2.1 : Hazard card has been chosen.
-			if ( bm.getCardToPlay() instanceof HazardCard ) {
-				// STEP 2.1.1 : Choose an opponent.
-				try {
-					bm.setTarget( this.chooseTarget( p ) );
-				} catch ( IllegalAccessError | IllegalMoveException e ) {
-					e.printStackTrace();
+			do {
+				
+				userChoiceIsCorrect = true;
+
+				// STEP 1 : Choose card to play.			
+				bm.setCardToPlay( this.chooseCardToPlay( p ) );
+				
+				// STEP 2 : Check its type.
+				
+				// STEP 2.1 : Hazard card has been chosen.
+				if ( bm.getCardToPlay() instanceof HazardCard ) {
+					// STEP 2.1.1 : Choose an opponent.
+					try {
+						bm.setTarget( this.chooseTarget( p ) );
+					} catch ( IllegalAccessError | IllegalMoveException e ) {
+						e.printStackTrace();
+					}
 				}
-			}
-			// STEP 2.2 : Remedy/Distance/Safety card has been chosen.
-			else {
-				try {
-					bm.setTarget( p );
-				} catch ( IllegalAccessError | IllegalMoveException e ) {
-					e.printStackTrace();
+				// STEP 2.2 : Remedy/Distance/Safety card has been chosen.
+				else {
+					try {
+						bm.setTarget( p );
+					} catch ( IllegalAccessError | IllegalMoveException e ) {
+						e.printStackTrace();
+					}
 				}
-			}
+				
+				// STEP 2.3 : Perform card to stack verifications.
+				try {
+					userChoiceIsCorrect = bm.cardAndPlayerStackAreCompatible();
+				} catch ( IllegalMoveException e ) {
+					tui.warn( e.getMessage() );
+				}
+				
+				if ( ! userChoiceIsCorrect ) {
+					tui.warn( "This move is not allowed." );
+				}
+				
+			} while ( ! userChoiceIsCorrect );
 			
 			// STEP 3 : play the card
-			p.play( bm );
+			//( ( HumanPlayer) p ).play( bm );
+			bm.realize();
 		}
 	}
 	
 	/**
-	 * @param p
-	 * @return
+	 * Allow the player to choose a card to play in his hand.
+	 * 
+	 * @param p Player aiming to choose a card to play.
+	 * @return Chosen card.
 	 */
 	private Card chooseCardToPlay( Player p ) {
 
@@ -199,18 +226,20 @@ public class TUIGameController {
 			userChoiceIsCorrect = true;
 			
 			try {
-				cardIndex = menu.askPlayingCard( p.getHandStack().toString() );
+				cardIndex = tui.askPlayingCard( p.getHandStack().toString() );
 			} catch ( NumberFormatException e ) {
-				menu.warn( "Please enter a number." );
+				tui.warn( "Please enter a number." );
 				userChoiceIsCorrect = false;	
 			}
 			
 			if ( cardIndex < HandStack.MIN_CARD_NB || cardIndex > HandStack.MAX_IN_PLAY_CARD ) {
-				menu.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
+			
+				tui.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
 						" and " + HandStack.MAX_IN_PLAY_CARD );
 				userChoiceIsCorrect = false;
-			}
 			
+			}
+				
 		} while ( ! userChoiceIsCorrect );
 		
 		return p.getHandStack().get( cardIndex - 1 );
@@ -231,20 +260,20 @@ public class TUIGameController {
 			userChoiceIsCorrect = true;
 			
 			try {
-				opponentIndex = menu.askTargetingOpponent( this.getOpponentsString( opponentMap ) );
+				opponentIndex = tui.askTargetingOpponent( this.getOpponentsString( opponentMap ) );
 			} catch ( NumberFormatException e ) {
-				menu.warn( "Please enter a number." );
+				tui.warn( "Please enter a number." );
 				userChoiceIsCorrect = false;
 			}
 			
 			if ( ! opponentMap.containsKey( opponentIndex ) ) {
-				menu.warn( "Please choose a correct index." );
+				tui.warn( "Please choose a correct index." );
 				userChoiceIsCorrect = false;
 			}
 			
 		} while ( ! userChoiceIsCorrect );
 		
-		return opponentMap.get( opponentIndex - 1 );
+		return opponentMap.get( opponentIndex );
 	}
 	
 	
@@ -290,14 +319,14 @@ public class TUIGameController {
 			
 			do {
 				try {
-					discardCardIndex = menu.askDiscardingCardChoice( p.getHandStack().toString() );
+					discardCardIndex = tui.askDiscardingCardChoice( p.getHandStack().toString() );
 				} catch ( NumberFormatException e ) {
-					menu.warn( "Please enter a number." );
+					tui.warn( "Please enter a number." );
 					userChoiceIsCorrect = false;
 				}
 				
 				if ( discardCardIndex < HandStack.MIN_CARD_NB || discardCardIndex > HandStack.MAX_IN_PLAY_CARD ) {
-					menu.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
+					tui.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
 							" and " + HandStack.MAX_IN_PLAY_CARD );
 					userChoiceIsCorrect = false;
 				}
