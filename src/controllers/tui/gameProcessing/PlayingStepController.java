@@ -14,6 +14,11 @@ import models.players.Player;
 import models.stacks.HandStack;
 import views.tui.TUIGameView;
 
+/**
+ * @author Simon RENOULT
+ * @version 0.1
+ *
+ */
 public class PlayingStepController extends StepController {
 
 	public PlayingStepController( TUIGameView t, Game g ) {
@@ -45,7 +50,8 @@ public class PlayingStepController extends StepController {
 				
 				userChoiceIsCorrect = true;
 
-				// STEP 1 : Choose card to play.			
+				// STEP 1 : Choose card to play.		
+				// FIXME What if no playable card in player's hand.
 				bm.setCardToPlay( this.chooseCardToPlay( super.currentPlayer ) );
 				
 				// STEP 2 : Check its type.
@@ -72,13 +78,10 @@ public class PlayingStepController extends StepController {
 				try {
 					userChoiceIsCorrect = bm.cardAndPlayerStackAreCompatible();
 				} catch ( IllegalMoveException e ) {
+					userChoiceIsCorrect = false;
 					tui.warn( e.getMessage() );
 				}
-				
-				if ( ! userChoiceIsCorrect ) {
-					tui.warn( "This move is not allowed." );
-				}
-				
+								
 			} while ( ! userChoiceIsCorrect );
 			
 			// STEP 3 : play the card
