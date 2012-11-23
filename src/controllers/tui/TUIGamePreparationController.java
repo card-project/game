@@ -34,10 +34,10 @@ public class TUIGamePreparationController {
 	 */
 	public void run() {
 		currentGame.getDeckStack().shuffle();
-		menu.inform( "Shuffling deck..." );
+		menu.inform( "Shuffling deck..." + '\n' );
 		
 		currentGame.distributeCardsToPlayers();
-		menu.inform( "Distributing cards to players..." );
+		menu.inform( "Distributing cards to players..." + '\n' );
 	}
 	
 	/**

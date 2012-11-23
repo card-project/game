@@ -1,5 +1,6 @@
 package controllers.tui;
 
+import controllers.tui.gameProcessing.TUIGameController;
 import models.Game;
 import views.tui.TUIGamePreparationView;
 import views.tui.TUIGameView;
@@ -12,7 +13,7 @@ import views.tui.TUIMenuView;
  * It owns the unique {@link Game} model class and handle both view and model.
  * 
  * @author Simon RENOULT
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class TUIController {
 
