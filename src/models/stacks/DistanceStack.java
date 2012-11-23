@@ -12,8 +12,6 @@ public class DistanceStack extends PlayerStack {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private static final long serialVersionUID = -8792591903898303572L;
-	
 	private static int MAX_DISTANCE200 = 2;
 	private static int BONUS_100_CPT = 0;
 	private static int BONUS_300_CPT = 0;

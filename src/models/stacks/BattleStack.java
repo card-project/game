@@ -7,10 +7,6 @@ public class BattleStack extends PlayerStack {
 	
 	// ------------ METHODS ------------ //
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7428996656985484083L;
 	private boolean initialGoRollIsPlayed = false;
 	
 	// ------------ METHODS ------------ //

@@ -16,8 +16,6 @@ public abstract class Stack {
 	
 	// ------------ ATTRIBUTES ------------ //
 	
-	private static final long serialVersionUID = -1306537448576986203L;
-
 	protected LinkedList<Card> cards;
 	
 	// ------------ CONSTRUCTORS ------------ //

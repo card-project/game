@@ -17,8 +17,6 @@ public class DeckStack extends GameStack {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private static final long serialVersionUID = 6591146537976403648L;
-
 	private static class DeckStackHolder {
 		private final static DeckStack INSTANCE = new DeckStack();
 	}
