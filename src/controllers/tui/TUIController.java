@@ -1,10 +1,10 @@
 package controllers.tui;
 
-import controllers.tui.gameProcessing.TUIGameController;
 import models.Game;
 import views.tui.TUIGamePreparationView;
 import views.tui.TUIGameView;
 import views.tui.TUIMenuView;
+import controllers.tui.gameProcessing.TUIGameController;
 
 /**
  * Main TUI (Textual User Interface) controller.
