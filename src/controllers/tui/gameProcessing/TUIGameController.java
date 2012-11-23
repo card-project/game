@@ -1,15 +1,6 @@
 package controllers.tui.gameProcessing;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
 import models.Game;
-import models.cards.Card;
-import models.cards.HazardCard;
-import models.exceptions.IllegalMoveException;
-import models.moves.BasicMove;
-import models.players.AIPlayer;
-import models.players.HumanPlayer;
 import models.players.Player;
 import models.stacks.HandStack;
 import views.tui.TUIGameView;
@@ -20,7 +11,7 @@ import views.tui.TUIGameView;
  * Allow users to play the game.
  * 
  * @author Simon RENOULT
- * @version 0.3.3
+ * @version 0.4.3
  *
  */
 public class TUIGameController {
@@ -73,13 +64,12 @@ public class TUIGameController {
 	 */
 	public void playCurrentGame( int firstPlayerIndex ) {
 		
+		Player currentPlayer = currentGame.getPlayers()[firstPlayerIndex];
+
 		boolean gameIsOver = false;
 		int currentPlayerIndex = firstPlayerIndex;
-		Player currentPlayer;
 		
 		do {
-			currentPlayer = currentGame.getPlayers()[currentPlayerIndex];
-			
 			// STEP 0 : Show player's turn name.
 			tui.inform( '\n' + "TURN OF " + currentPlayer.getAlias() + '\n' );
 			
@@ -93,7 +83,6 @@ public class TUIGameController {
 			
 			// STEP 3 : play a card
 			tui.inform( "-- > PLAYING" + '\n');
-			// TODO
 			playingStepController.setCurrentPlayer( currentPlayer );
 			playingStepController.run();
 			
@@ -109,7 +98,7 @@ public class TUIGameController {
 			
 			// STEP 6 : switch to next player
 			if ( ! gameIsOver ) {
-				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getPlayers().length - 1 ) ? currentPlayerIndex : 0 ;
+				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getPlayers().length - 1 ) ? 0 : currentPlayerIndex ;
 			}
 			
 		} while ( ! gameIsOver );
