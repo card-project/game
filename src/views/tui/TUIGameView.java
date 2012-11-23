@@ -14,7 +14,7 @@ public class TUIGameView extends TUIView {
 	// ------------ METHODS ------------ //
 
 	public String askDrawingStack() {
-		super.ask( "Which stack do you chosse to draw on ? [D]eck or [d]iscard ?" );
+		super.ask( "Which stack do you chosse to draw on : [D]eck or [d]iscard ?" );
 		return super.getAnswerAsString();
 	}
 

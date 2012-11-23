@@ -26,7 +26,7 @@ public abstract class TUIView {
 	 * @param information Notification to show up.
 	 */
 	public void inform( String information ) {
-		System.out.println( information );
+		System.out.print( information );
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public abstract class TUIView {
 	 * @param question
 	 */
 	public void ask( String previousInformation, String question ) {
-		this.inform( previousInformation );
+		this.inform( previousInformation + '\n' );
 		this.ask( question );
 	}
 	
