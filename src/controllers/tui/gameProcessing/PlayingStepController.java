@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import models.Game;
 import models.cards.Card;
 import models.cards.HazardCard;
-import models.exceptions.IllegalMoveException;
+import models.exceptions.moveExceptions.IllegalMoveException;
 import models.moves.BasicMove;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
@@ -50,37 +50,39 @@ public class PlayingStepController extends StepController {
 				
 				userChoiceIsCorrect = true;
 				
-				// STEP 1 : Choose card to play.		
-				// FIXME What if no playable card in player's hand.
-				bm.setCardToPlay( this.chooseCardToPlay( super.currentPlayer ) );
-				
-				// STEP 2 : Check its type.
-				
-				// STEP 2.1 : Hazard card has been chosen.
-				if ( bm.getCardToPlay() instanceof HazardCard ) {
-					// STEP 2.1.1 : Choose an opponent.
-					try {
-						userChoiceIsCorrect = bm.setTarget( this.chooseTarget( super.currentPlayer ) );
-					} catch ( IllegalAccessError e ) { 
-						userChoiceIsCorrect = false;
-						tui.warn( e.getMessage() );
-					} catch ( IllegalMoveException e ) {
-						userChoiceIsCorrect = false;
-						tui.warn( e.getMessage() );
+				if ( currentPlayer.canPlay( currentGame.getPlayers() ) ) {
+					// STEP 1 : Choose card to play.		
+					// FIXME What if no playable card in player's hand.
+					bm.setCardToPlay( this.chooseCardToPlay( super.currentPlayer ) );
+					
+					// STEP 2 : Check its type.
+					
+					// STEP 2.1 : Hazard card has been chosen.
+					if ( bm.getCardToPlay() instanceof HazardCard ) {
+						// STEP 2.1.1 : Choose an opponent.
+						try {
+							userChoiceIsCorrect = bm.setTarget( this.chooseTarget( super.currentPlayer ) );
+						} catch ( IllegalAccessError e ) { 
+							userChoiceIsCorrect = false;
+							tui.warn( e.getMessage() );
+						} catch ( IllegalMoveException e ) {
+							userChoiceIsCorrect = false;
+							tui.warn( e.getMessage() );
+						}
 					}
+					// STEP 2.2 : Remedy/Distance/Safety card has been chosen.
+					else {
+						try {
+							userChoiceIsCorrect = bm.setTarget( super.currentPlayer );
+						} catch ( IllegalAccessError e ) { 
+							userChoiceIsCorrect = false;
+							tui.warn( e.getMessage() );
+						} catch ( IllegalMoveException e ) {
+							userChoiceIsCorrect = false;
+							tui.warn( e.getMessage() );
+						}
+					}					
 				}
-				// STEP 2.2 : Remedy/Distance/Safety card has been chosen.
-				else {
-					try {
-						userChoiceIsCorrect = bm.setTarget( super.currentPlayer );
-					} catch ( IllegalAccessError e ) { 
-						userChoiceIsCorrect = false;
-						tui.warn( e.getMessage() );
-					} catch ( IllegalMoveException e ) {
-						userChoiceIsCorrect = false;
-						tui.warn( e.getMessage() );
-					}
-				}					
 				
 			} while ( ! userChoiceIsCorrect );
 			
