@@ -1,8 +1,8 @@
 package models.exceptions.moveExceptions;
 
-public class NotAttackedException extends IllegalMoveException {
+public class PlayerIsNotAttackedException extends IllegalMoveException {
 
-	public NotAttackedException( String string ) {
+	public PlayerIsNotAttackedException( String string ) {
 		super( string );
 		// TODO Auto-generated constructor stub
 	}

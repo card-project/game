@@ -1,8 +1,8 @@
 package models.exceptions.moveExceptions;
 
-public class AttackedException extends IllegalMoveException {
+public class PlayerIsAttackedException extends IllegalMoveException {
 
-	public AttackedException( String string ) {
+	public PlayerIsAttackedException( String string ) {
 		super( string );
 	}
 

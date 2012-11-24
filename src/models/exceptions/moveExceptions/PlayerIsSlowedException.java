@@ -1,9 +1,9 @@
 package models.exceptions.moveExceptions;
 
 
-public class SlowedException extends IllegalMoveException {
+public class PlayerIsSlowedException extends IllegalMoveException {
 
-	public SlowedException( String string ) {
+	public PlayerIsSlowedException( String string ) {
 		super( string );
 		// TODO Auto-generated constructor stub
 	}
