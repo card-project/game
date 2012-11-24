@@ -3,9 +3,12 @@ package models.players.strategies;
 import java.util.LinkedList;
 
 import models.cards.Card;
-import models.cards.distances.DistanceCard;
-import models.cards.hazards.HazardCard;
-import models.cards.hazards.SpeedLimit;
+import models.cards.CardType;
+import models.cards.DistanceCard;
+import models.cards.HazardCard;
+import models.cards.RemedyCard;
+import models.exceptions.IllegalMoveException;
+import models.moves.BasicMove;
 import models.players.AIPlayer;
 import models.stacks.GameStack;
 
@@ -31,49 +34,61 @@ public class Driver implements Strategy {
 
 	@Override
 	public Card chooseCardToPlay() {
-		DistanceCard chosenCard = null;
+		
+		Card chosenCard = null;
 		boolean speedLimit = false;
+		boolean initialGoRoll = this.player.getBattleStack().initialGoRollIsPlayed();
 		
-		if(this.player.getBattleStack().isAttacked())
-		{
-			LinkedList<Card> listInjuringCards = this.player.getBattleStack().getCards();
-			
-			for (Card card : listInjuringCards) {
-				
-				HazardCard injuringCard = (HazardCard) card;
-				
-				if(injuringCard instanceof SpeedLimit)
-				{
-					speedLimit = true;
-				}
-				else
-				{
-					
-				}	
-			}
-		}
+		BasicMove move = new BasicMove(this.player);
 		
+		LinkedList<DistanceCard> suitableCards = new LinkedList<DistanceCard>();
 		LinkedList<Card> list = this.player.getHandStack().getCards();
-		for (Card card : list) {
-			if(card instanceof DistanceCard)
+		
+		for (Card card : list)
+		{	
+			if(initialGoRoll == false)
 			{
-				DistanceCard cardChecked = (DistanceCard) card;
-				
-				if(!speedLimit ||(speedLimit && cardChecked.getRange() <= 50))
-				{					
-					if(cardChecked.getRange() == 200)
-					{
-						if(!this.player.getDistanceStack().maxNumberOfDistance200IsReached())
-						{
-							if(chosenCard.getRange() < cardChecked.getRange())
+				if(card instanceof RemedyCard)
+				{
+					RemedyCard cardChecked = (RemedyCard) card;
+					
+					if(initialGoRoll == false && cardChecked.getType() == CardType.GoRoll)
+						chosenCard = cardChecked;
+					
+					move.setCardToPlay(chosenCard);
+					
+					try {
+						move.performRemedyCardVerification();
+					} catch (IllegalMoveException e) {
+						
+						// TODO Check the kind of IllegalMoveException
+						chosenCard = null;
+						e.printStackTrace();
+					} catch (IllegalAccessError e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			else
+			{
+				if(card instanceof DistanceCard)
+				{
+					DistanceCard cardChecked = (DistanceCard) card;
+					
+					
+					try {
+						move.setCardToPlay(cardChecked);
+						
+						if(move.performDistanceCardVerification())
+							if(cardChecked.getRange() > ((DistanceCard)chosenCard).getRange())
 								chosenCard = cardChecked;
-						}
+						
+					} catch (IllegalMoveException e) { 
+						e.printStackTrace();
+					} catch (IllegalAccessError e) {
+						e.printStackTrace();
 					}
-					else
-					{
-						if(chosenCard.getRange() < cardChecked.getRange())
-							chosenCard = cardChecked;
-					}
+					
 				}
 			}
 		}

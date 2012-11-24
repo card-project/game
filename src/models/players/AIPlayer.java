@@ -13,13 +13,12 @@ public class AIPlayer extends Player {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private Integer level;
-	private Strategy strategy;
+	private Brain mind = new Brain(this);
 
 	// ------------ METHODS ------------ //
 	
 	public void draw() {
-		super.draw( strategy.chooseStackToDraw() );
+		super.draw( mind.chooseStackToDraw() );
 	}
 	
 	public void play( ) {
@@ -27,17 +26,12 @@ public class AIPlayer extends Player {
 	}
 	
 	public void discard( DiscardStack d ) {
-		super.discard( strategy.chooseCardToDiscard(), d );
+		super.discard( mind.chooseCardToDiscard(), d );
 	}	
 	
 	@Override
 	public String toString() {
-		return this.alias + " (" + this.level + ").";
+		return this.alias;
 	}
 
-	// ------------ SETTERS ------------ //
-	
-	public void setLevel( Integer level ) {
-		this.level = level;
-	}
 }
