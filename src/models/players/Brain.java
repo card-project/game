@@ -1,37 +1,44 @@
-package models.players.strategies;
+package models.players;
+
+import java.util.LinkedList;
 
 import models.cards.Card;
-import models.players.AIPlayer;
+import models.players.strategies.Protector;
+import models.players.strategies.Strategy;
 import models.stacks.GameStack;
 
-public class Protector implements Strategy {
-
+public class Brain implements Strategy{
+	
 	// ------------ ATTRIBUTES ------------ //
 	
+	private LinkedList<Strategy> mind = new LinkedList<Strategy>();
 	private AIPlayer player = null;
 	
 	// ------------ CONSTRUCTORS ------------ //
 	
-	public Protector(AIPlayer player) {
-		this.player = player;
+	public Brain(AIPlayer p) {
+		
+		this.player = p;
+		this.mind.add(new Protector(this.player));
 	}
 	
+	
 	// ------------ METHODS ------------ //
-
+	
 	@Override
-	public GameStack chooseStackToDraw() {
+	public Card chooseCardToDiscard() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
 	public Card chooseCardToPlay() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
-	public Card chooseCardToDiscard() {
+	public GameStack chooseStackToDraw() {
 		// TODO Auto-generated method stub
 		return null;
 	}
