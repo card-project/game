@@ -75,12 +75,14 @@ public abstract class Player {
 	 * -- > Safety
 	 *   -- > OK
 	 * -- > Attack
-	 *   -- > player attack free.
+	 *   -- > one player is free of attack.
+	 *     -- > OK
+	 * -- > Distance
 	 * 
 	 * @return
 	 */
 	public boolean canPlay( Player[] players ) {
-		return false;
+		return true;
 	}
 	
 	// ------------ GETTERS ------------ //
