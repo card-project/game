@@ -70,6 +70,18 @@ public abstract class Player {
 	public boolean isSlowed ( ) {
 		return this.getDistanceStack().isSlowed();
 	}
+
+	/**
+	 * -- > Safety
+	 *   -- > OK
+	 * -- > Attack
+	 *   -- > player attack free.
+	 * 
+	 * @return
+	 */
+	public boolean canPlay( Player[] players ) {
+		return false;
+	}
 	
 	// ------------ GETTERS ------------ //
 
