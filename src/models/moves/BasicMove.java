@@ -91,53 +91,65 @@ public class BasicMove extends Move {
 	 */
 	public boolean cardAndPlayerStackAreCompatible() throws IllegalMoveException {
 		if ( this.cardToPlay instanceof DistanceCard ) {
-			if ( ! this.target.getBattleStack().initialGoRollIsPlayed() ) {
-				throw new IllegalMoveException( "Initial GoRoll card has not been played yet." );
-			} else {
-				if ( ! this.target.isProtectedFrom( ( HazardCard ) ( this.target.getBattleStackContent() ) )
-						&& this.target.getBattleStack().isAttacked() ) {
-					throw new IllegalMoveException( "You are under attack." );
-				} else if ( this.target.isSlowed() && ( ( DistanceCard ) this.cardToPlay ).getRange() > 50 ) {
-					throw new IllegalMoveException( "Your speed is limited." );
-				}
-			}
-		}
-		
-		else if ( this.cardToPlay instanceof HazardCard ) {
-			if ( this.target.isProtectedFrom( ( HazardCard ) this.cardToPlay ) ) {
-				throw new IllegalMoveException( "Your opponent is protected from this kind of attack." );
-			} else if ( this.cardToPlay.getFamily() == CardFamily.Speed 
-					&& this.target.isSlowed() ) {
-				throw new IllegalMoveException( "Your opponent is already slowed." );
-			} else if ( this.cardToPlay.getFamily() != CardFamily.Speed 
-					&& this.target.isAttacked() ) {
-				throw new IllegalMoveException( "Your opponent is already under attack." );
-			}
-		}
-		
-		else if ( this.cardToPlay instanceof RemedyCard ) {
-			if ( cardToPlay.getFamily() == CardFamily.Speed ) {
-				if ( ! target.isSlowed() ) {
-					throw new IllegalMoveException( "You are not slowed." );
-				}
-			} else if ( cardToPlay.getFamily() == CardFamily.GoStop ) {
-				if ( target.getBattleStack().initialGoRollIsPlayed() && ! target.isAttacked() ) {
-						throw new IllegalMoveException( "Initial GoRoll has already been played." );
-				}
-			} else {
-				if ( ! target.isAttacked() ) {
-					throw new IllegalMoveException( "You are not under attack." );
-				} else {
-					if ( cardToPlay.getFamily() != target.getBattleStackContent().getFamily() ) {
-						throw new IllegalMoveException( "Not the good kind of remedy." );
-					}
-				}
-			}
-		}
-		
-		else if ( this.cardToPlay instanceof SafetyCard ) {
+			this.performDistanceCardVerification();
+		} else if ( this.cardToPlay instanceof HazardCard ) {
+			this.performHazardCardVerification();
+		} else if ( this.cardToPlay instanceof RemedyCard ) { 
+			this.performRemedyCardVerification();
+		}	else if ( this.cardToPlay instanceof SafetyCard ) {
 			return true;
 		} 
+		
+		return true;
+	}
+
+	public boolean performDistanceCardVerification() throws IllegalMoveException {
+		if ( ! this.target.getBattleStack().initialGoRollIsPlayed() ) {
+			throw new IllegalMoveException( "Initial GoRoll card has not been played yet." );
+		} else {
+			if ( ! this.target.isProtectedFrom( ( HazardCard ) ( this.target.getBattleStackContent() ) )
+					&& this.target.getBattleStack().isAttacked() ) {
+				throw new IllegalMoveException( "You are under attack." );
+			} else if ( this.target.isSlowed() && ( ( DistanceCard ) this.cardToPlay ).getRange() > 50 ) {
+				throw new IllegalMoveException( "Your speed is limited." );
+			}
+		}
+		
+		return true;
+	}
+
+	public boolean performHazardCardVerification() throws IllegalMoveException {
+		if ( this.target.isProtectedFrom( ( HazardCard ) this.cardToPlay ) ) {
+			throw new IllegalMoveException( "Your opponent is protected from this kind of attack." );
+		} else if ( this.cardToPlay.getFamily() == CardFamily.Speed 
+				&& this.target.isSlowed() ) {
+			throw new IllegalMoveException( "Your opponent is already slowed." );
+		} else if ( this.cardToPlay.getFamily() != CardFamily.Speed 
+				&& this.target.isAttacked() ) {
+			throw new IllegalMoveException( "Your opponent is already under attack." );
+		}
+		
+		return true;
+	}
+	
+	public boolean performRemedyCardVerification() throws IllegalMoveException {
+		if ( cardToPlay.getFamily() == CardFamily.Speed ) {
+			if ( ! target.isSlowed() ) {
+				throw new IllegalMoveException( "You are not slowed." );
+			}
+		} else if ( cardToPlay.getFamily() == CardFamily.GoStop ) {
+			if ( target.getBattleStack().initialGoRollIsPlayed() && ! target.isAttacked() ) {
+					throw new IllegalMoveException( "Initial GoRoll has already been played." );
+			}
+		} else {
+			if ( ! target.isAttacked() ) {
+				throw new IllegalMoveException( "You are not under attack." );
+			} else {
+				if ( cardToPlay.getFamily() != target.getBattleStackContent().getFamily() ) {
+					throw new IllegalMoveException( "Not the good kind of remedy." );
+				}
+			}
+		}
 		
 		return true;
 	}
