@@ -49,7 +49,7 @@ public class PlayingStepController extends StepController {
 			do {
 				
 				userChoiceIsCorrect = true;
-
+				
 				// STEP 1 : Choose card to play.		
 				// FIXME What if no playable card in player's hand.
 				bm.setCardToPlay( this.chooseCardToPlay( super.currentPlayer ) );
@@ -61,7 +61,9 @@ public class PlayingStepController extends StepController {
 					// STEP 2.1.1 : Choose an opponent.
 					try {
 						bm.setTarget( this.chooseTarget( super.currentPlayer ) );
-					} catch ( IllegalAccessError | IllegalMoveException e ) {
+					} catch ( IllegalAccessError e ) { 
+						e.printStackTrace();
+					} catch ( IllegalMoveException e ) {
 						e.printStackTrace();
 					}
 				}
@@ -69,7 +71,9 @@ public class PlayingStepController extends StepController {
 				else {
 					try {
 						bm.setTarget( super.currentPlayer );
-					} catch ( IllegalAccessError | IllegalMoveException e ) {
+					} catch ( IllegalAccessError e ) { 
+						e.printStackTrace();
+					} catch ( IllegalMoveException e ) {
 						e.printStackTrace();
 					}
 				}
@@ -81,7 +85,7 @@ public class PlayingStepController extends StepController {
 					userChoiceIsCorrect = false;
 					tui.warn( e.getMessage() );
 				}
-								
+
 			} while ( ! userChoiceIsCorrect );
 			
 			// STEP 3 : play the card
@@ -162,7 +166,7 @@ public class PlayingStepController extends StepController {
 	 * @return
 	 */
 	private HashMap<Integer, Player> getOpponentsAliasMap( Player currentPlayer ) {
-		HashMap<Integer, Player> opponentsMap = new HashMap<>();
+		HashMap<Integer, Player> opponentsMap = new HashMap<Integer, Player>();
 		
 		for( int i = 0 ; i < currentGame.getPlayers().length ; i++ )  {
 			if ( ! ( currentPlayer.equals( currentGame.getPlayers()[i] ) ) ) {
@@ -173,6 +177,10 @@ public class PlayingStepController extends StepController {
 		return opponentsMap;
 	}
 	
+	/**
+	 * @param opponentsMap
+	 * @return
+	 */
 	private String getOpponentsString( HashMap<Integer, Player> opponentsMap ) {
 		String playerList = "| ";
 		
@@ -182,5 +190,4 @@ public class PlayingStepController extends StepController {
 				
 		return playerList;
 	}
-
 }
