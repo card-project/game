@@ -2,6 +2,7 @@ package models.moves;
 
 import models.cards.Card;
 import models.cards.CardFamily;
+import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
@@ -39,6 +40,18 @@ public class BasicMove extends Move {
 		} else if ( cardToPlay instanceof SafetyCard ) {
 			target.getSafetyStack().addFirst( cardToPlay );
 			target.getDistanceStack().increaseBy100();
+			
+			if ( cardToPlay.getType() == CardType.RightOfWay ) {
+				for ( CardFamily cf : cardToPlay.getFamilies() ) {
+					if ( cf == cardToPlay.getFamily() ) {
+						target.getBattleStack().removeAll();
+					}
+				}
+			} else {
+				if ( cardToPlay.getFamily() == target.getBattleStackContent().getFamily() ) {
+					target.getBattleStack().removeAll();
+				}
+			}
 		}
  		
 		source.getHandStack().remove( cardToPlay );
@@ -178,7 +191,7 @@ public class BasicMove extends Move {
 	 * @param c
 	 * @throws IllegalMoveException
 	 */
-	public void setCardToPlay( Card c ) {
+	public void setCardToPlay( Card c ) throws IllegalAccessError {
 		if ( c == null ) {
 			throw new IllegalAccessError( "Card must be defined." );
 		} else {
@@ -193,12 +206,13 @@ public class BasicMove extends Move {
 	 * @throws IllegalMoveException Target cannot be chosen with this card.
 	 * @throws IllegalAccessError No card previously selected.
 	 */
-	public void setTarget( Player targetPlayer ) throws IllegalMoveException, IllegalAccessError {
+	public boolean setTarget( Player targetPlayer ) throws IllegalMoveException, IllegalAccessError {
 		if ( this.cardToPlay == null ) {
 			throw new IllegalAccessError( "No card selected." );
 		} else {
 			if ( this.cardAndTargetAreCompatible( targetPlayer ) ) {
 				this.target = targetPlayer;
+				return this.cardAndPlayerStackAreCompatible();
 			} else {
 				throw new IllegalMoveException( "Target must be an opponent." );
 			}

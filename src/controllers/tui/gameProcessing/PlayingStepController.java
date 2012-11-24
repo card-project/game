@@ -16,7 +16,7 @@ import views.tui.TUIGameView;
 
 /**
  * @author Simon RENOULT
- * @version 0.1
+ * @version 0.2
  *
  */
 public class PlayingStepController extends StepController {
@@ -60,32 +60,28 @@ public class PlayingStepController extends StepController {
 				if ( bm.getCardToPlay() instanceof HazardCard ) {
 					// STEP 2.1.1 : Choose an opponent.
 					try {
-						bm.setTarget( this.chooseTarget( super.currentPlayer ) );
+						userChoiceIsCorrect = bm.setTarget( this.chooseTarget( super.currentPlayer ) );
 					} catch ( IllegalAccessError e ) { 
-						e.printStackTrace();
+						userChoiceIsCorrect = false;
+						tui.warn( e.getMessage() );
 					} catch ( IllegalMoveException e ) {
-						e.printStackTrace();
+						userChoiceIsCorrect = false;
+						tui.warn( e.getMessage() );
 					}
 				}
 				// STEP 2.2 : Remedy/Distance/Safety card has been chosen.
 				else {
 					try {
-						bm.setTarget( super.currentPlayer );
+						userChoiceIsCorrect = bm.setTarget( super.currentPlayer );
 					} catch ( IllegalAccessError e ) { 
-						e.printStackTrace();
+						userChoiceIsCorrect = false;
+						tui.warn( e.getMessage() );
 					} catch ( IllegalMoveException e ) {
-						e.printStackTrace();
+						userChoiceIsCorrect = false;
+						tui.warn( e.getMessage() );
 					}
-				}
+				}					
 				
-				// STEP 2.3 : Perform card to stack verifications.
-				try {
-					userChoiceIsCorrect = bm.cardAndPlayerStackAreCompatible();
-				} catch ( IllegalMoveException e ) {
-					userChoiceIsCorrect = false;
-					tui.warn( e.getMessage() );
-				}
-
 			} while ( ! userChoiceIsCorrect );
 			
 			// STEP 3 : play the card
