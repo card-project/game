@@ -7,7 +7,7 @@ import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
-import models.exceptions.IllegalMoveException;
+import models.exceptions.moveExceptions.IllegalMoveException;
 import models.players.Player;
 
 /**
