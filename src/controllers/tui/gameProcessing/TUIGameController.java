@@ -11,7 +11,7 @@ import views.tui.TUIGameView;
  * Allow users to play the game.
  * 
  * @author Simon RENOULT
- * @version 0.4.3
+ * @version 0.4.4
  *
  */
 public class TUIGameController {
@@ -99,6 +99,7 @@ public class TUIGameController {
 			// STEP 6 : switch to next player
 			if ( ! gameIsOver ) {
 				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getPlayers().length - 1 ) ? 0 : currentPlayerIndex ;
+				currentPlayer = currentGame.getPlayers()[currentPlayerIndex];
 			}
 			
 		} while ( ! gameIsOver );
