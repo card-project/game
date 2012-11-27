@@ -1,6 +1,8 @@
-package models.stacks;
+package models.stacks.game;
+
 
 public class DiscardStack extends GameStack {
+	
 	private DiscardStack() {
 	}
 
