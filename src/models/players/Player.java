@@ -3,12 +3,12 @@ package models.players;
 import models.cards.Card;
 import models.cards.HazardCard;
 import models.moves.BasicMove;
-import models.stacks.BattleStack;
-import models.stacks.DiscardStack;
-import models.stacks.DistanceStack;
-import models.stacks.GameStack;
-import models.stacks.HandStack;
-import models.stacks.SafetyStack;
+import models.stacks.game.DiscardStack;
+import models.stacks.game.GameStack;
+import models.stacks.player.BattleStack;
+import models.stacks.player.DistanceStack;
+import models.stacks.player.HandStack;
+import models.stacks.player.SafetyStack;
 
 /**
  * @author Simon RENOULT
@@ -36,7 +36,9 @@ public abstract class Player {
 	// ------------ METHODS ------------ //
 		
 	public Card draw( GameStack drawStackChosen ) {
-		return drawStackChosen.shiftTopCardTo( this.handStack );
+		Card drawnCard = drawStackChosen.peek();
+		drawStackChosen.shiftTo( this.handStack, drawnCard );
+		return drawnCard;
 	}
 
 	public void play( BasicMove m ) {
@@ -44,7 +46,7 @@ public abstract class Player {
 	}
 	
 	public void discard( Card cardToDiscard, DiscardStack discardStack ) {
-		this.handStack.shift( cardToDiscard, discardStack );
+		this.handStack.shiftTo( discardStack, cardToDiscard );
 	}
 	
 	public void discard( Integer cardToDiscardIndex, DiscardStack discardStack ) {
@@ -72,6 +74,8 @@ public abstract class Player {
 	}
 
 	/**
+	 * TODO end me.
+	 * 
 	 * -- > Safety
 	 *   -- > OK
 	 * -- > Attack
@@ -112,7 +116,7 @@ public abstract class Player {
 	}
 	
 	public Card getBattleStackContent() {
-		return this.getBattleStack().getFirst();
+		return this.getBattleStack().peek();
 	}
 	
 	

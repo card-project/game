@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import models.cards.Card;
 import models.players.strategies.Protector;
 import models.players.strategies.Strategy;
-import models.stacks.GameStack;
+import models.stacks.game.GameStack;
 
 public class Brain implements Strategy{
 	

@@ -2,7 +2,7 @@ package models.players.strategies;
 
 import models.cards.Card;
 import models.players.AIPlayer;
-import models.stacks.GameStack;
+import models.stacks.game.GameStack;
 
 public class Protector implements Strategy {
 

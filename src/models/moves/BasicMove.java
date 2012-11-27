@@ -38,13 +38,13 @@ public class BasicMove extends Move {
 
 	public void realize() {
 		if ( cardToPlay instanceof DistanceCard ) {
-			target.getDistanceStack().addFirst( cardToPlay );
+			target.getDistanceStack().push( cardToPlay );
 		} else if ( cardToPlay instanceof HazardCard) {
-			target.getBattleStack().addFirst( cardToPlay );
+			target.getBattleStack().push( cardToPlay );
 		} else if ( cardToPlay instanceof RemedyCard ) {
 			target.getBattleStack().removeAll();
 		} else if ( cardToPlay instanceof SafetyCard ) {
-			target.getSafetyStack().addFirst( cardToPlay );
+			target.getSafetyStack().push( cardToPlay );
 			target.getDistanceStack().increaseBy100();
 			
 			if ( cardToPlay.getType() == CardType.RightOfWay ) {

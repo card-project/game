@@ -7,7 +7,7 @@ import models.cards.distances.DistanceCard;
 import models.cards.hazards.HazardCard;
 import models.cards.hazards.SpeedLimit;
 import models.players.AIPlayer;
-import models.stacks.GameStack;
+import models.stacks.game.GameStack;
 
 public class Driver implements Strategy {
 

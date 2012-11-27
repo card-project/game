@@ -1,7 +1,7 @@
 package models.players;
 
 import models.players.strategies.Strategy;
-import models.stacks.DiscardStack;
+import models.stacks.game.DiscardStack;
 
 /**
  * Virtual player.
