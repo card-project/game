@@ -1,6 +1,9 @@
 package models.players;
 
+import java.util.ArrayList;
+
 import models.cards.Card;
+import models.cards.CardType;
 import models.cards.HazardCard;
 import models.moves.BasicMove;
 import models.stacks.game.DiscardStack;
@@ -49,8 +52,8 @@ public abstract class Player {
 		this.handStack.shiftTo( discardStack, cardToDiscard );
 	}
 	
-	public void discard( Integer cardToDiscardIndex, DiscardStack discardStack ) {
-		discard( this.handStack.get( cardToDiscardIndex ), discardStack );
+	public void discard( Integer discardingCardIndex, DiscardStack discardStack ) {
+		discard( this.handStack.get( discardingCardIndex ), discardStack );
 	}
 
 	public String toString() {
@@ -78,15 +81,86 @@ public abstract class Player {
 	 * 
 	 * -- > Safety
 	 *   -- > OK
-	 * -- > Attack
-	 *   -- > one player is free of attack.
-	 *     -- > OK
+	 * -- > Hazard
+	 *   -- > SpeedLimit
+	 *     -- > DistanceStack is not slowed
+	 *       -- > OK
+	 *   -- > Other
+	 *     -- > BattleStack is not attacked
+	 *       -- > OK
 	 * -- > Distance
+	 *   -- > Initial GoRoll played
+	 * 	   -- > Not attacked 
+	 *       -- > Not slowed
+	 *         -- > OK
+	 *       -- > Slowed && value <= 50
+	 *         -- > OK
+	 * -- > Remedy
+	 *   -- > Attacked/Slowed && Good family
+	 *     -- > OK
+	 *   -- > Initial GoRoll not played && GoRoll
+	 *     -- > OK
 	 * 
 	 * @return
 	 */
-	public boolean canPlay( Player[] players ) {
-		return true;
+	public boolean canPlay( ArrayList<Player> opponents ) {
+		if ( handStack.containsSafety() ) {
+			System.out.println( "SAFETY" );
+			return true;
+		} 
+		
+		if ( handStack.containsHazard() ) {
+			System.out.println( "HAZARD" );
+			for ( Player p : opponents ) {
+				if( handStack.exists( CardType.SpeedLimit ) ) {
+					System.out.println( "NOT SLOWED SPEELIMIT");
+					return ! p.isSlowed();
+				} else {
+					System.out.println( "NOT ATACKED" );
+					return ! p.isAttacked();
+				}
+			}
+			
+		}
+		
+		if ( handStack.containsDistance() ) {
+			System.out.println( "DISTANCE" );
+			if ( battleStack.initialGoRollIsPlayed() ) {
+				System.out.println( "INITIALGOROLL" );
+				if ( ! this.isAttacked() ) {
+					System.out.println( "ISNOTATTACKED" );
+					if ( ! this.isSlowed() ) {
+						System.out.println( "ISNOTSLOWED" );
+						return true;
+					} else {
+						System.out.println( "ISSLOWED" );
+						if ( handStack.containsSlowDistanceCard() ) {
+							System.out.println( "SLOWDISTANCE" );
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		if ( handStack.containsRemedy() ) {
+			System.out.println( "REMEDY" );
+			if ( this.isAttacked() && handStack.hasRemedyFor( getBattleStackContent() ) ) {
+				System.out.println( "ATTACKED GOOD FAMILY" );
+				return true;
+			} else if ( this.isSlowed() && handStack.exists( CardType.GoRoll ) ) {
+				System.out.println( "SLOWED GOROLL" );
+				return true;
+			} else if ( ( !battleStack.initialGoRollIsPlayed() ) ) {
+				System.out.println( "NOINITIALGOROLL" );
+				if ( handStack.exists( CardType.GoRoll ) ) {
+					System.out.println( "GOROLL" );
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	// ------------ GETTERS ------------ //
@@ -115,8 +189,8 @@ public abstract class Player {
 		return this.battleStack;
 	}
 	
-	public Card getBattleStackContent() {
-		return this.getBattleStack().peek();
+	public HazardCard getBattleStackContent() {
+		return (HazardCard) this.getBattleStack().peek();
 	}
 	
 	
@@ -124,12 +198,5 @@ public abstract class Player {
 	
 	public void setAlias( String string ) {
 		this.alias = string;
-	}
-	
-	public static void main( String[] args ) {
-		Integer a = 1;
-		Integer b = 2;
-
-		System.out.println( a.getClass() == b.getClass() );
 	}
 }

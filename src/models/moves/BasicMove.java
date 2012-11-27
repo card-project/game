@@ -47,17 +47,20 @@ public class BasicMove extends Move {
 			target.getSafetyStack().push( cardToPlay );
 			target.getDistanceStack().increaseBy100();
 			
-			if ( cardToPlay.getType() == CardType.RightOfWay ) {
-				for ( CardFamily cf : cardToPlay.getFamilies() ) {
-					if ( cf == cardToPlay.getFamily() ) {
+			if ( target.isAttacked() ) {
+				if ( cardToPlay.getType() == CardType.RightOfWay ) {
+					for ( CardFamily cf : cardToPlay.getFamilies() ) {
+						if ( cf == cardToPlay.getFamily() ) {
+							target.getBattleStack().removeAll();
+						}
+					}
+				} else {
+					if ( cardToPlay.getFamily() == target.getBattleStackContent().getFamily() ) {
 						target.getBattleStack().removeAll();
 					}
 				}
-			} else {
-				if ( cardToPlay.getFamily() == target.getBattleStackContent().getFamily() ) {
-					target.getBattleStack().removeAll();
-				}
 			}
+			
 		}
  		
 		source.getHandStack().remove( cardToPlay );
@@ -126,9 +129,9 @@ public class BasicMove extends Move {
 		if ( ! this.target.getBattleStack().initialGoRollIsPlayed() ) {
 			throw new InitialGoRollNotPlayedException( "Initial GoRoll card has not been played yet." ); 
 		} else {
-			if ( ! this.target.isProtectedFrom( ( HazardCard ) ( this.target.getBattleStackContent() ) )
+			if ( ! this.target.isProtectedFrom( this.target.getBattleStackContent() )
 					&& this.target.getBattleStack().isAttacked() ) {
-				throw new PlayerIsAttackedException( "You are under attack." );
+				throw new PlayerIsAttackedException( "You are under attack : " + this.target.getBattleStackContent() );
 			} else if ( this.target.isSlowed() && ( ( DistanceCard ) this.cardToPlay ).getRange() > 50 ) {
 				throw new PlayerIsSlowedException( "Your speed is limited." );
 			}
@@ -158,7 +161,9 @@ public class BasicMove extends Move {
 			}
 		} else {
 			if ( ! target.isAttacked() ) {
-				throw new PlayerIsNotAttackedException( "You are not under attack." );
+				if ( cardToPlay.getFamily() != CardFamily.GoStop && ! target.getBattleStack().initialGoRollIsPlayed() ) {
+					throw new PlayerIsNotAttackedException( "You are not under attack." );
+				}
 			} else {
 				if ( cardToPlay.getFamily() != target.getBattleStackContent().getFamily() ) {
 					throw new UnsuitableRemedyException( "Not the good kind of remedy." );

@@ -13,6 +13,15 @@ public class TUIGameView extends TUIView {
 	
 	// ------------ METHODS ------------ //
 
+	public void tickBox( boolean isTrue ) {
+		super.inform( "[" + ( isTrue ? "V" : "X" ) + "]" );
+	}
+	
+	public void tickBox ( boolean isTrue, String information ) {
+		tickBox( isTrue );
+		super.inform( " " + information );
+	}
+	
 	public String askDrawingStack() {
 		super.ask( "Which stack do you chosse to draw on : [D]eck or [d]iscard ?" );
 		return super.getAnswerAsString();
@@ -30,7 +39,7 @@ public class TUIGameView extends TUIView {
 	
 	public int askDiscardingCardChoice( String cardList ) {
 		super.ask( cardList, "Too many card in your hand. Which one do you discard ?" +
-				" Choose its index from 1 to 4." );
+				" Choose its index." );
 		return Integer.valueOf( super.input.nextLine() );
 	}
 }

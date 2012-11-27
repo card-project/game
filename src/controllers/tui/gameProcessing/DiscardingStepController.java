@@ -40,7 +40,7 @@ public class DiscardingStepController extends StepController {
 				
 			} while ( ! userChoiceIsCorrect );
 			
-			super.currentPlayer.discard( discardCardIndex, currentGame.getDiscardStack() );
+			super.currentPlayer.discard( discardCardIndex - 1, currentGame.getDiscardStack() );
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package controllers.tui.gameProcessing;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -21,10 +22,14 @@ import views.tui.TUIGameView;
  */
 public class PlayingStepController extends StepController {
 
+	// ------------ CONSTRUCTORS ------------ //
+	
 	public PlayingStepController( TUIGameView t, Game g ) {
 		super( t, g );
 	}
 
+	// ------------ METHODS ------------ //
+	
 	@Override
 	public void run() {
 		this.play();
@@ -50,7 +55,7 @@ public class PlayingStepController extends StepController {
 				
 				userChoiceIsCorrect = true;
 				
-				if ( currentPlayer.canPlay( currentGame.getPlayers() ) ) {
+				if ( currentPlayer.canPlay( getOpponents( currentPlayer ) ) ) {
 					// STEP 1 : Choose card to play.		
 					bm.setCardToPlay( this.chooseCardToPlay( super.currentPlayer ) );
 					
@@ -81,6 +86,8 @@ public class PlayingStepController extends StepController {
 							tui.warn( e.getMessage() );
 						}
 					}					
+				} else {
+					System.out.println( "No card to play." );
 				}
 				
 			} while ( ! userChoiceIsCorrect );
@@ -134,57 +141,37 @@ public class PlayingStepController extends StepController {
 
 		boolean userChoiceIsCorrect = true;
 		int opponentIndex = 0;
-		HashMap<Integer, Player> opponentMap = this.getOpponentsAliasMap( p );
+		ArrayList<Player> opponents = this.getOpponents( p );
 		
 		do {
 			
 			userChoiceIsCorrect = true;
 			
 			try {
-				opponentIndex = tui.askTargetingOpponent( this.getOpponentsString( opponentMap ) );
+				opponentIndex = tui.askTargetingOpponent( opponents.toString() );
 			} catch ( NumberFormatException e ) {
 				tui.warn( "Please enter a number." );
 				userChoiceIsCorrect = false;
 			}
 			
-			if ( ! opponentMap.containsKey( opponentIndex ) ) {
+			if ( opponents.get( opponentIndex - 1 ) == null ) {
 				tui.warn( "Please choose a correct index." );
 				userChoiceIsCorrect = false;
 			}
 			
 		} while ( ! userChoiceIsCorrect );
 		
-		return opponentMap.get( opponentIndex );
+		return opponents.get( opponentIndex - 1 );
 	}
 	
-	
-	/**
-	 * @param currentPlayer
-	 * @return
-	 */
-	private HashMap<Integer, Player> getOpponentsAliasMap( Player currentPlayer ) {
-		HashMap<Integer, Player> opponentsMap = new HashMap<Integer, Player>();
-		
-		for( int i = 0 ; i < currentGame.getPlayers().length ; i++ )  {
-			if ( ! ( currentPlayer.equals( currentGame.getPlayers()[i] ) ) ) {
-				opponentsMap.put( i, currentGame.getPlayers()[i] );
+	private ArrayList<Player> getOpponents( Player currentPlayer ) {
+		ArrayList<Player> opponents = new ArrayList<Player>();
+		for ( Player p : this.currentGame.getPlayers() ) {
+			if ( ! p.equals( currentPlayer ) ) {
+				opponents.add( p );
 			}
 		}
 		
-		return opponentsMap;
-	}
-	
-	/**
-	 * @param opponentsMap
-	 * @return
-	 */
-	private String getOpponentsString( HashMap<Integer, Player> opponentsMap ) {
-		String playerList = "| ";
-		
-		for ( Entry<Integer, Player> entry : opponentsMap.entrySet() ) { 
-			playerList += entry.getKey() + " : " + entry.getValue().getAlias() + " | ";
-		}
-				
-		return playerList;
+		return opponents;
 	}
 }

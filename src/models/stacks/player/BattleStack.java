@@ -1,6 +1,5 @@
 package models.stacks.player;
 
-import models.cards.HazardCard;
 
 
 public class BattleStack extends PlayerStack {
@@ -12,7 +11,7 @@ public class BattleStack extends PlayerStack {
 	// ------------ METHODS ------------ //
 
 	public boolean isAttacked() {
-		return ( super.cards.getFirst() == null ) ? false : super.cards.getFirst() instanceof HazardCard;
+		return ! isEmpty();
 	}
 
 	public void removeAll() {

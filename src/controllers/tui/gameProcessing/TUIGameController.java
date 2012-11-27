@@ -83,6 +83,8 @@ public class TUIGameController {
 			
 			// STEP 3 : play a card
 			tui.inform( "-- > PLAYING" + '\n');
+			tui.tickBox( currentPlayer.getBattleStack().initialGoRollIsPlayed(), "Initial GoRoll." + '\n' );
+
 			playingStepController.setCurrentPlayer( currentPlayer );
 			playingStepController.run();
 			
