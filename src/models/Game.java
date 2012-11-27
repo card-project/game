@@ -4,9 +4,9 @@ import models.exceptions.AliasAlreadyChosenException;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
-import models.stacks.DeckStack;
-import models.stacks.DiscardStack;
-import models.stacks.HandStack;
+import models.stacks.game.DeckStack;
+import models.stacks.game.DiscardStack;
+import models.stacks.player.HandStack;
 
 /**
  * @author Simon RENOULT
