@@ -148,7 +148,7 @@ public class PlayingStepController extends StepController {
 			userChoiceIsCorrect = true;
 			
 			try {
-				opponentIndex = tui.askTargetingOpponent( opponents.toString() );
+				opponentIndex = tui.askTargetingOpponent( this.getOpponentsAlias( opponents ) );
 			} catch ( NumberFormatException e ) {
 				tui.warn( "Please enter a number." );
 				userChoiceIsCorrect = false;
@@ -173,5 +173,14 @@ public class PlayingStepController extends StepController {
 		}
 		
 		return opponents;
+	}
+	
+	private String getOpponentsAlias( ArrayList<Player> opponents ) {
+		String s = "";
+		for ( Player p : opponents ) {
+			s += p.getAlias();
+		}
+		
+		return s;
 	}
 }

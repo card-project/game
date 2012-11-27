@@ -83,8 +83,12 @@ public class TUIGameController {
 			
 			// STEP 3 : play a card
 			tui.inform( "-- > PLAYING" + '\n');
-			tui.tickBox( currentPlayer.getBattleStack().initialGoRollIsPlayed(), "Initial GoRoll." + '\n' );
-
+			
+			tui.tickBox( currentPlayer.getBattleStack().initialGoRollIsPlayed(), "Initial GoRoll status." + '\n' );
+			tui.tickBox( currentPlayer.isSlowed(), "Speed limitation." + '\n' );
+			String attacked = currentPlayer.isAttacked() ? currentPlayer.getBattleStackContent().toString() : "Not attacked";
+			tui.tickBox( currentPlayer.isAttacked(), attacked + '\n' );
+			
 			playingStepController.setCurrentPlayer( currentPlayer );
 			playingStepController.run();
 			

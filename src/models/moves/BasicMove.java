@@ -43,6 +43,9 @@ public class BasicMove extends Move {
 			target.getBattleStack().push( cardToPlay );
 		} else if ( cardToPlay instanceof RemedyCard ) {
 			target.getBattleStack().removeAll();
+			if ( cardToPlay.getFamily() == CardFamily.GoStop ) {
+				target.getBattleStack().setInitialGoRollIsPlayed( true );
+			}
 		} else if ( cardToPlay instanceof SafetyCard ) {
 			target.getSafetyStack().push( cardToPlay );
 			target.getDistanceStack().increaseBy100();
