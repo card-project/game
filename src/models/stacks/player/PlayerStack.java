@@ -60,11 +60,6 @@ public abstract class PlayerStack extends CardsStack {
 	}
 	
 	@Override
-	public void shiftTopCardTo( CardsStack destination ) {
-		shiftTo( destination, cards.getFirst() );
-	}
-	
-	@Override
 	public String toString() {
 		return this.cards.toString();
 	}

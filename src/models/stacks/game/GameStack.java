@@ -50,13 +50,8 @@ public abstract class GameStack extends CardsStack {
 		if ( ! c.equals( cards.peek() )) {
 			throw new IllegalAccessError( "Card access unauthorized." );
 		} else {
-			this.shiftTopCardTo( destination );
+			destination.push( this.cards.pop() );
 		}
-	}
-	
-	@Override
-	public void shiftTopCardTo( CardsStack destination ) {
-		destination.push( this.cards.pop() );
 	}
 	
 	@Override

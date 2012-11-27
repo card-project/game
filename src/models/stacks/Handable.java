@@ -12,8 +12,6 @@ public interface Handable {
 
 	public void shiftTo( CardsStack destination, Card c );
 
-	public void shiftTopCardTo( CardsStack destination );
-	
 	public int size();
 
 	public String toString();
