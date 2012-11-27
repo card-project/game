@@ -69,6 +69,11 @@ public abstract class PlayerStack extends CardsStack {
 		shiftTo( destination, cards.getFirst() );
 	}
 	
+	@Override
+	public String toString() {
+		return this.cards.toString();
+	}
+	
 	// ------------ GETTERS ------------ //
 	
 	public LinkedList<Card> getCards() {

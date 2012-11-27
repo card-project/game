@@ -58,4 +58,9 @@ public abstract class GameStack extends CardsStack {
 	public void shiftTopCardTo( CardsStack destination ) {
 		destination.add( this.cards.pop() );
 	}
+	
+	@Override
+	public String toString() {
+		return this.cards.toString();
+	}
 }

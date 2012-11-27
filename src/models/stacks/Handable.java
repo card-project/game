@@ -4,11 +4,9 @@ import models.cards.Card;
 
 public interface Handable {
 
-	public boolean isEmpty();
-
-	public int size();
-
 	public void add( Card c );
+
+	public boolean isEmpty();
 
 	public Card peek();
 
@@ -17,4 +15,8 @@ public interface Handable {
 	public void shiftTo( CardsStack destination, Card c );
 
 	public void shiftTopCardTo( CardsStack destination );
+	
+	public int size();
+
+	public String toString();
 }
