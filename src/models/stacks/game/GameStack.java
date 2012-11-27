@@ -41,6 +41,11 @@ public abstract class GameStack extends CardsStack {
 	}
 	
 	@Override
+	public int size() {
+		return this.cards.capacity();
+	}
+	
+	@Override
 	public void shiftTo( CardsStack destination, Card c ) {
 		if ( ! c.equals( cards.peek() )) {
 			throw new IllegalAccessError( "Card access unauthorized." );

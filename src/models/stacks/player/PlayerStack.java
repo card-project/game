@@ -44,6 +44,10 @@ public abstract class PlayerStack extends CardsStack {
 		return this.cards.getFirst();
 	}
 	
+	@Override
+	public int size() {
+		return this.cards.size();
+	}
 	public boolean exists( CardType ct ) {
 		for ( Card c : this.cards ) {
 			if ( ct == c.getType() ) {
