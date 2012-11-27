@@ -4,8 +4,6 @@ import models.cards.Card;
 
 public interface Handable {
 
-	public void add( Card c );
-
 	public boolean isEmpty();
 
 	public Card peek();

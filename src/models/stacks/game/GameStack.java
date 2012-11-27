@@ -56,7 +56,7 @@ public abstract class GameStack extends CardsStack {
 	
 	@Override
 	public void shiftTopCardTo( CardsStack destination ) {
-		destination.add( this.cards.pop() );
+		destination.push( this.cards.pop() );
 	}
 	
 	@Override

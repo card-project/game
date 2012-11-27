@@ -20,11 +20,6 @@ public abstract class PlayerStack extends CardsStack {
 	
 	// ------------ METHODS ------------ //
 	
-	@Override
-	public void add( Card c ) {
-		this.cards.add( c );
-	}
-	
 	public Card get ( int index ) {
 		return this.cards.get( index );
 	}
@@ -60,7 +55,7 @@ public abstract class PlayerStack extends CardsStack {
 	
 	@Override
 	public void shiftTo( CardsStack destination, Card c ) {
-		destination.add( c );
+		destination.push( c );
 		cards.remove( c );
 	}
 	
