@@ -3,7 +3,7 @@ package controllers.tui.gameProcessing;
 import models.Game;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
-import models.stacks.HandStack;
+import models.stacks.player.HandStack;
 import views.tui.TUIGameView;
 
 public class DiscardingStepController extends StepController {

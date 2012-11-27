@@ -11,7 +11,7 @@ import models.moves.BasicMove;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
-import models.stacks.HandStack;
+import models.stacks.player.HandStack;
 import views.tui.TUIGameView;
 
 /**
@@ -52,7 +52,6 @@ public class PlayingStepController extends StepController {
 				
 				if ( currentPlayer.canPlay( currentGame.getPlayers() ) ) {
 					// STEP 1 : Choose card to play.		
-					// FIXME What if no playable card in player's hand.
 					bm.setCardToPlay( this.chooseCardToPlay( super.currentPlayer ) );
 					
 					// STEP 2 : Check its type.

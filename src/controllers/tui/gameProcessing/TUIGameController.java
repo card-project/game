@@ -2,7 +2,7 @@ package controllers.tui.gameProcessing;
 
 import models.Game;
 import models.players.Player;
-import models.stacks.HandStack;
+import models.stacks.player.HandStack;
 import views.tui.TUIGameView;
 
 /**
