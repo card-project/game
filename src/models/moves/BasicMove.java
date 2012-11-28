@@ -18,7 +18,8 @@ import models.players.Player;
 /**
  * Create an object manipulating a standard move.
  * 
- * It enables the use of a move in the standard playing stream.
+ * It enables the use of a move (attack, defense, distance, safety)
+ * in the standard playing stream.
  * 
  * @author Simon RENOULT
  * @version 1.0
@@ -35,6 +36,7 @@ public class BasicMove extends Move {
 
 	// ------------ METHODS ------------ //
 
+	@Override
 	public void realize() {
 		if ( cardToPlay instanceof DistanceCard ) {
 			target.getDistanceStack().push( cardToPlay );
