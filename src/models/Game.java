@@ -1,6 +1,9 @@
 package models;
 
 import models.exceptions.AliasAlreadyChosenException;
+import models.exceptions.IllegalDistanceException;
+import models.exceptions.IllegalHumanPlayerNumberException;
+import models.exceptions.IllegalPlayerNumberException;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
@@ -10,15 +13,22 @@ import models.stacks.player.HandStack;
 
 /**
  * @author Simon RENOULT
- * @vresion 0.1.2
+ * @vresion 0.2.2
  */
 public class Game {
 
+	// ------------ CONSTANTS ------------ //
+
+	private static final int MIN_PLAYERS_NB = 2;
+	private static final int MAX_PLAYERS_NB = 6;
+	private static final int MIN_HUMAN_PLAYERS_NB = 1;
+	private static final int MIN_DISTANCE_GOAL = 700;
+	private static final int MAX_DISTANCE_GOAL = 1000;
+	
 	// ------------ ATTRIBUTES ------------ // 
 	
 	private Integer goal;
 	private Player[] players;
-	private Turn[] turns;
 	private DiscardStack discardStack;
 	private DeckStack deckStack;
 
@@ -41,20 +51,45 @@ public class Game {
 		
 	}
 	
+	public String toString() {
+		String players = "";
+		
+		for ( Player p : this.players ){
+			players += p.toString();
+		}
+		
+		return "Goal : " + this.goal + '\n' +
+				"Players : " + players  + '\n' +
+				"DiscardStack " + this.discardStack + '\n' +
+				"DeckStack" + this.deckStack;
+	}
+	
 	// ------------ SETTERS ------------ // 
 
-	public void setPlayersNumber( int playersNumber ) {
-		this.players = new Player [playersNumber];
+	public void setPlayersNumber( int playersNumber ) throws IllegalPlayerNumberException {
+		if ( playersNumber < MIN_PLAYERS_NB || playersNumber > MAX_PLAYERS_NB ) {
+			throw new IllegalPlayerNumberException();
+		} else {
+			this.players = new Player [playersNumber];
+		}
 	}
 
-	public void setHumanPlayers( int humanPlayersNumber ) {
-		for ( int i = 0; i < this.players.length; i++ ) {
-			this.players[i] = ( i < humanPlayersNumber ) ? new HumanPlayer() : new AIPlayer();
+	public void setHumanPlayers( int humanPlayersNumber ) throws IllegalHumanPlayerNumberException {
+		if ( humanPlayersNumber < MIN_HUMAN_PLAYERS_NB || humanPlayersNumber > this.players.length ) {
+			throw new IllegalHumanPlayerNumberException();
+		} else {
+			for ( int i = 0; i < this.players.length; i++ ) {
+				this.players[i] = ( i < humanPlayersNumber ) ? new HumanPlayer() : new AIPlayer();
+			}
 		}
 	}	
 	
-	public void setDistanceGoal( int distanceGoal ) {
-		this.goal = distanceGoal;
+	public void setDistanceGoal( int distanceGoal ) throws IllegalDistanceException {
+		if ( ( distanceGoal < MIN_DISTANCE_GOAL || distanceGoal > MAX_DISTANCE_GOAL || distanceGoal%25 != 0 ) ) {
+			throw new IllegalDistanceException();
+		} else {
+			this.goal = distanceGoal;
+		}
 	}
 	
 
@@ -94,10 +129,6 @@ public class Game {
 	
 	public Player[] getPlayers() {
 		return this.players;
-	}
-
-	public Turn[] getTurns() {
-		return this.turns;
 	}
 
 	public DeckStack getDeckStack() {
