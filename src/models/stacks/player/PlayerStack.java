@@ -4,9 +4,7 @@ import java.util.LinkedList;
 
 import models.cards.Card;
 import models.cards.CardType;
-import models.cards.DistanceCard;
-import models.cards.HazardCard;
-import models.cards.RemedyCard;
+import models.exceptions.IllegalCardTypeException;
 import models.stacks.CardsStack;
 
 public abstract class PlayerStack extends CardsStack {
@@ -23,40 +21,8 @@ public abstract class PlayerStack extends CardsStack {
 
 	// ------------ METHODS ------------ //
 
-	public boolean hasRemedyFor( HazardCard hc ) {
-		for ( Card c : this.cards ) {
-			if ( c instanceof RemedyCard ) {
-				if ( ( (RemedyCard) c ).getFamily() == hc.getFamily() ) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
 	public Card get( int index ) {
 		return this.cards.get( index );
-	}
-
-	@Override
-	public void push( Card item ) {
-		this.cards.addFirst( item );
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return this.cards.isEmpty();
-	}
-
-	@Override
-	public Card peek() {
-		return this.cards.getFirst();
-	}
-
-	@Override
-	public int size() {
-		return this.cards.size();
 	}
 
 	public boolean exists( CardType ct ) {
@@ -69,10 +35,38 @@ public abstract class PlayerStack extends CardsStack {
 		return false;
 	}
 
-	@Override
-	public void shiftTo( CardsStack destination, Card c ) {
+	public void remove( Card item ) {
+		this.cards.remove( item );
+	}
+	
+	public void shiftTo( CardsStack destination, Card c ) throws IllegalCardTypeException {
 		destination.push( c );
 		cards.remove( c );
+	}
+	
+	@Override
+	public void push( Card item ) throws IllegalCardTypeException {
+		this.cards.addFirst( item );
+	}
+
+	@Override
+	public Card pop() {
+		return this.cards.pop();
+	}
+
+	@Override
+	public Card peek() {
+		return this.cards.peek();
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return this.cards.isEmpty();
+	}
+	
+	@Override
+	public int size() {
+		return this.cards.size();
 	}
 
 	@Override

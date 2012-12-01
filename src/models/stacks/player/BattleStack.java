@@ -1,5 +1,11 @@
 package models.stacks.player;
 
+import models.cards.Card;
+import models.cards.CardType;
+import models.cards.HazardCard;
+import models.cards.RemedyCard;
+import models.exceptions.IllegalCardTypeException;
+
 
 
 public class BattleStack extends PlayerStack {
@@ -10,8 +16,21 @@ public class BattleStack extends PlayerStack {
 	
 	// ------------ METHODS ------------ //
 
+	@Override
+	public void push( Card item ) throws IllegalCardTypeException {
+		if ( ! ( item instanceof RemedyCard ) && ! ( item instanceof HazardCard ) ) {
+			throw new IllegalCardTypeException();
+		} else {
+			if ( ! initialGoRollIsPlayed && item.getType() == CardType.GoRoll ) {
+				initialGoRollIsPlayed = true;
+			}
+			
+			this.cards.push( item );
+		}
+	}
+	
 	public boolean isAttacked() {
-		return ! isEmpty();
+		return ! super.cards.isEmpty();
 	}
 
 	public void removeAll() {
@@ -22,12 +41,6 @@ public class BattleStack extends PlayerStack {
 	
 	public boolean initialGoRollIsPlayed() {
 		return initialGoRollIsPlayed;
-	}
-	
-	// ------------ SETTERS ------------ //
-	
-	public void setInitialGoRollIsPlayed( boolean initialGoRollIsPlayed ) {
-		this.initialGoRollIsPlayed = initialGoRollIsPlayed;
 	}
 
 }

@@ -6,6 +6,7 @@ import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
+import models.exceptions.IllegalCardTypeException;
 import models.exceptions.moveExceptions.IllegalMoveException;
 import models.exceptions.moveExceptions.InitialGoRollNotPlayedException;
 import models.exceptions.moveExceptions.PlayerIsAttackedException;
@@ -37,16 +38,13 @@ public class BasicMove extends Move {
 	// ------------ METHODS ------------ //
 
 	@Override
-	public void realize() {
+	public void realize() throws IllegalCardTypeException {
 		if ( cardToPlay instanceof DistanceCard ) {
 			target.getDistanceStack().push( cardToPlay );
 		} else if ( cardToPlay instanceof HazardCard ) {
 			target.getBattleStack().push( cardToPlay );
 		} else if ( cardToPlay instanceof RemedyCard ) {
 			target.getBattleStack().removeAll();
-			if ( cardToPlay.getFamily() == CardFamily.GoStop ) {
-				target.getBattleStack().setInitialGoRollIsPlayed( true );
-			}
 		} else if ( cardToPlay instanceof SafetyCard ) {
 			target.getSafetyStack().push( cardToPlay );
 			target.getDistanceStack().increaseBy100();

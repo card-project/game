@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import models.cards.Card;
 import models.cards.CardType;
 import models.cards.HazardCard;
+import models.exceptions.IllegalCardTypeException;
 import models.moves.BasicMove;
 import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
@@ -39,9 +40,8 @@ public abstract class Player {
 	// ------------ METHODS ------------ //
 		
 	public Card draw( GameStack drawStackChosen ) {
-		Card drawnCard = drawStackChosen.peek();
-		drawStackChosen.shiftTo( this.handStack, drawnCard );
-		return drawnCard;
+		drawStackChosen.shiftTopCardTo( this.handStack );
+		return  handStack.peek();
 	}
 
 	public void play( BasicMove m ) {
@@ -49,7 +49,11 @@ public abstract class Player {
 	}
 	
 	public void discard( Card cardToDiscard, DiscardStack discardStack ) {
-		this.handStack.shiftTo( discardStack, cardToDiscard );
+		try {
+			this.handStack.shiftTo( discardStack, cardToDiscard );
+		} catch ( IllegalCardTypeException e ) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void discard( Integer discardingCardIndex, DiscardStack discardStack ) {
@@ -65,7 +69,7 @@ public abstract class Player {
 	}
 	
 	public boolean isProtectedFrom ( HazardCard hc ) {
-		return this.getSafetyStack().performProtectionVerificationOn( hc );
+		return this.getSafetyStack().isProtectedFrom( hc.getFamily() );
 	}
 	
 	public boolean isAttacked ( ) {
@@ -145,7 +149,7 @@ public abstract class Player {
 		
 		if ( handStack.containsRemedy() ) {
 			System.out.println( "REMEDY" );
-			if ( this.isAttacked() && handStack.hasRemedyFor( getBattleStackContent() ) ) {
+			if ( this.isAttacked() && handStack.hasRemedyFor( getBattleStackContent().getFamily() ) ) {
 				System.out.println( "ATTACKED GOOD FAMILY" );
 				return true;
 			} else if ( this.isSlowed() && handStack.exists( CardType.GoRoll ) ) {

@@ -1,6 +1,7 @@
 package models.moves;
 
 import models.cards.Card;
+import models.exceptions.IllegalCardTypeException;
 import models.exceptions.moveExceptions.IllegalMoveException;
 import models.players.Player;
 
@@ -23,7 +24,11 @@ public abstract class Move {
 	// ------------ CONSTRUCTORS ------------ //
 	
 	public Move( Player moveInitiator ) {
-		this.origin = moveInitiator;
+		if ( moveInitiator == null ) {
+			throw new NullPointerException();
+		} else {
+			this.origin = moveInitiator;
+		}
 	}
 	
 	// ------------ METHODS ------------ //
@@ -31,8 +36,9 @@ public abstract class Move {
 	/**
 	 * Executes the move using the origin player and the card he chosses
 	 * to play on the target.
+	 * @throws IllegalCardTypeException 
 	 */
-	public abstract void realize();
+	public abstract void realize() throws IllegalCardTypeException;
 	
 	// ------------ GETTERS ------------ //
 	

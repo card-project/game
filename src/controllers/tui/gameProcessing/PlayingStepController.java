@@ -1,12 +1,11 @@
 package controllers.tui.gameProcessing;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 import models.Game;
 import models.cards.Card;
 import models.cards.HazardCard;
+import models.exceptions.IllegalCardTypeException;
 import models.exceptions.moveExceptions.IllegalMoveException;
 import models.moves.BasicMove;
 import models.players.AIPlayer;
@@ -94,7 +93,12 @@ public class PlayingStepController extends StepController {
 			
 			// STEP 3 : play the card
 			//( ( HumanPlayer) p ).play( bm );
-			bm.realize();
+			try {
+				bm.realize();
+			} catch ( IllegalCardTypeException e ) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

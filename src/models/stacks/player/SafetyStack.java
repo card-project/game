@@ -2,7 +2,8 @@ package models.stacks.player;
 
 import models.cards.Card;
 import models.cards.CardFamily;
-import models.cards.HazardCard;
+import models.cards.SafetyCard;
+import models.exceptions.IllegalCardTypeException;
 
 public class SafetyStack extends PlayerStack {
 
@@ -10,11 +11,20 @@ public class SafetyStack extends PlayerStack {
 
 	// ------------ METHODS ------------ //
 
-	public boolean performProtectionVerificationOn( HazardCard hc ) {
+	@Override
+	public void push( Card item ) throws IllegalCardTypeException {
+		if ( ! ( item instanceof SafetyCard ) ) {
+			throw new IllegalCardTypeException();
+		} else {
+			this.cards.push( item );
+		}
+	}
+	
+	public boolean isProtectedFrom( CardFamily hazardFamily ) {
 
-		for ( Card c : cards ) {
+		for ( Card c : super.cards ) {
 			for ( CardFamily cf : c.getFamilies() ) {
-				if ( hc.getFamilies().get( 0 ) == cf ) {
+				if ( hazardFamily == cf ) {
 					return true;
 				}
 			}

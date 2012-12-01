@@ -1,9 +1,9 @@
 package models.stacks.game;
 
 import java.util.Stack;
-import java.util.Vector;
 
 import models.cards.Card;
+import models.exceptions.IllegalCardTypeException;
 import models.stacks.CardsStack;
 
 public abstract class GameStack extends CardsStack {
@@ -21,8 +21,12 @@ public abstract class GameStack extends CardsStack {
 	
 	// ------------ METHODS ------------ //
 	
-	public void add(Card c) {
-		this.cards.push( c );
+	public void shiftTopCardTo( CardsStack destination ) {
+		try {
+			destination.push( this.cards.pop() );
+		} catch ( IllegalCardTypeException e ) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -31,8 +35,8 @@ public abstract class GameStack extends CardsStack {
 	}
 	
 	@Override
-	public Card peek() {
-		return cards.peek();
+	public Card pop() {
+		return cards.pop();
 	}
 	
 	@Override
@@ -41,21 +45,23 @@ public abstract class GameStack extends CardsStack {
 	}
 	
 	@Override
-	public int size() {
-		return this.cards.capacity();
+	public Card peek() {
+		return this.cards.peek();
 	}
 	
 	@Override
-	public void shiftTo( CardsStack destination, Card c ) {
-		if ( ! c.equals( cards.peek() )) {
-			throw new IllegalAccessError( "Card access unauthorized." );
-		} else {
-			destination.push( this.cards.pop() );
-		}
+	public int size() {
+		return this.cards.size();
 	}
 	
 	@Override
 	public String toString() {
 		return this.cards.toString();
+	}
+
+	// ------------ GETTERS ------------ //
+
+	public Stack<Card> getCards() {
+		return cards;
 	}
 }

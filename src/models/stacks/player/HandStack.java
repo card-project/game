@@ -1,10 +1,12 @@
 package models.stacks.player;
 
 import models.cards.Card;
+import models.cards.CardFamily;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
+import models.exceptions.IllegalCardTypeException;
 
 
 /**
@@ -20,7 +22,24 @@ public class HandStack extends PlayerStack {
 	public static final int MIN_CARD_NB = 1;
 	
 	// ------------ METHODS ------------ //
+	
+	@Override
+	public void push( Card item ) throws IllegalCardTypeException {
+		super.push( item );
+	}
+	
+	public boolean hasRemedyFor( CardFamily f ) {
+		for ( Card c : this.cards ) {
+			if ( c instanceof RemedyCard ) {
+				if ( ( (RemedyCard) c ).getFamily() == f ) {
+					return true;
+				}
+			}
+		}
 
+		return false;
+	}
+	
 	public boolean containsSafety() {
 		for ( Card c : super.cards ) {
 			if ( c instanceof SafetyCard ) {
@@ -69,9 +88,5 @@ public class HandStack extends PlayerStack {
 		}
 
 		return false;
-	}
-	
-	public void remove( Card c ) {
-		this.cards.remove( c );
 	}
 }

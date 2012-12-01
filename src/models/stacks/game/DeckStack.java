@@ -1,9 +1,7 @@
 package models.stacks.game;
 
 import java.util.Collections;
-import java.util.Stack;
 
-import models.cards.Card;
 import models.cards.CardFactory;
 import models.cards.CardType;
 import models.cards.DistanceCard;

@@ -5,7 +5,7 @@ package models.cards;
  * Distance card "factory".
  * 
  * @author Simon RENOULT
- * @version 1.1
+ * @version 1.1.1
  */
 public class DistanceCard extends Card {
 	
@@ -24,10 +24,29 @@ public class DistanceCard extends Card {
 	public DistanceCard( int rangeValue ) {
 		super();
 		this.range = rangeValue;
+		
+		switch ( rangeValue ) {
+		case 25:
+			this.type = CardType.Distance25;
+			break;
+		case 50:
+			this.type = CardType.Distance50;
+			break;
+		case 75:
+			this.type = CardType.Distance75;
+			break;
+		case 100:
+			this.type = CardType.Distance100;
+			break;
+		case 200:
+			this.type = CardType.Distance200;
+			break;
+		}
 	}
 	
 	// ------------ METHODS ------------ //
 	
+	@Override
 	public String toString() {
 		return String.valueOf( this.range );
 	}

@@ -1,9 +1,13 @@
 package models.cards;
 
+import models.stacks.player.BattleStack;
+
 /**
+ * Create a remedy card object. Allow a player to defend himself from 
+ * another player attack once this one is on the {@link BattleStack}.
+ * 
  * @author Simon RENOULT
  * @version 1.0
- *
  */
 public class RemedyCard extends Card {
 

@@ -1,6 +1,8 @@
 package models.cards;
 
 /**
+ * Create a hazard card object. Allow a player to attack another player.
+ * 
  * @author Simon RENOULT
  * @version 1.0
  */

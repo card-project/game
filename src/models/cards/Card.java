@@ -3,7 +3,7 @@ package models.cards;
 import java.util.ArrayList;
 
 /**
- * Top Card class.
+ * Top Card class. Create a Card object with its type and its families.
  * 
  * @author Simon RENOULT
  * @version 1.0
@@ -22,6 +22,7 @@ public abstract class Card {
 	public Card( CardFamily initialFamily, CardType cardType ) {
 		this.families = new ArrayList<CardFamily>();
 		this.addFamily( initialFamily );
+		
 		this.type = cardType;
 	}
 	

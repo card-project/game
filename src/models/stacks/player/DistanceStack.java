@@ -3,6 +3,7 @@ package models.stacks.player;
 import models.cards.Card;
 import models.cards.CardType;
 import models.cards.DistanceCard;
+import models.exceptions.IllegalCardTypeException;
 
 /**
  * @author Simon RENOULT
@@ -10,6 +11,8 @@ import models.cards.DistanceCard;
  */
 public class DistanceStack extends PlayerStack {
 
+	// ------------ CONSTANTS ------------ //
+	
 	// ------------ ATTRIBUTES ------------ //
 	
 	private static int MAX_DISTANCE200 = 2;
@@ -17,6 +20,15 @@ public class DistanceStack extends PlayerStack {
 	private static int BONUS_300_CPT = 0;
 	
 	// ------------ METHODS ------------ //
+
+	@Override
+	public void push( Card item ) throws IllegalCardTypeException {
+		if ( maxNumberOfDistance200IsReached() ) {
+			throw new IllegalCardTypeException( "There are already two 200 distances." );
+		} else {
+			super.cards.push( item );
+		}
+	}
 	
 	/**
 	 * Get the amount of driven kilometers.
@@ -38,32 +50,18 @@ public class DistanceStack extends PlayerStack {
 	 * @return <em>True</em> if the limit is reached. <em>False</em> instead.
 	 */
 	public Boolean maxNumberOfDistance200IsReached() {
-		int distance200Counter = 0;
+		int distances200Counter = 0;
 		for ( Card c : super.cards ) {
-			if ( c instanceof DistanceCard ) {
-				if ( ( ( DistanceCard ) c ).getRange() == 200 )
-				distance200Counter++;
+			if ( c.getType() == CardType.Distance200 ) {
+				distances200Counter++;
 			}
 		}
 		
-		return distance200Counter == MAX_DISTANCE200;
+		return distances200Counter == MAX_DISTANCE200;
 	}
 
 	public boolean isSlowed() {
 		return exists( CardType.SpeedLimit );
-	}
-	
-	public void addFirst( DistanceCard c ) {
-		if ( c.getRange() == 200 ) {
-			if ( this.maxNumberOfDistance200IsReached() ) {
-				throw new IllegalAccessError( "Maximum number of 200 Distances is reached." );
-			} else {
-				MAX_DISTANCE200--;
-				this.cards.addFirst( c );
-			}
-		} else {
-			this.cards.addFirst( c );
-		}
 	}
 
 	public void increaseBy100() {
@@ -72,5 +70,10 @@ public class DistanceStack extends PlayerStack {
 
 	public void increaseBy300() {
 		BONUS_300_CPT++;
+	}
+	
+	public void resetBonuses() {
+		BONUS_100_CPT = 0;
+		BONUS_300_CPT = 0;
 	}
 }

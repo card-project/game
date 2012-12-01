@@ -3,9 +3,8 @@ package models.players.strategies;
 import java.util.LinkedList;
 
 import models.cards.Card;
-import models.cards.distances.DistanceCard;
-import models.cards.hazards.HazardCard;
-import models.cards.hazards.SpeedLimit;
+import models.cards.DistanceCard;
+import models.cards.HazardCard;
 import models.players.AIPlayer;
 import models.stacks.game.GameStack;
 

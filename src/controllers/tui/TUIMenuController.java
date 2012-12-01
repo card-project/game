@@ -2,6 +2,10 @@ package controllers.tui;
 
 import models.Game;
 import models.exceptions.AliasAlreadyChosenException;
+import models.exceptions.IllegalAILevelException;
+import models.exceptions.IllegalDistanceException;
+import models.exceptions.IllegalHumanPlayerNumberException;
+import models.exceptions.IllegalPlayerNumberException;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
@@ -55,8 +59,10 @@ public class TUIMenuController {
 	}
 
 	private void defineGlobalPlayersNumber() {
+		
 		int playersNumber = 0;
 		boolean userChoiceIsCorrect;
+		
 		do {
 			userChoiceIsCorrect = true;
 			
@@ -67,13 +73,18 @@ public class TUIMenuController {
 				userChoiceIsCorrect = false;
 			}
 			
-			if ( userChoiceIsCorrect && ( playersNumber < 1 || playersNumber > 6 ) ) {
-				tui.warn( "Please enter a number between 1 and 6." );
-				userChoiceIsCorrect = false;
+			if ( userChoiceIsCorrect ) {
+				try {
+					currentGame.setPlayersNumber( playersNumber );
+				} catch ( IllegalPlayerNumberException e ) {
+					tui.warn( "Please enter a number between 2 and 6." );
+					userChoiceIsCorrect = false; 
+				}
+				
 			}
+			
 		} while ( ! userChoiceIsCorrect );
 
-		currentGame.setPlayersNumber( playersNumber );
 	}
 	
 	private void defineHumanPlayersNumber() {
@@ -89,19 +100,25 @@ public class TUIMenuController {
 				userChoiceIsCorrect = false;
 			}
 			
-			if ( userChoiceIsCorrect && ( humanPlayersNumber < 1 || humanPlayersNumber > currentGame.getPlayers().length ) ) {
-				tui.warn( "Please enter a number between 1 and " + currentGame.getPlayers().length + "." );
-				userChoiceIsCorrect = false;
+			if ( userChoiceIsCorrect ) {
+				try {
+					currentGame.setHumanPlayersNumber( humanPlayersNumber );
+				} catch ( IllegalHumanPlayerNumberException e ) {
+					tui.warn( "Please enter a number between 1 and " + currentGame.getPlayers().length + "." );
+					userChoiceIsCorrect = false;
+				}
 			}
+
 		} while ( ! userChoiceIsCorrect );
-		
-		currentGame.setHumanPlayers( humanPlayersNumber );
 	}
 	
 	private void defineDistanceGoal() {
+		
 		int distanceGoal = 0;
 		boolean userChoiceIsCorrect;
+		
 		do {
+
 			userChoiceIsCorrect = true;
 			
 			try {
@@ -111,13 +128,16 @@ public class TUIMenuController {
 				userChoiceIsCorrect = false;
 			}
 			
-			if ( userChoiceIsCorrect && ( distanceGoal < 700 || distanceGoal > 1000 || distanceGoal%25 != 0 ) ) {
-				tui.warn( "Please enter a number between 700 and 1000 and multiple of 25." );
-				userChoiceIsCorrect = false;
+			if ( userChoiceIsCorrect ) {
+				try {
+					currentGame.setDistanceGoal ( distanceGoal );
+				} catch ( IllegalDistanceException e ) {
+					tui.warn( "Please enter a number between 700 and 1000 and multiple of 25." );
+					userChoiceIsCorrect = false;
+				}	
 			}
+			
 		} while ( ! userChoiceIsCorrect );
-		
-		currentGame.setDistanceGoal ( distanceGoal );
 	}
 
 	private void defineHumanPlayersAlias() {
@@ -155,13 +175,16 @@ public class TUIMenuController {
 						userChoiceIsCorrect = false;
 					}
 					
-					if ( userChoiceIsCorrect && ( chosenLevel < 1 || chosenLevel > 3 ) ) {
-						tui.warn( "Please enter a number between 1 and 3." );
-						userChoiceIsCorrect = false;
+					if ( userChoiceIsCorrect ) {
+						try {
+							currentGame.setAIPlayerLevel( (AIPlayer) p, chosenLevel );
+						} catch ( IllegalAILevelException e ) {
+							tui.warn( "Please enter a number between 1 and 3." );
+							userChoiceIsCorrect = false;
+						}
 					}
-				} while ( ! userChoiceIsCorrect );
 
-				currentGame.setAIPlayerLevel( (AIPlayer) p, chosenLevel );
+				} while ( ! userChoiceIsCorrect );
 			}
 		}
 	}

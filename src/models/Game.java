@@ -1,6 +1,9 @@
 package models;
 
+import java.util.ArrayList;
+
 import models.exceptions.AliasAlreadyChosenException;
+import models.exceptions.IllegalAILevelException;
 import models.exceptions.IllegalDistanceException;
 import models.exceptions.IllegalHumanPlayerNumberException;
 import models.exceptions.IllegalPlayerNumberException;
@@ -19,11 +22,14 @@ public class Game {
 
 	// ------------ CONSTANTS ------------ //
 
-	private static final int MIN_PLAYERS_NB = 2;
-	private static final int MAX_PLAYERS_NB = 6;
-	private static final int MIN_HUMAN_PLAYERS_NB = 1;
-	private static final int MIN_DISTANCE_GOAL = 700;
-	private static final int MAX_DISTANCE_GOAL = 1000;
+	public static final int MIN_PLAYERS_NB = 2;
+	public static final int MAX_PLAYERS_NB = 6;
+	// Allow IA vs IA game.
+	public static final int MIN_HUMAN_PLAYERS_NB = 0;
+	public static final int MIN_DISTANCE_GOAL = 700;
+	public static final int MAX_DISTANCE_GOAL = 1000;
+	public static final int MIN_AI_LEVEL = 1;
+	public static final int MAX_AI_LEVEL = 3;
 	
 	// ------------ ATTRIBUTES ------------ // 
 	
@@ -74,7 +80,7 @@ public class Game {
 		}
 	}
 
-	public void setHumanPlayers( int humanPlayersNumber ) throws IllegalHumanPlayerNumberException {
+	public void setHumanPlayersNumber( int humanPlayersNumber ) throws IllegalHumanPlayerNumberException {
 		if ( humanPlayersNumber < MIN_HUMAN_PLAYERS_NB || humanPlayersNumber > this.players.length ) {
 			throw new IllegalHumanPlayerNumberException();
 		} else {
@@ -94,9 +100,11 @@ public class Game {
 	
 
 	public void setPlayerAlias( Player player, String askedPlayerAlias ) throws AliasAlreadyChosenException  {
-		for ( int i = 0; i < this.players.length; i++ ) {
-			if ( askedPlayerAlias.equals( this.players[i].getAlias() ) ) {
-				throw new AliasAlreadyChosenException( "Alias already chosen." );
+		for ( Player p : this.players ) {
+			if ( player != p ) {
+				if ( p.getAlias() == askedPlayerAlias ) {
+					throw new AliasAlreadyChosenException( "Alias already chosen." );
+				}
 			}
 		}
 		
@@ -121,8 +129,12 @@ public class Game {
 		}
 	}
 	
-	public void setAIPlayerLevel( AIPlayer p, Integer chosenLevel ) {
-		p.setLevel( chosenLevel );
+	public void setAIPlayerLevel( AIPlayer p, Integer chosenLevel ) throws IllegalAILevelException {
+		if ( chosenLevel < MIN_AI_LEVEL || chosenLevel > MAX_AI_LEVEL ) {
+			throw new IllegalAILevelException();
+		} else {
+			p.setLevel( chosenLevel );
+		}
 	}
 	
 	// ------------ GETTERS------------ // 
@@ -131,6 +143,28 @@ public class Game {
 		return this.players;
 	}
 
+	public AIPlayer[] getAIPlayers() {
+		ArrayList<AIPlayer> aiPlayers = new ArrayList<AIPlayer>();
+		for ( Player p : players ) {
+			if ( p instanceof AIPlayer ) {
+				aiPlayers.add( (AIPlayer) p );
+			}
+		}
+		
+		return aiPlayers.toArray( new AIPlayer[aiPlayers.size()] );
+	}
+	
+	public HumanPlayer[] getHumanPlayers() {
+		ArrayList<HumanPlayer> humanPlayers = new ArrayList<HumanPlayer>();
+		for ( Player p : players ) {
+			if ( p instanceof HumanPlayer) {
+				humanPlayers.add( (HumanPlayer) p );
+			}
+		}
+		
+		return humanPlayers.toArray( new HumanPlayer[humanPlayers.size()] );
+	}
+	
 	public DeckStack getDeckStack() {
 		return this.deckStack;
 	}
