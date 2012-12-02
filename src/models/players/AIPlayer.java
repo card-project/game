@@ -1,5 +1,7 @@
 package models.players;
 
+import java.util.ArrayList;
+
 import models.players.strategies.Strategy;
 import models.stacks.DiscardStack;
 
@@ -13,7 +15,13 @@ public class AIPlayer extends Player {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private Brain mind = new Brain(this);
+	private Brain mind = null;
+	
+	// ------------ CONSTRUCTORS ------------ //
+	
+	public AIPlayer(ArrayList<Player> opponents) {
+		this.mind = new Brain(this, opponents);
+	}
 
 	// ------------ METHODS ------------ //
 	
@@ -22,7 +30,7 @@ public class AIPlayer extends Player {
 	}
 	
 	public void play( ) {
-		//strategy.chooseCardToPlay();
+		//super.play(mind.chooseCardToPlay());
 	}
 	
 	public void discard( DiscardStack d ) {

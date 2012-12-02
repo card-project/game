@@ -1,15 +1,17 @@
 package models.players.strategies;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import models.cards.Card;
 import models.cards.CardType;
 import models.cards.DistanceCard;
-import models.cards.HazardCard;
 import models.cards.RemedyCard;
-import models.exceptions.IllegalMoveException;
+import models.exceptions.moveExceptions.IllegalMoveException;
 import models.moves.BasicMove;
 import models.players.AIPlayer;
+import models.stacks.DeckStack;
+import models.stacks.DiscardStack;
 import models.stacks.GameStack;
 
 public class Driver implements Strategy {
@@ -28,20 +30,25 @@ public class Driver implements Strategy {
 	
 	@Override
 	public GameStack chooseStackToDraw() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		GameStack stackToDraw = null;
+		Card cardDisCard = DiscardStack.getInstance().getFirst();
+		
+		if(cardDisCard instanceof DistanceCard)
+			stackToDraw = DiscardStack.getInstance();
+		else
+			stackToDraw = DeckStack.getInstance();
+
+		return stackToDraw;
 	}
 
 	@Override
 	public Card chooseCardToPlay() {
 		
 		Card chosenCard = null;
-		boolean speedLimit = false;
 		boolean initialGoRoll = this.player.getBattleStack().initialGoRollIsPlayed();
 		
 		BasicMove move = new BasicMove(this.player);
-		
-		LinkedList<DistanceCard> suitableCards = new LinkedList<DistanceCard>();
 		LinkedList<Card> list = this.player.getHandStack().getCards();
 		
 		for (Card card : list)
@@ -58,11 +65,9 @@ public class Driver implements Strategy {
 					move.setCardToPlay(chosenCard);
 					
 					try {
-						move.performRemedyCardVerification();
+						move.setTarget(this.player);
 					} catch (IllegalMoveException e) {
-						
 						// TODO Check the kind of IllegalMoveException
-						chosenCard = null;
 						e.printStackTrace();
 					} catch (IllegalAccessError e) {
 						e.printStackTrace();
@@ -75,9 +80,9 @@ public class Driver implements Strategy {
 				{
 					DistanceCard cardChecked = (DistanceCard) card;
 					
-					
 					try {
 						move.setCardToPlay(cardChecked);
+						move.setTarget(this.player);
 						
 						if(move.performDistanceCardVerification())
 							if(cardChecked.getRange() > ((DistanceCard)chosenCard).getRange())
@@ -98,8 +103,41 @@ public class Driver implements Strategy {
 
 	@Override
 	public Card chooseCardToDiscard() {
-		//TODO
-		return null;
+		
+		boolean cardChosen = false;
+		
+		Card cardToDiscard = null;
+		BasicMove bm = new BasicMove(this.player);
+		
+		Iterator<Card> handCardsIterator = this.player.getHandStack().getCards().iterator();
+		
+		while(handCardsIterator.hasNext() && !cardChosen)
+		{
+			Card card = handCardsIterator.next();
+			
+			if(card instanceof DistanceCard)
+			{
+				DistanceCard cardUnderTest = (DistanceCard) card;
+				
+				bm.setCardToPlay(cardUnderTest);
+				try {
+					
+					// We check if the card is possible to play
+					if(bm.setTarget(player))
+					{
+						if(cardUnderTest.getRange() < ((DistanceCard)cardToDiscard).getRange())
+							cardToDiscard = cardUnderTest;
+					}
+				} catch (IllegalMoveException e) {
+					
+					// If a distance card can't be played, we can discard it. 
+					cardToDiscard = cardUnderTest;
+					cardChosen = true;
+				}
+			}
+		}
+		
+		return cardToDiscard;
 	}
 
 }
