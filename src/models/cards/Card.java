@@ -19,7 +19,7 @@ public abstract class Card {
 	
 	public Card() { }
 	
-	public Card( CardFamily initialFamily, CardType cardType ) {
+	protected Card( CardFamily initialFamily, CardType cardType ) {
 		this.families = new ArrayList<CardFamily>();
 		this.addFamily( initialFamily );
 		

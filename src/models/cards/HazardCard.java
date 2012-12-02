@@ -18,7 +18,7 @@ public class HazardCard extends Card {
 
 	// ------------ CONSTRUCTORS ------------ //
 
-	public HazardCard( CardFamily initialFamily, CardType cardType ) {
+	protected HazardCard( CardFamily initialFamily, CardType cardType ) {
 		super( initialFamily, cardType );
 	}
 }

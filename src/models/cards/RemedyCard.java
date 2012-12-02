@@ -21,7 +21,7 @@ public class RemedyCard extends Card {
 	
 	// ------------ CONSTRUCTORS ------------ //
 
-	public RemedyCard( CardFamily initialFamily, CardType cardType ) {
+	protected RemedyCard( CardFamily initialFamily, CardType cardType ) {
 		super( initialFamily, cardType );
 	}
 	

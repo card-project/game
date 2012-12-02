@@ -21,7 +21,7 @@ public class DistanceCard extends Card {
 
 	// ------------ CONSTRUCTORS ------------ //
 	
-	public DistanceCard( int rangeValue ) {
+	protected DistanceCard( int rangeValue ) {
 		super();
 		this.range = rangeValue;
 		

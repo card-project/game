@@ -8,7 +8,7 @@ public class SafetyCard extends Card {
 
 	// ------------ CONSTRUCTORS ------------ //
 
-	public SafetyCard( CardFamily initialFamily, CardType cardType ) {
+	protected SafetyCard( CardFamily initialFamily, CardType cardType ) {
 		super( initialFamily, cardType );
 	}
 }
