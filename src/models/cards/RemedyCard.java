@@ -25,6 +25,4 @@ public class RemedyCard extends Card {
 		super( initialFamily, cardType );
 	}
 	
-	// ------------ METHODS ------------ //
-	
 }

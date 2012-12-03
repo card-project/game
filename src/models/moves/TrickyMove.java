@@ -19,19 +19,17 @@ public class TrickyMove extends Move {
 
 	public TrickyMove( Player moveInitiator ) {
 		super( moveInitiator );
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void realize() {
-		// TODO Auto-generated method stub
+	public boolean realize() {
+		return false;
 		
 	}
 
 	@Override
 	public boolean targetIsCompatible( Player targetPlayer )
 			throws IllegalMoveException {
-		// TODO Auto-generated method stub
 		return true;
 	}
 }

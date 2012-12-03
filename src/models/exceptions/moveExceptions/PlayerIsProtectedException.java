@@ -4,7 +4,6 @@ public class PlayerIsProtectedException extends IllegalMoveException {
 
 	public PlayerIsProtectedException( String string ) {
 		super( string );
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

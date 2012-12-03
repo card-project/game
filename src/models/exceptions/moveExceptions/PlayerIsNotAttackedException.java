@@ -4,7 +4,6 @@ public class PlayerIsNotAttackedException extends IllegalMoveException {
 
 	public PlayerIsNotAttackedException( String string ) {
 		super( string );
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

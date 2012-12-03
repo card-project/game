@@ -22,24 +22,20 @@ public class Brain implements Strategy{
 		this.mind.add(new Protector(this.player));
 	}
 	
-	
 	// ------------ METHODS ------------ //
 	
 	@Override
 	public Card chooseCardToDiscard() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public Card chooseCardToPlay() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public GameStack chooseStackToDraw() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

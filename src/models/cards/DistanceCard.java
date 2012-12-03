@@ -25,7 +25,13 @@ public class DistanceCard extends Card {
 		super();
 		this.range = rangeValue;
 		
-		switch ( rangeValue ) {
+		setType();
+	}
+	
+	// ------------ METHODS ------------ //
+	
+	private void setType() {
+		switch ( this.range ) {
 		case 25:
 			this.type = CardType.Distance25;
 			break;
@@ -41,10 +47,8 @@ public class DistanceCard extends Card {
 		case 200:
 			this.type = CardType.Distance200;
 			break;
-		}
+		}		
 	}
-	
-	// ------------ METHODS ------------ //
 	
 	@Override
 	public String toString() {

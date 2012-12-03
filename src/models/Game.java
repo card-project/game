@@ -15,6 +15,9 @@ import models.stacks.game.DiscardStack;
 import models.stacks.player.HandStack;
 
 /**
+ * TODO : replay when safety 
+ * TODO : when deck is empty, turn discard stack into deck and shuffle
+ * 
  * @author Simon RENOULT
  * @vresion 0.2.2
  */

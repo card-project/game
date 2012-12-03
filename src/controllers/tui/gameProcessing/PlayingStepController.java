@@ -96,7 +96,6 @@ public class PlayingStepController extends StepController {
 			try {
 				bm.realize();
 			} catch ( IllegalCardTypeException e ) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

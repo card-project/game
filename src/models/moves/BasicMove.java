@@ -12,6 +12,7 @@ import models.exceptions.moveExceptions.InitialGoRollNotPlayedException;
 import models.exceptions.moveExceptions.PlayerIsAttackedException;
 import models.exceptions.moveExceptions.PlayerIsNotAttackedException;
 import models.exceptions.moveExceptions.PlayerIsNotSlowedException;
+import models.exceptions.moveExceptions.PlayerIsProtectedException;
 import models.exceptions.moveExceptions.PlayerIsSlowedException;
 import models.exceptions.moveExceptions.UnsuitableRemedyException;
 import models.players.Player;
@@ -38,35 +39,40 @@ public class BasicMove extends Move {
 	// ------------ METHODS ------------ //
 
 	@Override
-	public void realize() throws IllegalCardTypeException {
-		if ( cardToPlay instanceof DistanceCard ) {
-			target.getDistanceStack().push( cardToPlay );
-		} else if ( cardToPlay instanceof HazardCard ) {
-			target.getBattleStack().push( cardToPlay );
-		} else if ( cardToPlay instanceof RemedyCard ) {
-			target.getBattleStack().removeAll();
-		} else if ( cardToPlay instanceof SafetyCard ) {
-			target.getSafetyStack().push( cardToPlay );
-			target.getDistanceStack().increaseBy100();
+	public boolean realize() throws IllegalCardTypeException {
+		if ( this.origin == null || this.target == null || this.cardToPlay == null ) {
+			throw new IllegalAccessError();
+		} else {
+			if ( cardToPlay instanceof DistanceCard ) {
+				target.getDistanceStack().push( cardToPlay );
+			} else if ( cardToPlay instanceof HazardCard ) {
+				target.getBattleStack().push( cardToPlay );
+			} else if ( cardToPlay instanceof RemedyCard ) {
+				target.getBattleStack().removeHazards();
+			} else if ( cardToPlay instanceof SafetyCard ) {
+				target.getSafetyStack().push( cardToPlay );
+				target.getDistanceStack().increaseBy100();
 
-			if ( target.isAttacked() ) {
-				if ( cardToPlay.getType() == CardType.RightOfWay ) {
+				if ( target.isAttacked() ) {
 					for ( CardFamily cf : cardToPlay.getFamilies() ) {
-						if ( cf == cardToPlay.getFamily() ) {
-							target.getBattleStack().removeAll();
+						if ( target.isAttacked() && cf == target.getBattleStackContent().getFamily() ) {
+							target.getBattleStack().removeHazards();
 						}
 					}
-				} else {
-					if ( cardToPlay.getFamily() == target
-							.getBattleStackContent().getFamily() ) {
-						target.getBattleStack().removeAll();
-					}
 				}
+				
+				if ( target.isSlowed() && cardToPlay.getType() == CardType.RightOfWay ) {
+					target.getDistanceStack().removeHazards();
+				}
+				
+				return true;
+
 			}
 
+			origin.getHandStack().remove( cardToPlay );
 		}
-
-		origin.getHandStack().remove( cardToPlay );
+		
+		return false;
 	}
 
 	/**
@@ -94,22 +100,33 @@ public class BasicMove extends Move {
 	/**
 	 * Perform card to stack verification.
 	 * 
-	 * -- > Distance : -- > Initial GoRoll is not played : -- > IMPOSSIBLE. -- >
-	 * Initial GoRoll is played : -- > Attacked and not protected : -- >
-	 * IMPOSSIBLE. -- > Not attacked: -- > Slowed and > 50 -- > IMPOSSIBLE.
+	 * -- > Distance : 
+	 *   -- > Initial GoRoll is not played : 
+	 *     -- > IMPOSSIBLE.
+	 *   -- > Initial GoRoll is played : 
+	 *     -- > Attacked and not protected : 
+	 *       -- > IMPOSSIBLE. 
+	 *     -- > Not attacked:
+	 *       -- > Slowed and > 50 
+	 *         -- > IMPOSSIBLE.
 	 * 
-	 * -- > Hazard : -- > Protected -- > IMPOSSIBLE. -- > Already
-	 * attacked/slowed. -- > IMPOSSIBLE.
+	 * -- > Hazard : 
+	 *   -- > Protected 
+	 *     -- > IMPOSSIBLE. 
+	 *   -- > Already attacked/slowed. 
+	 *     -- > IMPOSSIBLE.
 	 * 
-	 * -- > Remedy : -- > Speed -- > GoStop -- > Else
+	 * -- > Remedy : 
+	 *   -- > Speed 
+	 *   -- > GoStop 
+	 *   -- > Else
 	 * 
 	 * -- > Safety :
 	 * 
 	 * @return false is Move is not allowed.
 	 * @throws IllegalMoveException
 	 */
-	public boolean cardAndPlayerStackAreCompatible( Player targetPlayer )
-			throws IllegalMoveException {
+	public boolean cardAndPlayerStackAreCompatible( Player targetPlayer ) throws IllegalMoveException {
 		if ( this.cardToPlay instanceof DistanceCard ) {
 			this.performDistanceCardVerification( targetPlayer );
 		} else if ( this.cardToPlay instanceof HazardCard ) {
@@ -138,7 +155,7 @@ public class BasicMove extends Move {
 					"Initial GoRoll card has not been played yet." );
 		} else {
 			if ( targetPlayer.getBattleStack().isAttacked()
-					&& ( !targetPlayer.isProtectedFrom( targetPlayer
+					&& ( !targetPlayer.isProtectedFrom( (HazardCard) targetPlayer
 							.getBattleStackContent() ) ) ) {
 				throw new PlayerIsAttackedException( "You are under attack : "
 						+ targetPlayer.getBattleStackContent() );
@@ -161,18 +178,23 @@ public class BasicMove extends Move {
 	 */
 	public boolean performHazardCardVerification( Player targetPlayer )
 			throws IllegalMoveException {
-		if ( targetPlayer.isProtectedFrom( (HazardCard) this.cardToPlay ) ) {
-			throw new IllegalMoveException(
-					"Your opponent is protected from this kind of attack." );
-		} else if ( this.cardToPlay.getFamily() == CardFamily.Speed
-				&& targetPlayer.isSlowed() ) {
-			throw new PlayerIsSlowedException(
-					"Your opponent is already slowed." );
-		} else if ( this.cardToPlay.getFamily() != CardFamily.Speed
-				&& targetPlayer.isAttacked() ) {
-			throw new PlayerIsAttackedException(
-					"Your opponent is already under attack." );
+		if ( target.getBattleStack().initialGoRollIsPlayed() ) {
+			if ( targetPlayer.isProtectedFrom( (HazardCard) this.cardToPlay ) ) {
+				throw new PlayerIsProtectedException(
+						"Your opponent is protected from this kind of attack." );
+			} else if ( this.cardToPlay.getFamily() == CardFamily.Speed
+					&& targetPlayer.isSlowed() ) {
+				throw new PlayerIsSlowedException(
+						"Your opponent is already slowed." );
+			} else if ( this.cardToPlay.getFamily() != CardFamily.Speed
+					&& targetPlayer.isAttacked() ) {
+				throw new PlayerIsAttackedException(
+						"Your opponent is already under attack." );
+			}
+		} else {
+			throw new IllegalMoveException( "Your opponent has not started to play yet." );
 		}
+		
 
 		return true;
 	}
@@ -210,6 +232,13 @@ public class BasicMove extends Move {
 		return true;
 	}
 
+	@Override
+	public boolean targetIsCompatible( Player targetPlayer )
+			throws IllegalMoveException {
+		return cardAndTargetAreCompatible( targetPlayer )
+				&& cardAndPlayerStackAreCompatible( targetPlayer );
+	}
+	
 	// ------------ GETTERS ------------ //
 
 	public Boolean isAnAttack() {
@@ -218,10 +247,4 @@ public class BasicMove extends Move {
 
 	// ------------ SETTERS ------------ //
 
-	@Override
-	public boolean targetIsCompatible( Player targetPlayer )
-			throws IllegalMoveException {
-		return cardAndTargetAreCompatible( targetPlayer )
-				&& cardAndPlayerStackAreCompatible( targetPlayer );
-	}
 }

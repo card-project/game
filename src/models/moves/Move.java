@@ -36,9 +36,21 @@ public abstract class Move {
 	/**
 	 * Executes the move using the origin player and the card he chosses
 	 * to play on the target.
+	 * @return 
 	 * @throws IllegalCardTypeException 
 	 */
-	public abstract void realize() throws IllegalCardTypeException;
+	public abstract boolean realize() throws IllegalCardTypeException;
+
+	/**
+	 * Perform a verification on target player. As the verification content
+	 * depends on the type of move, the method is set as abstract and is used
+	 * through a final method : {@link Move#setTarget(Player)}.
+	 * 
+	 * @param targetPlayer
+	 * @return True if the target is compatible , else false.
+	 * @throws IllegalMoveException
+	 */
+	public abstract boolean targetIsCompatible ( Player targetPlayer ) throws IllegalMoveException;
 	
 	// ------------ GETTERS ------------ //
 	
@@ -76,7 +88,7 @@ public abstract class Move {
 	 * @throws IllegalMoveException Target cannot be chosen with this card.
 	 * @throws IllegalAccessError No card previously selected.
 	 */
-	final public void setTarget( Player targetPlayer ) throws IllegalMoveException, IllegalAccessError {
+	final public boolean setTarget( Player targetPlayer ) throws IllegalMoveException, IllegalAccessError {
 		if ( this.cardToPlay == null ) {
 			throw new IllegalAccessError( "No card selected." );
 		} else if ( targetPlayer == null ) {
@@ -84,21 +96,10 @@ public abstract class Move {
 		} else {
 			if ( targetIsCompatible( targetPlayer ) ) {
 				this.target = targetPlayer;
+				return true;
 			} else {
 				throw new IllegalMoveException( "Target is incompatible with this card." );
 			}
 		}
 	}
-
-	/**
-	 * Perform a verification on target player. As the verification content
-	 * depends on the type of move, the method is set as abstract and is used
-	 * through a final method : {@link Move#setTarget(Player)}.
-	 * 
-	 * @param targetPlayer
-	 * @return True if the target is compatible , else false.
-	 * @throws IllegalMoveException
-	 */
-	public abstract boolean targetIsCompatible ( Player targetPlayer ) throws IllegalMoveException;
-	
 }

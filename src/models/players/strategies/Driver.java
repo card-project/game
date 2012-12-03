@@ -24,7 +24,6 @@ public class Driver implements Strategy {
 	
 	@Override
 	public GameStack chooseStackToDraw() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

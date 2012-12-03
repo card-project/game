@@ -3,6 +3,7 @@ package models.stacks.player;
 import models.cards.Card;
 import models.cards.CardType;
 import models.cards.DistanceCard;
+import models.cards.HazardCard;
 import models.exceptions.IllegalCardTypeException;
 
 /**
@@ -16,8 +17,8 @@ public class DistanceStack extends PlayerStack {
 	// ------------ ATTRIBUTES ------------ //
 	
 	private static int MAX_DISTANCE200 = 2;
-	private static int BONUS_100_CPT = 0;
-	private static int BONUS_300_CPT = 0;
+	private int BONUS_100_CPT = 0;
+	private int BONUS_300_CPT = 0;
 	
 	// ------------ METHODS ------------ //
 
@@ -72,8 +73,25 @@ public class DistanceStack extends PlayerStack {
 		BONUS_300_CPT++;
 	}
 	
+	public int getBonus100() {
+		return this.BONUS_100_CPT;
+	}
+	
+	public int getBonus300() {
+		return this.BONUS_300_CPT;
+	}
+	
 	public void resetBonuses() {
 		BONUS_100_CPT = 0;
 		BONUS_300_CPT = 0;
 	}
+	
+	public void removeHazards() {
+		for ( int i = 0; i < super.cards.size() ; i++ ) {
+			if ( super.cards.get( i ) instanceof HazardCard ) {
+				super.cards.remove( i );
+			}
+		}
+	}
+	
 }

@@ -12,8 +12,8 @@ public abstract class Card {
 	
 	// ------------ ATTRIBUTES ------------ //
 	
-	protected ArrayList<CardFamily> families;
-	protected CardType type;
+	protected ArrayList<CardFamily> families = null;
+	protected CardType type = null;
 	
 	// ------------ CONSTRUCTORS ------------ //
 	

@@ -4,7 +4,6 @@ public class InitialGoRollNotPlayedException extends IllegalMoveException {
 
 	public InitialGoRollNotPlayedException( String string ) {
 		super( string );
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

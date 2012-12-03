@@ -5,7 +5,6 @@ public class PlayerIsSlowedException extends IllegalMoveException {
 
 	public PlayerIsSlowedException( String string ) {
 		super( string );
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

@@ -33,7 +33,8 @@ public class MoveTest {
 			}
 			
 			@Override
-			public void realize() throws IllegalCardTypeException {
+			public boolean realize() throws IllegalCardTypeException {
+				return true;
 				
 			}
 		};

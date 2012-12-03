@@ -7,7 +7,6 @@ public class IllegalCardTypeException extends Exception {
 	}
 
 	public IllegalCardTypeException() {
-		// TODO Auto-generated constructor stub
 	}
 
 }

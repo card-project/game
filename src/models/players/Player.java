@@ -193,8 +193,8 @@ public abstract class Player {
 		return this.battleStack;
 	}
 	
-	public HazardCard getBattleStackContent() {
-		return (HazardCard) this.getBattleStack().peek();
+	public Card getBattleStackContent() {
+		return this.getBattleStack().peek();
 	}
 	
 	
