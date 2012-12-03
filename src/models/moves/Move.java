@@ -11,7 +11,7 @@ import models.players.Player;
  * from a origin {@link Player} to his target (can be himself).
  * 
  * @author Simon RENOULT
- * @version 1.0
+ * @version 1.0.1
  */
 public abstract class Move {
 
@@ -76,7 +76,7 @@ public abstract class Move {
 	 * @throws IllegalMoveException Target cannot be chosen with this card.
 	 * @throws IllegalAccessError No card previously selected.
 	 */
-	final public boolean setTarget( Player targetPlayer ) throws IllegalMoveException, IllegalAccessError {
+	final public void setTarget( Player targetPlayer ) throws IllegalMoveException, IllegalAccessError {
 		if ( this.cardToPlay == null ) {
 			throw new IllegalAccessError( "No card selected." );
 		} else if ( targetPlayer == null ) {
@@ -84,7 +84,6 @@ public abstract class Move {
 		} else {
 			if ( targetIsCompatible( targetPlayer ) ) {
 				this.target = targetPlayer;
-				return true;
 			} else {
 				throw new IllegalMoveException( "Target is incompatible with this card." );
 			}

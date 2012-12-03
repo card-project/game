@@ -33,7 +33,6 @@ public class HandStackTest {
 		try {
 			this.handStack.push( c );
 		} catch ( IllegalCardTypeException e ) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -51,7 +50,6 @@ public class HandStackTest {
 		try {
 			handStack.push( c );
 		} catch ( IllegalCardTypeException e ) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -65,7 +63,6 @@ public class HandStackTest {
 		try {
 			handStack.push( c );
 		} catch ( IllegalCardTypeException e ) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -79,7 +76,6 @@ public class HandStackTest {
 		try {
 			handStack.push( c );
 		} catch ( IllegalCardTypeException e ) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -101,7 +97,6 @@ public class HandStackTest {
 			this.handStack.push( (DistanceCard) CardFactory
 					.createCard( distanceType ) );
 		} catch ( IllegalCardTypeException e ) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertTrue( handStack.containsDistance() );
@@ -122,7 +117,6 @@ public class HandStackTest {
 			this.handStack.push( (DistanceCard) CardFactory
 					.createCard( distanceType ) );
 		} catch ( IllegalCardTypeException e ) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertEquals( expected, handStack.containsSlowDistanceCard() );

@@ -24,7 +24,6 @@ public class PlayerStackTest {
 		try {
 			playerStack.push( CardFactory.createCard( reference ) );
 		} catch ( IllegalCardTypeException e ) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -41,7 +40,6 @@ public class PlayerStackTest {
 		try {
 			this.playerStack.shiftTo( destinationStack, chosenCard );
 		} catch ( IllegalCardTypeException e ) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

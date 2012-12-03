@@ -77,6 +77,23 @@ public class BattleStackTest {
 
 		assertTrue( this.battleStack.getCards().isEmpty() );
 	}
+	
+	
+	@Test
+	public void testRemoveHazards() {
+		assertTrue( this.battleStack.getCards().isEmpty() );
+
+		try {
+			this.battleStack.push( CardFactory.createCard( CardType.GoRoll ) );
+			this.battleStack.push( CardFactory.createCard( CardType.Accident ) );
+		} catch ( IllegalCardTypeException e ) {
+			e.printStackTrace();
+		}
+		
+		this.battleStack.removeHazards();
+		
+		assertTrue( this.battleStack.peek().getType() == CardType.GoRoll );
+	}
 
 	@Test
 	public void testInitialGoRollIsPlayed() {

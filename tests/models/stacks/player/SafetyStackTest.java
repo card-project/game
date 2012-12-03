@@ -80,7 +80,6 @@ public class SafetyStackTest {
 			assertTrue( safetyStack.isProtectedFrom( CardFamily.Tire ) );
 
 		} catch ( IllegalCardTypeException e ) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
