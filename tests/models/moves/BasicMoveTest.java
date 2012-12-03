@@ -170,14 +170,10 @@ public class BasicMoveTest {
 	public void testRealizeSafetyAndNoAttack() {
 
 		HumanPlayer refOrigin = new HumanPlayer();
-		HumanPlayer refTarget = new HumanPlayer();
 		Card refCard = null;
-		HazardCard refHazards = null;
 		
 		bm.origin = refOrigin;
 		bm.target = refOrigin;
-		
-		// -- > Case 1 : Not attacked
 		
 		refCard = CardFactory.createCard( CardType.DrivingAce );
 		bm.cardToPlay = refCard;
@@ -188,9 +184,9 @@ public class BasicMoveTest {
 			e.printStackTrace();
 		}
 		
-		assertTrue( bm.origin.getSafetyStack().exists( CardType.DrivingAce ) );
+		assertFalse( bm.target.getHandStack().exists( CardType.DrivingAce ) );
+		assertTrue( bm.target.getSafetyStack().exists( CardType.DrivingAce ) );
 		assertEquals( bm.origin.getDistanceStack().getBonus100(), 1 );
-		
 	}
 
 	@Test
@@ -230,7 +226,6 @@ public class BasicMoveTest {
 		assertTrue( bm.target.isAttacked() );
 	}
 	
-	
 	@Test
 	public void testRealizeSafetyAndRightAttack() {
 
@@ -267,7 +262,6 @@ public class BasicMoveTest {
 		assertEquals( bm.origin.getDistanceStack().getBonus100(), 1 );
 		assertFalse( bm.target.isAttacked() );
 	}
-	
 	
 	@Test
 	public void testRealizeRightOfWayAndSlowed() {
@@ -306,7 +300,6 @@ public class BasicMoveTest {
 		assertEquals( bm.origin.getDistanceStack().getBonus100(), 1 );
 		assertFalse( bm.target.isSlowed() );
 	}
-	
 	
 	@Test
 	public void testPerformDistanceCardVerification() {

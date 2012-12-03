@@ -9,8 +9,6 @@ public class DeckStackTest {
 
 	// ------------ CONSTANTS ------------ //
 	
-	private static final int DECK_CARD_NB = 65;
-	
 	// ------------ ATTRIBUTES ------------ //
 	
 	private DeckStack deckStack = DeckStack.getInstance();
@@ -22,8 +20,4 @@ public class DeckStackTest {
 		assertEquals( this.deckStack, DeckStack.getInstance() );
 	}
 	
-	@Test
-	public void testSize() {
-		assertEquals( DECK_CARD_NB, this.deckStack.size() );
-	}
 }
