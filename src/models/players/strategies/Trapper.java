@@ -1,34 +1,33 @@
 package models.players.strategies;
 
 import models.cards.Card;
+import models.cards.RemedyCard;
 import models.players.AIPlayer;
-import models.stacks.game.GameStack;
 
-public class Trapper implements Strategy {
+/**
+ * The Trapper strategy is pretty similar with the Protector strategy.
+ * This main difference is that it will play his safeties only when someone is attacking him.
+ * 
+ * @author Adrien SAUNIER
+ */
+public class Trapper extends Protector {
 
-	// ------------ ATTRIBUTES ------------ //
-	
-	private AIPlayer player;
-	
-	// ------------ CONSTRUCTORS ------------ //
-	
 	public Trapper(AIPlayer player) {
-		this.player = player;
-	}
-	
-	@Override
-	public GameStack chooseStackToDraw() {
-		return null;
+		super(player);
 	}
 
 	@Override
 	public Card chooseCardToPlay() {
-		return null;
+		Card chosenCard = null;
+		
+		if(this.player.isAttacked())
+		{
+			for (Card card : this.player.getHandStack().getCards()) {
+				if(this.player.getBattleStack().peek().getType() == card.getType())
+					chosenCard = (RemedyCard) card;
+			}
+		}
+		
+		return chosenCard;
 	}
-
-	@Override
-	public Card chooseCardToDiscard() {
-		return null;
-	}
-
 }
