@@ -178,7 +178,7 @@ public class BasicMove extends Move {
 	 */
 	public boolean performHazardCardVerification( Player targetPlayer )
 			throws IllegalMoveException {
-		if ( target.getBattleStack().initialGoRollIsPlayed() ) {
+		if ( targetPlayer.getBattleStack().initialGoRollIsPlayed() ) {
 			if ( targetPlayer.isProtectedFrom( (HazardCard) this.cardToPlay ) ) {
 				throw new PlayerIsProtectedException(
 						"Your opponent is protected from this kind of attack." );

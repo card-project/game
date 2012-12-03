@@ -109,37 +109,29 @@ public abstract class Player {
 	 */
 	public boolean canPlay( ArrayList<Player> opponents ) {
 		if ( handStack.containsSafety() ) {
-			System.out.println( "SAFETY" );
 			return true;
 		} 
 		
 		if ( handStack.containsHazard() ) {
-			System.out.println( "HAZARD" );
 			for ( Player p : opponents ) {
-				if( handStack.exists( CardType.SpeedLimit ) ) {
-					System.out.println( "NOT SLOWED SPEELIMIT");
-					return ! p.isSlowed();
-				} else {
-					System.out.println( "NOT ATACKED" );
-					return ! p.isAttacked();
+				if ( p.getBattleStack().initialGoRollIsPlayed() ) {
+					if( handStack.exists( CardType.SpeedLimit ) ) {
+						return ! p.isSlowed();
+					} else {
+						return ! p.isAttacked();
+					}					
 				}
 			}
 			
 		}
 		
 		if ( handStack.containsDistance() ) {
-			System.out.println( "DISTANCE" );
 			if ( battleStack.initialGoRollIsPlayed() ) {
-				System.out.println( "INITIALGOROLL" );
 				if ( ! this.isAttacked() ) {
-					System.out.println( "ISNOTATTACKED" );
 					if ( ! this.isSlowed() ) {
-						System.out.println( "ISNOTSLOWED" );
 						return true;
 					} else {
-						System.out.println( "ISSLOWED" );
 						if ( handStack.containsSlowDistanceCard() ) {
-							System.out.println( "SLOWDISTANCE" );
 							return true;
 						}
 					}
@@ -148,17 +140,12 @@ public abstract class Player {
 		}
 		
 		if ( handStack.containsRemedy() ) {
-			System.out.println( "REMEDY" );
 			if ( this.isAttacked() && handStack.hasRemedyFor( getBattleStackContent().getFamily() ) ) {
-				System.out.println( "ATTACKED GOOD FAMILY" );
 				return true;
 			} else if ( this.isSlowed() && handStack.exists( CardType.GoRoll ) ) {
-				System.out.println( "SLOWED GOROLL" );
 				return true;
 			} else if ( ( !battleStack.initialGoRollIsPlayed() ) ) {
-				System.out.println( "NOINITIALGOROLL" );
 				if ( handStack.exists( CardType.GoRoll ) ) {
-					System.out.println( "GOROLL" );
 					return true;
 				}
 			}

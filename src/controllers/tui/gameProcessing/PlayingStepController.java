@@ -50,11 +50,10 @@ public class PlayingStepController extends StepController {
 			BasicMove bm = new BasicMove( super.currentPlayer );
 			boolean userChoiceIsCorrect;
 			
-			do {
+			if ( currentPlayer.canPlay( getOpponents( currentPlayer ) ) ) {
+				do {
+					userChoiceIsCorrect = true;
 				
-				userChoiceIsCorrect = true;
-				
-				if ( currentPlayer.canPlay( getOpponents( currentPlayer ) ) ) {
 					// STEP 1 : Choose card to play.		
 					bm.setCardToPlay( this.chooseCardToPlay( super.currentPlayer ) );
 					
@@ -85,19 +84,20 @@ public class PlayingStepController extends StepController {
 							tui.warn( e.getMessage() );
 						}
 					}					
-				} else {
-					System.out.println( "No card to play." );
-				}
 				
-			} while ( ! userChoiceIsCorrect );
+				} while ( ! userChoiceIsCorrect );
 			
-			// STEP 3 : play the card
-			//( ( HumanPlayer) p ).play( bm );
-			try {
-				bm.realize();
-			} catch ( IllegalCardTypeException e ) {
-				e.printStackTrace();
+				// STEP 3 : play the card
+				try {
+					bm.realize();
+				} catch ( IllegalCardTypeException e ) {
+					e.printStackTrace();
+				}
+			
+			} else {
+					System.out.println( "No card to play." );
 			}
+						
 		}
 	}
 	
