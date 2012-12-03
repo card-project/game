@@ -10,7 +10,7 @@ import models.cards.RemedyCard;
 
 /**
  * @author Simon RENOULT
- * @version 1.2
+ * @version 1.2.1
  *
  */
 public class DeckStack extends GameStack {
@@ -25,47 +25,19 @@ public class DeckStack extends GameStack {
 		
 		/* ADD HAZARDS CARDS */
 
-		for ( int i = 0; i < HazardCard.MAX_ACCIDENT ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.Accident ) );
-		}
-
-		for ( int i = 0; i < HazardCard.MAX_OUT_OF_GAS ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.OutOfGas ) );
-		}
-
-		for ( int i = 0; i < HazardCard.MAX_FLAT_TIRE ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.FlatTire ) );
-		}
-
-		for ( int i = 0; i < HazardCard.MAX_STOP ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.Stop ) );
-		}
-
-		for ( int i = 0; i < HazardCard.MAX_SPEED_LIMIT ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.SpeedLimit ) );
-		}
+		addCards( HazardCard.MAX_ACCIDENT, CardType.Accident );
+		addCards( HazardCard.MAX_OUT_OF_GAS, CardType.OutOfGas );
+		addCards( HazardCard.MAX_STOP, CardType.Stop );
+		addCards( HazardCard.MAX_FLAT_TIRE, CardType.FlatTire );
+		addCards( HazardCard.MAX_SPEED_LIMIT, CardType.SpeedLimit );
 
 		/* ADD REMEDIES CARDS */
 
-		for ( int i = 0; i < RemedyCard.MAX_REPAIRS; i++ ) {
-			cards.add( CardFactory.createCard( CardType.Repairs ) );
-		}
-
-		for ( int i = 0; i < RemedyCard.MAX_GASOLINE; i++ ) {
-			cards.add( CardFactory.createCard( CardType.Gasoline ) );
-		}
-
-		for ( int i = 0; i < RemedyCard.MAX_SPARE_TIRE; i++ ) {
-			cards.add( CardFactory.createCard( CardType.SpareTire ) );
-		}
-
-		for ( int i = 0; i < RemedyCard.MAX_GO_ROLL; i++ ) {
-			cards.add( CardFactory.createCard( CardType.GoRoll ) );
-		}
-
-		for ( int i = 0; i < RemedyCard.MAX_END_OF_LIMIT ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.EndOfLimit ) );
-		}
+		addCards( RemedyCard.MAX_REPAIRS, CardType.Repairs );
+		addCards( RemedyCard.MAX_GASOLINE, CardType.Gasoline );
+		addCards( RemedyCard.MAX_SPARE_TIRE, CardType.SpareTire );
+		addCards( RemedyCard.MAX_GO_ROLL, CardType.GoRoll );
+		addCards( RemedyCard.MAX_END_OF_LIMIT, CardType.EndOfLimit );
 
 		/* ADD SAFETIES CARDS */
 
@@ -76,25 +48,11 @@ public class DeckStack extends GameStack {
 
 		/* ADD DISTANCES CARDS */
 
-		for ( int i = 0; i < DistanceCard.MAX_25 ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.Distance25 ) );
-		}
-
-		for ( int i = 0; i < DistanceCard.MAX_50 ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.Distance50 ) );
-		}
-
-		for ( int i = 0; i < DistanceCard.MAX_75 ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.Distance75 ) );
-		}
-
-		for ( int i = 0; i < DistanceCard.MAX_100 ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.Distance100 ) );
-		}
-
-		for ( int i = 0; i < DistanceCard.MAX_200 ; i++ ) {
-			cards.add( CardFactory.createCard( CardType.Distance200 ) );
-		}
+		addCards( DistanceCard.MAX_25, CardType.Distance25 );
+		addCards( DistanceCard.MAX_50, CardType.Distance50 );
+		addCards( DistanceCard.MAX_75, CardType.Distance75 );
+		addCards( DistanceCard.MAX_100, CardType.Distance100 );
+		addCards( DistanceCard.MAX_200, CardType.Distance200 );
 	}
 
 	// ------------ METHODS ------------ //
@@ -102,7 +60,13 @@ public class DeckStack extends GameStack {
 	public static DeckStack getInstance() {
 		return DeckStackHolder.INSTANCE;
 	}
-
+	
+	private void addCards( int maxNumber, CardType type ) {
+		for ( int i = 0; i < maxNumber ; i++ ) {
+			cards.add( CardFactory.createCard( type ) );
+		}
+	}
+	
 	public void shuffle() {
 		Collections.shuffle( cards );
 	}
