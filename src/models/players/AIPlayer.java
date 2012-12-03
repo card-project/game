@@ -19,6 +19,10 @@ public class AIPlayer extends Player {
 
 	// ------------ CONSTRUCTORS ------------ //
 
+	public AIPlayer() {
+		
+	}
+	
 	public AIPlayer( ArrayList<Player> opponents ) {
 		this.mind = new Brain( this, opponents );
 	}
@@ -40,6 +44,11 @@ public class AIPlayer extends Player {
 	@Override
 	public String toString() {
 		return this.alias;
+	}
+
+	public void setLevel( Integer chosenLevel ) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
