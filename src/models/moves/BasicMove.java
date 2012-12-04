@@ -218,23 +218,20 @@ public class BasicMove extends Move {
 	 * @return true if no error has been raised.
 	 * @throws IllegalMoveException
 	 */
-	public boolean performRemedyCardVerification( Player targetPlayer )
-			throws IllegalMoveException {
+	public boolean performRemedyCardVerification( Player targetPlayer ) throws IllegalMoveException {
 		if ( cardToPlay.getFamily() == CardFamily.Speed ) {
 			if ( !targetPlayer.isSlowed() ) {
 				throw new PlayerIsNotSlowedException( "You are not slowed." );
 			}
 		} else {
-			if ( cardToPlay.getFamily() != CardFamily.GoStop
-					&& !targetPlayer.getBattleStack().initialGoRollIsPlayed() ) {
+			if ( ! target.getBattleStack().initialGoRollIsPlayed() && cardToPlay.getType() == CardType.GoRoll ) {
+				return true;
+			} else {
 				if ( !targetPlayer.isAttacked() ) {
-					throw new PlayerIsNotAttackedException(
-							"You are not under attack." );
+					throw new PlayerIsNotAttackedException("You are not under attack." );
 				} else {
-					if ( cardToPlay.getFamily() != targetPlayer
-							.getBattleStackContent().getFamily() ) {
-						throw new UnsuitableRemedyException(
-								"Not the good kind of remedy." );
+					if ( cardToPlay.getFamily() != targetPlayer.getBattleStackContent().getFamily() ) {
+						throw new UnsuitableRemedyException("Not the good kind of remedy." );
 					}
 				}
 			}

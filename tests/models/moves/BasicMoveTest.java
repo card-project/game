@@ -126,9 +126,9 @@ public class BasicMoveTest {
 		} catch ( IllegalCardTypeException e ) { 
 			e.printStackTrace();
 		}
-		
+
+		assertFalse( bm.target.getHandStack().exists( refCard.getType() ) );
 		assertEquals( refCard, bm.target.getDistanceStack().peek() );
-		assertFalse( bm.origin.getHandStack().exists( refCard.getType() ) );
 		assertEquals( ((DistanceCard) refCard).getRange(), bm.target.getDistanceStack().getTravelledDistance());
 	}
 
@@ -166,7 +166,48 @@ public class BasicMoveTest {
 	}
 
 	@Test
-	public void testRealizeRemedy() {
+	public void testRealizeWrongRemedy() {
+		Throwable caught = null;
+		
+		HumanPlayer refOrigin = new HumanPlayer();
+		Card refCard = CardFactory.createCard( CardType.SpareTire );
+		
+		bm.origin = refOrigin;
+		bm.target = bm.origin;
+		
+		// -- > Set context
+		
+		try {
+			bm.origin.getHandStack().push( refCard );
+		} catch ( IllegalCardTypeException e2 ) {
+			e2.printStackTrace();
+		}
+		
+		try {
+			bm.origin.getBattleStack().push( CardFactory.createCard( CardType.GoRoll ) );
+			bm.origin.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
+		} catch ( IllegalCardTypeException e1 ) {
+			e1.printStackTrace();
+		}
+		
+		// -- > Realize
+
+		bm.setCardToPlay( refCard );
+		
+		try {
+			bm.setTarget( bm.origin );
+		} catch ( IllegalAccessError e ) {
+			caught = e ;
+		} catch ( IllegalMoveException e ) {
+			caught = e;
+		}
+		
+		assertNotNull( caught );
+		assertTrue( caught instanceof UnsuitableRemedyException );
+	}
+	
+	@Test
+	public void testRealizeRightRemedy() {
 
 		HumanPlayer refOrigin = new HumanPlayer();
 		HumanPlayer refTarget = new HumanPlayer();
@@ -621,10 +662,9 @@ public class BasicMoveTest {
 	}
 	
 	@Test
-	public void remedyCardVerificationOthers() {
+	public void testRemedyCardVerificationOthers() {
 		Throwable caught = null;
 		HumanPlayer refOrigin = new HumanPlayer();
-		HumanPlayer refTarget = new HumanPlayer();
 
 		bm.origin = refOrigin;
 		bm.target = refOrigin;

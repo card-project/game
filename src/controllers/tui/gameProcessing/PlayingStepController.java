@@ -124,12 +124,14 @@ public class PlayingStepController extends StepController {
 				userChoiceIsCorrect = false;	
 			}
 			
-			if ( cardIndex < HandStack.MIN_CARD_NB || cardIndex > HandStack.MAX_IN_PLAY_CARD ) {
-			
-				tui.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
-						" and " + HandStack.MAX_IN_PLAY_CARD );
-				userChoiceIsCorrect = false;
-			
+			if ( userChoiceIsCorrect ) {
+				if ( cardIndex < HandStack.MIN_CARD_NB || cardIndex > HandStack.MAX_IN_PLAY_CARD ) {
+					
+					tui.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
+							" and " + HandStack.MAX_IN_PLAY_CARD );
+					userChoiceIsCorrect = false;
+				
+				}
 			}
 				
 		} while ( ! userChoiceIsCorrect );
