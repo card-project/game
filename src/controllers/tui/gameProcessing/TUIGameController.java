@@ -73,7 +73,8 @@ public class TUIGameController {
 			int distance = currentPlayer.getDistanceStack().getTravelledDistance();
 			
 			// STEP 0 : Show player's turn name.
-			tui.inform( '\n' + "TURN OF " + currentPlayer.getAlias() + " - " + distance + "km" + '\n' );
+			
+			tui.title( "TURN OF " + currentPlayer.getAlias() + " - " + distance + "km"  );
 			
 			// STEP 2 : draw a card
 			tui.inform( '\n' + "-- > DRAWING" + '\n' );

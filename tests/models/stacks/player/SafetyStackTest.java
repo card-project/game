@@ -51,37 +51,4 @@ public class SafetyStackTest {
 
 		assertEquals( caught == null, expected );
 	}
-
-	@Test
-	public void testIsProtectedFrom() {
-		// SafetyStack is empty
-		assertFalse( safetyStack.isProtectedFrom( CardFamily.Gas ) );
-		assertFalse( safetyStack.isProtectedFrom( CardFamily.GoStop ) );
-		assertFalse( safetyStack.isProtectedFrom( CardFamily.Speed ) );
-		assertFalse( safetyStack.isProtectedFrom( CardFamily.StateOfCar ) );
-		assertFalse( safetyStack.isProtectedFrom( CardFamily.Tire ) );
-
-		try {
-			safetyStack.push( (SafetyCard) CardFactory
-					.createCard( CardType.DrivingAce ) );
-			assertTrue( safetyStack.isProtectedFrom( CardFamily.StateOfCar ) );
-
-			safetyStack.push( (SafetyCard) CardFactory
-					.createCard( CardType.RightOfWay ) );
-			assertTrue( safetyStack.isProtectedFrom( CardFamily.GoStop ) );
-			assertTrue( safetyStack.isProtectedFrom( CardFamily.Speed ) );
-
-			safetyStack.push( (SafetyCard) CardFactory
-					.createCard( CardType.ExtraTank ) );
-			assertTrue( safetyStack.isProtectedFrom( CardFamily.Gas ) );
-
-			safetyStack.push( (SafetyCard) CardFactory
-					.createCard( CardType.PunctureProof ) );
-			assertTrue( safetyStack.isProtectedFrom( CardFamily.Tire ) );
-
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-	}
-
 }

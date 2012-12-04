@@ -165,7 +165,7 @@ public class BasicMove extends Move {
 			throw new InitialGoRollNotPlayedException(
 					"Initial GoRoll card has not been played yet." );
 		} else {
-			if ( targetPlayer.getBattleStack().isAttacked()
+			if ( targetPlayer.isAttacked()
 					&& ( !targetPlayer.isProtectedFrom( (HazardCard) targetPlayer
 							.getBattleStackContent() ) ) ) {
 				throw new PlayerIsAttackedException( "You are under attack : "
@@ -224,7 +224,7 @@ public class BasicMove extends Move {
 				throw new PlayerIsNotSlowedException( "You are not slowed." );
 			}
 		} else {
-			if ( ! target.getBattleStack().initialGoRollIsPlayed() && cardToPlay.getType() == CardType.GoRoll ) {
+			if ( ! targetPlayer.getBattleStack().initialGoRollIsPlayed() && cardToPlay.getType() == CardType.GoRoll ) {
 				return true;
 			} else {
 				if ( !targetPlayer.isAttacked() ) {

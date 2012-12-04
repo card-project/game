@@ -19,18 +19,4 @@ public class SafetyStack extends PlayerStack {
 			this.cards.push( item );
 		}
 	}
-	
-	public boolean isProtectedFrom( CardFamily hazardFamily ) {
-
-		for ( Card c : super.cards ) {
-			for ( CardFamily cf : c.getFamilies() ) {
-				if ( hazardFamily == cf ) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
 }

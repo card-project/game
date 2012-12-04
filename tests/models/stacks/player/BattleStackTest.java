@@ -51,18 +51,6 @@ public class BattleStackTest {
 		assertEquals( caught == null, expected );
 	}
 
-	@Test
-	public void testIsAttacked() {
-		assertFalse( this.battleStack.isAttacked() );
-
-		try {
-			this.battleStack.push( CardFactory.createCard( CardType.Accident ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-
-		assertTrue( this.battleStack.isAttacked() );
-	}
 
 	@Test
 	public void testRemoveAll() {

@@ -3,6 +3,8 @@ package models.players;
 import java.util.ArrayList;
 
 import models.cards.Card;
+import models.cards.CardFactory;
+import models.cards.CardFamily;
 import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
@@ -53,7 +55,7 @@ public abstract class Player {
 	}
 
 	public void discard( Integer discardingCardIndex ) throws IllegalCardTypeException, DiscardChoiceOutOfBoundsException {
-		if ( discardingCardIndex < HandStack.MIN_CARD_NB || discardingCardIndex > HandStack.MAX_IN_PLAY_CARD ) {
+		if ( discardingCardIndex < HandStack.MIN_CARD_NB - 1 || discardingCardIndex > HandStack.MAX_IN_PLAY_CARD - 1 ) {
 			throw new DiscardChoiceOutOfBoundsException( "Please enter a number between " + HandStack.MIN_CARD_NB +
 					" and " + HandStack.MAX_IN_PLAY_CARD );
 		} else {
@@ -76,15 +78,35 @@ public abstract class Player {
 	}
 
 	public boolean isProtectedFrom( HazardCard hc ) {
-		return this.getSafetyStack().isProtectedFrom( hc.getFamily() );
+		for ( int i = 0; i < safetyStack.size() ; i++) {
+			for ( CardFamily cf : safetyStack.get( i ).getFamilies() ) {
+				if ( cf == hc.getFamily() ) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	public boolean isAttacked() {
-		return this.getBattleStack().isAttacked();
+		for ( int i = 0; i < battleStack.size() ; i++) {
+			if ( battleStack.get( i ) instanceof HazardCard ) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public boolean isSlowed() {
-		return this.getDistanceStack().isSlowed();
+		for ( int i = 0; i < distanceStack.size() ; i++) {
+			if ( distanceStack.get( i ).getType() == CardType.SpeedLimit ) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	/**
@@ -106,10 +128,16 @@ public abstract class Player {
 		if ( handStack.containsHazard() ) {
 			for ( Player p : opponents ) {
 				if ( p.getBattleStack().initialGoRollIsPlayed() ) {
-					if ( handStack.exists( CardType.SpeedLimit ) ) {
-						return !p.isSlowed();
-					} else {
-						return !p.isAttacked();
+					if ( p.isAttacked() && ! p.isSlowed() && handStack.exists( CardType.SpeedLimit )) {
+						return true;
+					} else if ( p.isSlowed() && ! p.isAttacked() ) {
+						for ( Card c : p.handStack.getCards() ) {
+							if ( c instanceof HazardCard && c.getType() != CardType.SpeedLimit ) {
+								return true;
+							}
+						}
+					} else if ( ! p.isAttacked() && ! p.isSlowed() ) {
+						return true;
 					}
 				}
 			}
@@ -131,13 +159,11 @@ public abstract class Player {
 		}
 
 		if ( handStack.containsRemedy() ) {
-			if ( this.isAttacked()
-					&& handStack.hasRemedyFor( getBattleStackContent()
-							.getFamily() ) ) {
+			if ( this.isAttacked() && handStack.hasRemedyFor( getBattleStackContent().getFamily() ) ) {
 				return true;
 			} else if ( this.isSlowed() && handStack.exists( CardType.GoRoll ) ) {
 				return true;
-			} else if ( ( !battleStack.initialGoRollIsPlayed() ) ) {
+			} else if ( !battleStack.initialGoRollIsPlayed() ) {
 				if ( handStack.exists( CardType.GoRoll ) ) {
 					return true;
 				}

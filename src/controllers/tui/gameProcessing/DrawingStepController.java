@@ -35,10 +35,11 @@ public class DrawingStepController extends StepController {
 				String userChoice = "";
 				
 				do {
-					userChoice = tui.askDrawingStack( currentGame.getDiscardStack().peek().toString() );
-					if ( userChoice.equals( "D" ) ) {
+					userChoice = tui.askDrawingStack( currentGame.getDiscardStack().peek().toString() ).trim();
+					System.out.println( userChoice );
+					if ( userChoice.startsWith( "D" ) ) {
 						drawnCrad = super.currentPlayer.draw( currentGame.getDeckStack() );
-					} else if (userChoice.equals( "d" ) ) {
+					} else if ( userChoice.startsWith( "d" ) ) {
 						drawnCrad = super.currentPlayer.draw( currentGame.getDiscardStack() );
 					} else {
 						tui.warn( "Try again." );

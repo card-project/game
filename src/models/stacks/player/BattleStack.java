@@ -28,18 +28,6 @@ public class BattleStack extends PlayerStack {
 		}
 	}
 	
-	public boolean isAttacked() {
-		boolean containsHazard = false;
-		
-		for ( Card c : super.cards ) {
-			if ( c instanceof HazardCard ) {
-				containsHazard = true;
-			}
-		}
-		
-		return containsHazard;
-	}
-	
 	public void discardHazards() throws IllegalCardTypeException {
 		for ( int i = 0; i < super.cards.size() ; i++ ) {
 			if ( super.cards.get( i ) instanceof HazardCard ) {

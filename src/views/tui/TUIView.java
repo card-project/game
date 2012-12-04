@@ -29,6 +29,10 @@ public abstract class TUIView {
 		System.out.print( information );
 	}
 	
+	public void title( String content ) {
+		System.out.print( '\n' + "+------------ " + content.toUpperCase() + " ------------+" + '\n');
+	}
+	
 	/**
 	 * Ask something to the user.
 	 * 

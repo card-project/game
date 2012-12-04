@@ -48,7 +48,6 @@ public class AIPlayer extends Player {
 	}
 
 	public void setLevel( Integer chosenLevel ) {
-		// TODO Auto-generated method stub
 		
 	}
 
