@@ -3,6 +3,7 @@ package models.stacks.game;
 import java.util.Stack;
 
 import models.cards.Card;
+import models.cards.CardType;
 import models.exceptions.IllegalCardTypeException;
 import models.stacks.CardsStack;
 
@@ -27,6 +28,16 @@ public abstract class GameStack extends CardsStack {
 		} catch ( IllegalCardTypeException e ) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean exists( CardType ct ) {
+		for ( Card c : this.cards ) {
+			if ( ct == c.getType() ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 	
 	@Override

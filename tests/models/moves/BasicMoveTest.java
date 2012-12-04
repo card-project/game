@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import models.cards.Card;
 import models.cards.CardFactory;
 import models.cards.CardType;
+import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.exceptions.IllegalCardTypeException;
 import models.exceptions.moveExceptions.IllegalMoveException;
@@ -19,6 +20,7 @@ import models.exceptions.moveExceptions.PlayerIsProtectedException;
 import models.exceptions.moveExceptions.PlayerIsSlowedException;
 import models.exceptions.moveExceptions.UnsuitableRemedyException;
 import models.players.HumanPlayer;
+import models.stacks.game.DiscardStack;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -101,13 +103,23 @@ public class BasicMoveTest {
 	@Test
 	public void testRealizeDistance() {
 
-		HumanPlayer refOrigin = new HumanPlayer();
-		HumanPlayer refTarget = new HumanPlayer();
 		Card refCard = CardFactory.createCard( CardType.Distance25 );
 		
-		bm.origin = refOrigin;
-		bm.target = refOrigin;
+		bm.origin = new HumanPlayer();
+		bm.target = new HumanPlayer();
 		bm.cardToPlay = refCard;
+
+		// -- > Set context
+		
+		try {
+			bm.origin.getHandStack().push( refCard );
+		} catch ( IllegalCardTypeException e1 ) {
+			e1.printStackTrace();
+		}
+		
+		// -- > Realize
+		
+		assertTrue( bm.origin.getHandStack().exists( refCard.getType() ) );
 		
 		try {
 			assertFalse( bm.realize() );
@@ -116,19 +128,30 @@ public class BasicMoveTest {
 		}
 		
 		assertEquals( refCard, bm.target.getDistanceStack().peek() );
-		
+		assertFalse( bm.origin.getHandStack().exists( refCard.getType() ) );
+		assertEquals( ((DistanceCard) refCard).getRange(), bm.target.getDistanceStack().getTravelledDistance());
 	}
 
 	@Test
 	public void testRealizeHazard() {
 
-		HumanPlayer refOrigin = new HumanPlayer();
-		HumanPlayer refTarget = new HumanPlayer();
 		Card refCard = CardFactory.createCard( CardType.Accident );
 		
-		bm.origin = refOrigin;
-		bm.target = refTarget;
+		bm.origin = new HumanPlayer();
+		bm.target = new HumanPlayer();
 		bm.cardToPlay = refCard;
+
+		// -- > Set context
+		
+		try {
+			bm.origin.getHandStack().push( refCard );
+		} catch ( IllegalCardTypeException e1 ) {
+			e1.printStackTrace();
+		}
+		
+		// -- > Realize
+		
+		assertTrue( bm.origin.getHandStack().exists( refCard.getType() ) );
 		
 		try {
 			assertFalse( bm.realize() );
@@ -137,6 +160,9 @@ public class BasicMoveTest {
 		}
 		
 		assertEquals( refCard, bm.target.getBattleStack().peek() );
+		assertFalse( bm.origin.getHandStack().exists( refCard.getType() ) );
+		assertTrue( bm.target.getBattleStack().exists( refCard.getType() ) );
+		assertTrue( bm.target.isAttacked() );
 	}
 
 	@Test
@@ -150,12 +176,26 @@ public class BasicMoveTest {
 		bm.target = refOrigin;
 		bm.cardToPlay = refCard;
 
+		// -- > Set context
+		
 		try {
-			bm.origin.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
+			bm.origin.getHandStack().push( refCard );
+		} catch ( IllegalCardTypeException e2 ) {
+			e2.printStackTrace();
+		}
+		
+		try {
 			bm.origin.getBattleStack().push( CardFactory.createCard( CardType.GoRoll ) );
+			bm.origin.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
 		} catch ( IllegalCardTypeException e1 ) {
 			e1.printStackTrace();
 		}
+
+		assertTrue( bm.origin.getHandStack().exists( refCard.getType() ) );
+		
+		assertTrue( bm.origin.isAttacked() );
+		
+		// -- > Realize
 		
 		try {
 			assertFalse( bm.realize() );
@@ -163,7 +203,14 @@ public class BasicMoveTest {
 			e.printStackTrace();
 		}
 
+		assertFalse( bm.origin.isAttacked() );
+
+		assertFalse( bm.origin.getHandStack().exists( refCard.getType() ) );
+
 		assertEquals( bm.origin.getBattleStackContent().getType(), CardType.GoRoll );
+		
+		assertEquals( DiscardStack.getInstance().peek().getType(), CardType.Repairs );
+		assertTrue( DiscardStack.getInstance().exists( CardType.Accident ) );
 	}
 
 	@Test
@@ -300,9 +347,10 @@ public class BasicMoveTest {
 		assertEquals( bm.origin.getDistanceStack().getBonus100(), 1 );
 		assertFalse( bm.target.isSlowed() );
 	}
-	
+
 	@Test
 	public void testPerformDistanceCardVerification() {
+		
 		Throwable caught = null;
 		HumanPlayer refOrigin = new HumanPlayer();
 		HumanPlayer refTarget = new HumanPlayer();
@@ -310,7 +358,7 @@ public class BasicMoveTest {
 		bm.origin = refOrigin;
 		bm.target = refTarget;
 		
-		// -- > Case 1
+		// -- > Case 1 : No initial go roll
 		
 		bm.cardToPlay = CardFactory.createCard( CardType.Distance25 );
 		
@@ -332,7 +380,7 @@ public class BasicMoveTest {
 			e.printStackTrace();
 		}
 		
-		// -- > Case 2
+		// -- > Case 2 : initial GoRoll is played 
 
 		bm.cardToPlay = CardFactory.createCard( CardType.Distance25 );
 
@@ -345,13 +393,15 @@ public class BasicMoveTest {
 		assertNull( caught );
 		caught = null;
 		
-		// -- > Case 3
+		// -- > Case 3 : PlayerIsAttacked
 		
 		try {
 			bm.target.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
 		} catch ( IllegalCardTypeException e ) {
 			e.printStackTrace();
 		}
+		
+		Class a = PlayerIsAttackedException.class;
 
 		bm.cardToPlay = CardFactory.createCard( CardType.Distance25 );
 
@@ -421,7 +471,7 @@ public class BasicMoveTest {
 	}
 
 	@Test
-	public void testPerformHazardCardVerification() throws IllegalCardTypeException {
+	public void testPerformHazardCardVerification() {
 		Throwable caught = null;
 		HumanPlayer refOrigin = new HumanPlayer();
 		HumanPlayer refTarget = new HumanPlayer();
@@ -432,7 +482,12 @@ public class BasicMoveTest {
 		// -- > Case 1 : no initial GoRoll
 		
 		bm.cardToPlay = CardFactory.createCard( CardType.Accident );
-		bm.target.getSafetyStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+
+		try {
+			bm.target.getSafetyStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		} catch ( IllegalCardTypeException e1 ) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			bm.performHazardCardVerification( refTarget );
@@ -448,12 +503,21 @@ public class BasicMoveTest {
 		// -- > Set context for next cases
 		
 		// Play the initial GoRoll
-		bm.target.getBattleStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		try {
+			bm.target.getBattleStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		} catch ( IllegalCardTypeException e1 ) {
+			e1.printStackTrace();
+		}
 		
 		// -- > Case 2
 		
 		bm.cardToPlay = CardFactory.createCard( CardType.Accident );
-		bm.target.getSafetyStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+
+		try {
+			bm.target.getSafetyStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		} catch ( IllegalCardTypeException e1 ) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			bm.performHazardCardVerification( refTarget );
@@ -469,7 +533,12 @@ public class BasicMoveTest {
 		// -- > Case 3
 		
 		bm.cardToPlay = CardFactory.createCard( CardType.SpeedLimit );
-		bm.target.getDistanceStack().push( CardFactory.createCard( CardType.SpeedLimit ) );
+
+		try {
+			bm.target.getDistanceStack().push( CardFactory.createCard( CardType.SpeedLimit ) );
+		} catch ( IllegalCardTypeException e1 ) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			bm.performHazardCardVerification( refTarget );
@@ -484,7 +553,12 @@ public class BasicMoveTest {
 		// -- > Case 4
 		
 		bm.cardToPlay = CardFactory.createCard( CardType.Accident );
-		bm.target.getBattleStack().push( CardFactory.createCard( CardType.OutOfGas ) );
+
+		try {
+			bm.target.getBattleStack().push( CardFactory.createCard( CardType.OutOfGas ) );
+		} catch ( IllegalCardTypeException e1 ) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			bm.performHazardCardVerification( refTarget );
