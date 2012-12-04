@@ -70,31 +70,35 @@ public class TUIGameController {
 		int currentPlayerIndex = firstPlayerIndex;
 		
 		do {
-			// STEP 0 : Show player's turn name.
-			tui.inform( '\n' + "TURN OF " + currentPlayer.getAlias() + '\n' );
+			int distance = currentPlayer.getDistanceStack().getTravelledDistance();
 			
-			// STEP 1 : Show initial hand
-			tui.inform( "HAND : " + currentPlayer.getHandStack() + '\n' );
+			// STEP 0 : Show player's turn name.
+			tui.inform( '\n' + "TURN OF " + currentPlayer.getAlias() + " - " + distance + "km" + '\n' );
 			
 			// STEP 2 : draw a card
-			tui.inform( "-- > DRAWING" + '\n' );
+			tui.inform( '\n' + "-- > DRAWING" + '\n' );
 			drawingStepController.setCurrentPlayer( currentPlayer );
 			drawingStepController.run();
 			
 			// STEP 3 : play a card
-			tui.inform( "-- > PLAYING" + '\n');
+			tui.inform( '\n' + "-- > PLAYING" + '\n');
 			
 			tui.tickBox( currentPlayer.getBattleStack().initialGoRollIsPlayed(), "Initial GoRoll status." + '\n' );
+			
 			tui.tickBox( currentPlayer.isSlowed(), "Speed limitation." + '\n' );
+			
 			String attacked = currentPlayer.isAttacked() ? currentPlayer.getBattleStackContent().toString() : "Not attacked";
 			tui.tickBox( currentPlayer.isAttacked(), attacked + '\n' );
+			
+			String safetyList = currentPlayer.getSafetyStack().isEmpty() ? "No safety." : currentPlayer.getSafetyStack().toString(); 
+			tui.tickBox( ! currentPlayer.getSafetyStack().isEmpty(), safetyList + '\n' );
 			
 			playingStepController.setCurrentPlayer( currentPlayer );
 			playingStepController.run();
 			
 			// STEP 4 : discard a card
 			if ( currentPlayer.getHandStack().size() > HandStack.MAX_CARD_NB ) {
-				tui.inform( "-- > DISCARDING STEP" + '\n' );
+				tui.inform( '\n' + "-- > DISCARDING STEP" + '\n' );
 				discardingStepControler.setCurrentPlayer( currentPlayer );
 				discardingStepControler.run();
 			}

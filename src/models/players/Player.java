@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 import models.cards.Card;
 import models.cards.CardType;
+import models.cards.DistanceCard;
 import models.cards.HazardCard;
+import models.cards.RemedyCard;
+import models.cards.SafetyCard;
+import models.exceptions.DiscardChoiceOutOfBoundsException;
 import models.exceptions.IllegalCardTypeException;
 import models.moves.BasicMove;
 import models.stacks.game.DiscardStack;
@@ -44,20 +48,17 @@ public abstract class Player {
 		return handStack.peek();
 	}
 
-	public void play( BasicMove m ) {
-
+	public void discard( Card cardToDiscard ) throws IllegalCardTypeException {
+		this.handStack.shiftTo( DiscardStack.getInstance(), cardToDiscard );
 	}
 
-	public void discard( Card cardToDiscard, DiscardStack discardStack ) {
-		try {
-			this.handStack.shiftTo( discardStack, cardToDiscard );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
+	public void discard( Integer discardingCardIndex ) throws IllegalCardTypeException, DiscardChoiceOutOfBoundsException {
+		if ( discardingCardIndex < HandStack.MIN_CARD_NB || discardingCardIndex > HandStack.MAX_IN_PLAY_CARD ) {
+			throw new DiscardChoiceOutOfBoundsException( "Please enter a number between " + HandStack.MIN_CARD_NB +
+					" and " + HandStack.MAX_IN_PLAY_CARD );
+		} else {
+			discard( this.handStack.get( discardingCardIndex ) );
 		}
-	}
-
-	public void discard( Integer discardingCardIndex, DiscardStack discardStack ) {
-		discard( this.handStack.get( discardingCardIndex ), discardStack );
 	}
 
 	public String toString() {

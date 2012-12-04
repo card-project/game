@@ -5,6 +5,7 @@ import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.exceptions.IllegalCardTypeException;
+import models.stacks.game.DiscardStack;
 
 /**
  * @author Simon RENOULT
@@ -39,7 +40,9 @@ public class DistanceStack extends PlayerStack {
 	public int getTravelledDistance() {
 		int currentDistance = 0;
 		for( Card c : super.cards ) {
-			currentDistance += ( (DistanceCard ) c ).getRange();
+			if ( c instanceof DistanceCard ) {
+				currentDistance += ( (DistanceCard ) c ).getRange();
+			}
 		}
 		
 		return currentDistance + 100 * BONUS_100_CPT + 300 * BONUS_300_CPT;
@@ -86,10 +89,10 @@ public class DistanceStack extends PlayerStack {
 		BONUS_300_CPT = 0;
 	}
 	
-	public void removeHazards() {
+	public void discardHazards() throws IllegalCardTypeException {
 		for ( int i = 0; i < super.cards.size() ; i++ ) {
 			if ( super.cards.get( i ) instanceof HazardCard ) {
-				super.cards.remove( i );
+				shiftTo( DiscardStack.getInstance(), super.cards.get( i ) );
 			}
 		}
 	}

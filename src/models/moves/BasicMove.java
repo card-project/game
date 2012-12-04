@@ -35,7 +35,7 @@ public class BasicMove extends Move {
 	public BasicMove( Player moveInitiator ) {
 		super( moveInitiator );
 	}
-
+	
 	// ------------ METHODS ------------ //
 
 	@Override
@@ -44,32 +44,43 @@ public class BasicMove extends Move {
 			throw new IllegalAccessError();
 		} else {
 			if ( cardToPlay instanceof DistanceCard ) {
-				target.getDistanceStack().push( cardToPlay );
+				target.getHandStack().shiftTo( target.getDistanceStack(), cardToPlay );
 			} else if ( cardToPlay instanceof HazardCard ) {
-				target.getBattleStack().push( cardToPlay );
+				if ( cardToPlay.getType() == CardType.SpeedLimit ) {
+					origin.getHandStack().shiftTo( target.getDistanceStack(), cardToPlay );
+				} else {
+					origin.getHandStack().shiftTo( target.getBattleStack(), cardToPlay );					
+				}
 			} else if ( cardToPlay instanceof RemedyCard ) {
-				target.getBattleStack().removeHazards();
+				if ( cardToPlay.getType() == CardType.EndOfLimit ) {
+					target.getDistanceStack().discardHazards();
+					origin.discard( cardToPlay );
+				} else {
+					if ( cardToPlay.getType() == CardType.GoRoll && ! target.getBattleStack().initialGoRollIsPlayed() ) {
+						target.getHandStack().shiftTo( target.getBattleStack(), cardToPlay );
+					} else {
+						target.getBattleStack().discardHazards();
+						target.discard( cardToPlay );
+					}
+				}
 			} else if ( cardToPlay instanceof SafetyCard ) {
-				target.getSafetyStack().push( cardToPlay );
+				target.getHandStack().shiftTo( target.getSafetyStack(), cardToPlay );
 				target.getDistanceStack().increaseBy100();
 
 				if ( target.isAttacked() ) {
 					for ( CardFamily cf : cardToPlay.getFamilies() ) {
 						if ( target.isAttacked() && cf == target.getBattleStackContent().getFamily() ) {
-							target.getBattleStack().removeHazards();
+							target.getBattleStack().discardHazards();
 						}
 					}
 				}
 				
 				if ( target.isSlowed() && cardToPlay.getType() == CardType.RightOfWay ) {
-					target.getDistanceStack().removeHazards();
+					target.getDistanceStack().discardHazards();
 				}
 				
 				return true;
-
 			}
-
-			origin.getHandStack().remove( cardToPlay );
 		}
 		
 		return false;

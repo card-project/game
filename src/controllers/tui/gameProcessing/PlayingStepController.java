@@ -46,11 +46,12 @@ public class PlayingStepController extends StepController {
 			( ( AIPlayer ) super.currentPlayer ).play( );
 		
 		} else if ( super.currentPlayer instanceof HumanPlayer ) {
-
-			BasicMove bm = new BasicMove( super.currentPlayer );
-			boolean userChoiceIsCorrect;
 			
 			if ( currentPlayer.canPlay( getOpponents( currentPlayer ) ) ) {
+
+				BasicMove bm = new BasicMove( super.currentPlayer );
+				boolean userChoiceIsCorrect;
+				
 				do {
 					userChoiceIsCorrect = true;
 				
@@ -95,7 +96,7 @@ public class PlayingStepController extends StepController {
 				}
 			
 			} else {
-					System.out.println( "No card to play." );
+				System.out.println( "No card to play." );
 			}
 						
 		}

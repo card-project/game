@@ -22,7 +22,8 @@ public class TUIGameView extends TUIView {
 		super.inform( " " + information );
 	}
 	
-	public String askDrawingStack() {
+	public String askDrawingStack( String topDiscardCard ) {
+		super.inform( "Discard stack : " + topDiscardCard + '\n' );
 		super.ask( "Which stack do you chosse to draw on : [D]eck or [d]iscard ?" );
 		return super.getAnswerAsString();
 	}

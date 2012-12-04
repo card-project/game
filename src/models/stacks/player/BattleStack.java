@@ -3,8 +3,8 @@ package models.stacks.player;
 import models.cards.Card;
 import models.cards.CardType;
 import models.cards.HazardCard;
-import models.cards.RemedyCard;
 import models.exceptions.IllegalCardTypeException;
+import models.stacks.game.DiscardStack;
 
 
 
@@ -18,14 +18,13 @@ public class BattleStack extends PlayerStack {
 
 	@Override
 	public void push( Card item ) throws IllegalCardTypeException {
-		if ( ! ( item instanceof RemedyCard ) && ! ( item instanceof HazardCard ) ) {
-			throw new IllegalCardTypeException();
-		} else {
-			if ( ! initialGoRollIsPlayed && item.getType() == CardType.GoRoll ) {
-				initialGoRollIsPlayed = true;
-			}
-			
+		if ( item instanceof HazardCard ) {
 			this.cards.push( item );
+		} else if ( ( ! initialGoRollIsPlayed && item.getType() == CardType.GoRoll ) ) {
+			initialGoRollIsPlayed = true;
+			this.cards.push( item );
+		} else {
+			throw new IllegalCardTypeException();
 		}
 	}
 	
@@ -41,14 +40,14 @@ public class BattleStack extends PlayerStack {
 		return containsHazard;
 	}
 	
-	public void removeHazards() {
+	public void discardHazards() throws IllegalCardTypeException {
 		for ( int i = 0; i < super.cards.size() ; i++ ) {
 			if ( super.cards.get( i ) instanceof HazardCard ) {
-				super.cards.remove( i );
+				this.shiftTo( DiscardStack.getInstance(), super.cards.get( i ) );
 			}
 		}
 	}
-
+	
 	public void removeAll() {
 		this.cards.clear();
 	}
@@ -58,5 +57,4 @@ public class BattleStack extends PlayerStack {
 	public boolean initialGoRollIsPlayed() {
 		return initialGoRollIsPlayed;
 	}
-
 }

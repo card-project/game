@@ -2,6 +2,7 @@ package models.players;
 
 import java.util.ArrayList;
 
+import models.exceptions.IllegalCardTypeException;
 import models.players.strategies.Strategy;
 import models.stacks.game.DiscardStack;
 
@@ -37,8 +38,8 @@ public class AIPlayer extends Player {
 		// super.play(mind.chooseCardToPlay());
 	}
 
-	public void discard( DiscardStack d ) {
-		super.discard( mind.chooseCardToDiscard(), d );
+	public void discard( ) throws IllegalCardTypeException {
+		super.discard( mind.chooseCardToDiscard() );
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package controllers.tui.gameProcessing;
 
 import models.Game;
+import models.exceptions.DiscardChoiceOutOfBoundsException;
+import models.exceptions.IllegalCardTypeException;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.stacks.player.HandStack;
@@ -18,13 +20,19 @@ public class DiscardingStepController extends StepController {
 	
 	private void discard() {
 		if ( super.currentPlayer instanceof AIPlayer ) {
-			( ( AIPlayer ) super.currentPlayer ).discard( currentGame.getDiscardStack() );
+			try {
+				( ( AIPlayer ) super.currentPlayer ).discard( );
+			} catch ( IllegalCardTypeException e ) {
+				e.printStackTrace();
+			}
 		} else if ( super.currentPlayer instanceof HumanPlayer ) {
 			
 			boolean userChoiceIsCorrect = true;
 			int discardCardIndex = 0;
 			
 			do {
+				userChoiceIsCorrect = true;
+				
 				try {
 					discardCardIndex = tui.askDiscardingCardChoice( super.currentPlayer.getHandStack().toString() );
 				} catch ( NumberFormatException e ) {
@@ -32,15 +40,18 @@ public class DiscardingStepController extends StepController {
 					userChoiceIsCorrect = false;
 				}
 				
-				if ( discardCardIndex < HandStack.MIN_CARD_NB || discardCardIndex > HandStack.MAX_IN_PLAY_CARD ) {
-					tui.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
-							" and " + HandStack.MAX_IN_PLAY_CARD );
-					userChoiceIsCorrect = false;
+				if ( userChoiceIsCorrect ) {
+					try {
+						super.currentPlayer.discard( discardCardIndex - 1 );
+					} catch ( IllegalCardTypeException e ) {
+						tui.warn( e.getMessage() );
+						userChoiceIsCorrect = false;
+					} catch ( DiscardChoiceOutOfBoundsException e ) {
+						tui.warn( e.getMessage() );
+						userChoiceIsCorrect = false;
+					}
 				}
-				
 			} while ( ! userChoiceIsCorrect );
-			
-			super.currentPlayer.discard( discardCardIndex - 1, currentGame.getDiscardStack() );
 		}
 	}
 }
