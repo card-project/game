@@ -7,6 +7,7 @@ import models.cards.Card;
 import models.cards.CardFactory;
 import models.cards.CardType;
 import models.exceptions.IllegalCardTypeException;
+import models.stacks.game.DiscardStack;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,8 +28,10 @@ public class BattleStackTest {
 	@Test
 	public void testPush() {
 		this.push( CardType.Accident, true );
-		this.push( CardType.Repairs, true );
-
+		this.push( CardType.GoRoll, true );
+		
+		this.push( CardType.GoRoll, false );
+		this.push( CardType.Repairs, false );
 		this.push( CardType.Distance200, false );
 		this.push( CardType.Distance25, false );
 		this.push( CardType.DrivingAce, false );
@@ -90,9 +93,14 @@ public class BattleStackTest {
 			e.printStackTrace();
 		}
 		
-		this.battleStack.removeHazards();
+		try {
+			this.battleStack.discardHazards();
+		} catch ( IllegalCardTypeException e ) {
+			e.printStackTrace();
+		}
 		
 		assertTrue( this.battleStack.peek().getType() == CardType.GoRoll );
+		assertTrue( DiscardStack.getInstance().peek().getType() == CardType.Accident );
 	}
 
 	@Test
