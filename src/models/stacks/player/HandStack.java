@@ -82,8 +82,10 @@ public class HandStack extends PlayerStack {
 	
 	public boolean containsSlowDistanceCard() {
 		for ( Card c : super.cards ) {
-			if ( ( ( DistanceCard ) c ).getRange() <= 50 ) {
-				return true;
+			if ( c instanceof DistanceCard ) {
+				if ( ( ( DistanceCard ) c ).getRange() <= 50 ) {
+					return true;
+				}
 			}
 		}
 
