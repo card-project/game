@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import models.cards.Card;
 import models.cards.CardFamily;
 import models.cards.CardType;
+import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.exceptions.DiscardChoiceOutOfBoundsException;
 import models.exceptions.IllegalCardTypeException;
@@ -17,7 +18,7 @@ import models.stacks.player.SafetyStack;
 
 /**
  * @author Simon RENOULT
- * @version 1.2.3
+ * @version 1.2.4
  */
 public abstract class Player {
 
@@ -58,6 +59,7 @@ public abstract class Player {
 		}
 	}
 
+	@Override
 	public String toString() {
 		return this.alias
 				+ " - "
@@ -113,8 +115,8 @@ public abstract class Player {
 	 * 
 	 * @return
 	 */
-	public boolean canPlay( ArrayList<Player> opponents ) {
-		return canPlaySafety() || canPlayDistance() || canPlayRemedy() || canPlayHazard( opponents ); 
+	public boolean canPlay( ArrayList<Player> opponents, int distanceGoal ) {
+		return canPlaySafety() || canPlayDistance( distanceGoal ) || canPlayRemedy() || canPlayHazard( opponents ); 
 	}
 
 	/**
@@ -180,15 +182,27 @@ public abstract class Player {
 	 * 
 	 * @return
 	 */
-	protected boolean canPlayDistance() {
-		if ( handStack.containsDistance() ) {
-			if ( battleStack.initialGoRollIsPlayed() ) {
-				if ( !this.isAttacked() ) {
-					if ( !this.isSlowed() ) {
-						return true;
-					} else {
-						if ( handStack.containsSlowDistanceCard() ) {
-							return true;
+	protected boolean canPlayDistance( int distanceGoal ) {
+		if ( handStack.containsDistance() && battleStack.initialGoRollIsPlayed() ) {
+			if ( !this.isAttacked() ) {
+				if ( !this.isSlowed() ) {
+					for( Card c : handStack.getCards() ) {
+						if ( c instanceof DistanceCard ) {
+							DistanceCard distanceCard = ( DistanceCard ) c;
+							if ( distanceStack.getTravelledDistance() + distanceCard.getRange() <= distanceGoal ) {
+								return true;
+							}
+						}
+					}
+				} else {
+					if ( handStack.containsSlowDistanceCard() ) {
+						for( Card c : handStack.getCards() ) {
+							if ( c instanceof DistanceCard ) {
+								DistanceCard distanceCard = ( DistanceCard ) c;
+								if ( distanceStack.getTravelledDistance() + distanceCard.getRange() <= distanceGoal ) {
+									return true;
+								}
+							}
 						}
 					}
 				}
