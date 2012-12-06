@@ -24,7 +24,7 @@ import models.players.Player;
  * in the standard playing stream.
  * 
  * @author Simon RENOULT
- * @version 1.0
+ * @version 1.1
  */
 public class BasicMove extends Move {
 
@@ -44,48 +44,70 @@ public class BasicMove extends Move {
 			throw new IllegalAccessError();
 		} else {
 			if ( cardToPlay instanceof DistanceCard ) {
-				target.getHandStack().shiftTo( target.getDistanceStack(), cardToPlay );
+				return realizeDistance();
 			} else if ( cardToPlay instanceof HazardCard ) {
-				if ( cardToPlay.getType() == CardType.SpeedLimit ) {
-					origin.getHandStack().shiftTo( target.getDistanceStack(), cardToPlay );
-				} else {
-					origin.getHandStack().shiftTo( target.getBattleStack(), cardToPlay );					
-				}
+				return realizeHazard();
 			} else if ( cardToPlay instanceof RemedyCard ) {
-				if ( cardToPlay.getType() == CardType.EndOfLimit ) {
-					target.getDistanceStack().discardHazards();
-					origin.discard( cardToPlay );
-				} else {
-					if ( cardToPlay.getType() == CardType.GoRoll && ! target.getBattleStack().initialGoRollIsPlayed() ) {
-						target.getHandStack().shiftTo( target.getBattleStack(), cardToPlay );
-					} else {
-						target.getBattleStack().discardHazards();
-						target.discard( cardToPlay );
-					}
-				}
+				return realizeRemedy();
 			} else if ( cardToPlay instanceof SafetyCard ) {
-				target.getHandStack().shiftTo( target.getSafetyStack(), cardToPlay );
-				target.getDistanceStack().increaseBy100();
-
-				if ( target.isAttacked() ) {
-					for ( CardFamily cf : cardToPlay.getFamilies() ) {
-						if ( target.isAttacked() && cf == target.getBattleStackContent().getFamily() ) {
-							target.getBattleStack().discardHazards();
-						}
-					}
-				}
-				
-				if ( target.isSlowed() && cardToPlay.getType() == CardType.RightOfWay ) {
-					target.getDistanceStack().discardHazards();
-				}
-				
-				return true;
+				return realizeSafety();
 			}
 		}
 		
 		return false;
 	}
 
+	private boolean realizeDistance() throws IllegalCardTypeException {
+		target.getHandStack().shiftTo( target.getDistanceStack(), cardToPlay );
+
+		return false;
+	}
+	
+	private boolean realizeHazard() throws IllegalCardTypeException {
+		if ( cardToPlay.getType() == CardType.SpeedLimit ) {
+			origin.getHandStack().shiftTo( target.getDistanceStack(), cardToPlay );
+		} else {
+			origin.getHandStack().shiftTo( target.getBattleStack(), cardToPlay );					
+		}
+		
+		return false;
+	}
+	
+	private boolean realizeRemedy() throws IllegalCardTypeException {
+		if ( cardToPlay.getType() == CardType.EndOfLimit ) {
+			target.getDistanceStack().discardHazards();
+			origin.discard( cardToPlay );
+		} else {
+			if ( cardToPlay.getType() == CardType.GoRoll && ! target.getBattleStack().initialGoRollIsPlayed() ) {
+				target.getHandStack().shiftTo( target.getBattleStack(), cardToPlay );
+			} else {
+				target.getBattleStack().discardHazards();
+				target.discard( cardToPlay );
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean realizeSafety() throws IllegalCardTypeException {
+		target.getHandStack().shiftTo( target.getSafetyStack(), cardToPlay );
+		target.getDistanceStack().increaseBy100();
+
+		if ( target.isAttacked() ) {
+			for ( CardFamily cf : cardToPlay.getFamilies() ) {
+				if ( target.isAttacked() && cf == target.getBattleStack().peek().getFamily() ) {
+					target.getBattleStack().discardHazards();
+				}
+			}
+		}
+		
+		if ( target.isSlowed() && cardToPlay.getType() == CardType.RightOfWay ) {
+			target.getDistanceStack().discardHazards();
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * Perform card to target verifications.
 	 * 
@@ -167,9 +189,9 @@ public class BasicMove extends Move {
 		} else {
 			if ( targetPlayer.isAttacked()
 					&& ( !targetPlayer.isProtectedFrom( (HazardCard) targetPlayer
-							.getBattleStackContent() ) ) ) {
+							.getBattleStack().peek() ) ) ) {
 				throw new PlayerIsAttackedException( "You are under attack : "
-						+ targetPlayer.getBattleStackContent() );
+						+ targetPlayer.getBattleStack().peek() );
 			} else if ( targetPlayer.isSlowed()
 					&& ( (DistanceCard) this.cardToPlay ).getRange() > 50 ) {
 				throw new PlayerIsSlowedException( "Your speed is limited." );
@@ -230,7 +252,7 @@ public class BasicMove extends Move {
 				if ( !targetPlayer.isAttacked() ) {
 					throw new PlayerIsNotAttackedException("You are not under attack." );
 				} else {
-					if ( cardToPlay.getFamily() != targetPlayer.getBattleStackContent().getFamily() ) {
+					if ( cardToPlay.getFamily() != targetPlayer.getBattleStack().peek().getFamily() ) {
 						throw new UnsuitableRemedyException("Not the good kind of remedy." );
 					}
 				}
@@ -247,12 +269,8 @@ public class BasicMove extends Move {
 				&& cardAndPlayerStackAreCompatible( targetPlayer );
 	}
 	
-	// ------------ GETTERS ------------ //
-
 	public Boolean isAnAttack() {
 		return this.cardToPlay instanceof HazardCard;
 	}
-
-	// ------------ SETTERS ------------ //
 
 }
