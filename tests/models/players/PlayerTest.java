@@ -17,6 +17,10 @@ import org.junit.Test;
 
 public class PlayerTest {
 
+	// ------------ CONSTANTS ------------ //
+	
+	private final static int GOAL = 1000;
+	
 	// ------------ ATTRIBUTES ------------ //
 
 	private Player testPlayer;
@@ -122,7 +126,7 @@ public class PlayerTest {
 			e.printStackTrace();
 		}
 		
-		assertTrue( testPlayer.canPlay( null ));
+		assertTrue( testPlayer.canPlay( opponents, GOAL ));
 		testPlayer.handStack.pop();
 	}
 
@@ -259,7 +263,7 @@ public class PlayerTest {
 			e.printStackTrace();
 		}
 		
-		assertFalse( testPlayer.canPlay( opponents ) );
+		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.handStack.pop();
 		
 		// -- > Set context for incoming tests : set initialGoRoll as true
@@ -278,7 +282,7 @@ public class PlayerTest {
 			e1.printStackTrace();
 		}
 		
-		assertTrue( testPlayer.canPlay( opponents ) );
+		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.handStack.pop();
 		
 		// -- > Case 3 : you are attacked
@@ -295,7 +299,7 @@ public class PlayerTest {
 			e.printStackTrace();
 		}
 		
-		assertFalse( testPlayer.canPlay( opponents ) );
+		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.battleStack.pop();
 		testPlayer.handStack.pop();
 		
@@ -314,9 +318,9 @@ public class PlayerTest {
 		}
 		
 		if ( type == CardType.Distance25 || type == CardType.Distance50 ) {
-			assertTrue( testPlayer.canPlay( opponents ) );
+			assertTrue( testPlayer.canPlay( opponents, GOAL ) );
 		} else {
-			assertFalse( testPlayer.canPlay( opponents ) );
+			assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		}
 		
 		initialize();
@@ -342,9 +346,9 @@ public class PlayerTest {
 		}
 
 		if ( type == CardType.GoRoll ) {
-			assertTrue( testPlayer.canPlay( opponents ) );
+			assertTrue( testPlayer.canPlay( opponents, GOAL ) );
 		} else {
-			assertFalse( testPlayer.canPlay( opponents ) );
+			assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		}
 		
 		testPlayer.handStack.pop();
@@ -374,7 +378,7 @@ public class PlayerTest {
 			e.printStackTrace();
 		}
 		
-		assertTrue( testPlayer.canPlay( opponents ) );
+		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.battleStack.pop();
 		testPlayer.handStack.pop();
 		
@@ -386,7 +390,7 @@ public class PlayerTest {
 			e.printStackTrace();
 		}
 		
-		assertFalse( testPlayer.canPlay( opponents ) );
+		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.handStack.pop();
 		
 		initialize();
