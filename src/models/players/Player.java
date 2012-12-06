@@ -3,16 +3,11 @@ package models.players;
 import java.util.ArrayList;
 
 import models.cards.Card;
-import models.cards.CardFactory;
 import models.cards.CardFamily;
 import models.cards.CardType;
-import models.cards.DistanceCard;
 import models.cards.HazardCard;
-import models.cards.RemedyCard;
-import models.cards.SafetyCard;
 import models.exceptions.DiscardChoiceOutOfBoundsException;
 import models.exceptions.IllegalCardTypeException;
-import models.moves.BasicMove;
 import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 import models.stacks.player.BattleStack;
@@ -22,7 +17,7 @@ import models.stacks.player.SafetyStack;
 
 /**
  * @author Simon RENOULT
- * @version 1.1.3
+ * @version 1.2.3
  */
 public abstract class Player {
 
@@ -78,8 +73,8 @@ public abstract class Player {
 	}
 
 	public boolean isProtectedFrom( HazardCard hc ) {
-		for ( int i = 0; i < safetyStack.size() ; i++) {
-			for ( CardFamily cf : safetyStack.get( i ).getFamilies() ) {
+		for( Card c : safetyStack.getCards() ) {
+			for( CardFamily cf : c.getFamilies() ) {
 				if ( cf == hc.getFamily() ) {
 					return true;
 				}
@@ -110,8 +105,6 @@ public abstract class Player {
 	}
 
 	/**
-	 * TODO end me.
-	 * 
 	 * -- > Safety -- > OK -- > Hazard -- > SpeedLimit -- > DistanceStack is not
 	 * slowed -- > OK -- > Other -- > BattleStack is not attacked -- > OK -- >
 	 * Distance -- > Initial GoRoll played -- > Not attacked -- > Not slowed --
@@ -121,29 +114,73 @@ public abstract class Player {
 	 * @return
 	 */
 	public boolean canPlay( ArrayList<Player> opponents ) {
-		if ( handStack.containsSafety() ) {
-			return true;
-		}
+		return canPlaySafety() || canPlayDistance() || canPlayRemedy() || canPlayHazard( opponents ); 
+	}
 
+	/**
+	 * Set as protected so the unitary tests can test it.
+	 * 
+	 * @return
+	 */
+	protected boolean canPlaySafety() {
+		return handStack.containsSafety();
+	}
+
+	/**
+	 * Set as protected so the unitary tests can test it.
+	 * 
+	 * @return
+	 */
+	protected boolean canPlayHazard(ArrayList<Player> opponents) {
 		if ( handStack.containsHazard() ) {
 			for ( Player p : opponents ) {
 				if ( p.getBattleStack().initialGoRollIsPlayed() ) {
-					if ( p.isAttacked() && ! p.isSlowed() && handStack.exists( CardType.SpeedLimit )) {
-						return true;
-					} else if ( p.isSlowed() && ! p.isAttacked() ) {
-						for ( Card c : p.handStack.getCards() ) {
-							if ( c instanceof HazardCard && c.getType() != CardType.SpeedLimit ) {
-								return true;
+					for ( Card handCard : handStack.getCards() ) {
+						if ( handCard instanceof HazardCard ) {
+							HazardCard hazardCard = ( HazardCard ) handCard;
+							if ( ! p.isProtectedFrom( hazardCard ) ) {
+								if ( hazardCard.getType() == CardType.SpeedLimit ) {
+									return ! p.isSlowed();
+								} else {
+									return ! p.isAttacked();
+								}
 							}
 						}
-					} else if ( ! p.isAttacked() && ! p.isSlowed() ) {
-						return true;
 					}
 				}
 			}
-
 		}
+		
+		return false;
+	}
 
+	/**
+	 * Set as protected so the unitary tests can test it.
+	 * 
+	 * @return
+	 */
+	protected boolean canPlayRemedy() {
+		if ( handStack.containsRemedy() ) {
+			if ( this.isAttacked() && handStack.hasRemedyFor( getBattleStack().peek().getFamily() ) ) {
+				return true;
+			} else if ( this.isSlowed() && handStack.exists( CardType.GoRoll ) ) {
+				return true;
+			} else if ( !battleStack.initialGoRollIsPlayed() ) {
+				if ( handStack.exists( CardType.GoRoll ) ) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Set as protected so the unitary tests can test it.
+	 * 
+	 * @return
+	 */
+	protected boolean canPlayDistance() {
 		if ( handStack.containsDistance() ) {
 			if ( battleStack.initialGoRollIsPlayed() ) {
 				if ( !this.isAttacked() ) {
@@ -157,28 +194,24 @@ public abstract class Player {
 				}
 			}
 		}
-
-		if ( handStack.containsRemedy() ) {
-			if ( this.isAttacked() && handStack.hasRemedyFor( getBattleStackContent().getFamily() ) ) {
-				return true;
-			} else if ( this.isSlowed() && handStack.exists( CardType.GoRoll ) ) {
-				return true;
-			} else if ( !battleStack.initialGoRollIsPlayed() ) {
-				if ( handStack.exists( CardType.GoRoll ) ) {
-					return true;
-				}
-			}
-		}
-
+		
 		return false;
 	}
-
+	
 	// ------------ GETTERS ------------ //
+
+	public BattleStack getBattleStack() {
+		return this.battleStack;
+	}
 
 	public DistanceStack getDistanceStack() {
 		return distanceStack;
 	}
 
+	public HandStack getHandStack() {
+		return this.handStack;
+	}
+	
 	public SafetyStack getSafetyStack() {
 		return safetyStack;
 	}
@@ -191,21 +224,10 @@ public abstract class Player {
 		return this.alias;
 	}
 
-	public HandStack getHandStack() {
-		return this.handStack;
-	}
-
-	public BattleStack getBattleStack() {
-		return this.battleStack;
-	}
-
-	public Card getBattleStackContent() {
-		return this.getBattleStack().peek();
-	}
-
 	// ------------ SETTERS ------------ //
 
 	public void setAlias( String string ) {
 		this.alias = string;
 	}
+
 }
