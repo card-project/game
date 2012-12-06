@@ -248,7 +248,7 @@ public class BasicMoveTest {
 
 		assertFalse( bm.origin.getHandStack().exists( refCard.getType() ) );
 
-		assertEquals( bm.origin.getBattleStackContent().getType(), CardType.GoRoll );
+		assertEquals( bm.origin.getBattleStack().peek().getType(), CardType.GoRoll );
 		
 		assertEquals( DiscardStack.getInstance().peek().getType(), CardType.Repairs );
 		assertTrue( DiscardStack.getInstance().exists( CardType.Accident ) );
@@ -631,7 +631,7 @@ public class BasicMoveTest {
 		
 		assertNotNull( caught );
 		assertTrue ( caught instanceof PlayerIsNotSlowedException );
-		assertNull( bm.target.getBattleStackContent() );		
+		assertNull( bm.target.getBattleStack().peek() );		
 	}
 
 	@Test
@@ -658,7 +658,7 @@ public class BasicMoveTest {
 		}
 		
 		assertNull( caught );
-		assertNull( bm.target.getBattleStackContent() );	
+		assertNull( bm.target.getBattleStack().peek() );	
 	}
 	
 	@Test
