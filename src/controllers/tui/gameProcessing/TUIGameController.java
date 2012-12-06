@@ -74,7 +74,11 @@ public class TUIGameController {
 			
 			// STEP 0 : Show player's turn name.
 			
-			tui.title( "TURN OF " + currentPlayer.getAlias() + " - " + distance + "km"  );
+			String status =  currentPlayer.getBattleStack().initialGoRollIsPlayed() ? "Started" : "Not started";
+			status += "/" + ( currentPlayer.isSlowed() ? "Slowed" : "Not slowed" );
+			status += "/" + (currentPlayer.isAttacked() ? currentPlayer.getBattleStack().peek().toString() : "Not attacked" );
+			
+			tui.title( "TURN OF " + currentPlayer.getAlias() + " - " + distance + "km - " + status );
 			
 			// STEP 2 : draw a card
 			tui.inform( '\n' + "-- > DRAWING" + '\n' );

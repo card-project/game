@@ -47,7 +47,7 @@ public class PlayingStepController extends StepController {
 		
 		} else if ( super.currentPlayer instanceof HumanPlayer ) {
 			
-			if ( currentPlayer.canPlay( getOpponents( currentPlayer ) ) ) {
+			if ( currentPlayer.canPlay( getOpponents( currentPlayer ), currentGame.getGoal() ) ) {
 
 				BasicMove bm = new BasicMove( super.currentPlayer );
 				boolean userChoiceIsCorrect;
@@ -182,11 +182,11 @@ public class PlayingStepController extends StepController {
 	}
 	
 	private String getOpponentsAlias( ArrayList<Player> opponents ) {
-		String s = "";
-		for ( Player p : opponents ) {
-			s += p.getAlias();
+		String playerList = "| ";
+		for ( int i = 0; i < opponents.size() ; i++, playerList += " | " ) {
+			playerList += (i+1) + " : " + opponents.get( i ).getAlias();
 		}
 		
-		return s;
+		return playerList;
 	}
 }
