@@ -9,6 +9,7 @@ import models.cards.SafetyCard;
 import models.exceptions.IllegalCardTypeException;
 import models.exceptions.moveExceptions.IllegalMoveException;
 import models.exceptions.moveExceptions.InitialGoRollNotPlayedException;
+import models.exceptions.moveExceptions.MaxNumberOfDistance200IsReached;
 import models.exceptions.moveExceptions.PlayerIsAttackedException;
 import models.exceptions.moveExceptions.PlayerIsNotAttackedException;
 import models.exceptions.moveExceptions.PlayerIsNotSlowedException;
@@ -20,11 +21,11 @@ import models.players.Player;
 /**
  * Create an object manipulating a standard move.
  * 
- * It enables the use of a move (attack, defense, distance, safety)
+ * It enables the use of a move (attack/hazard, defense/remedy, distance, safety)
  * in the standard playing stream.
  * 
  * @author Simon RENOULT
- * @version 1.1
+ * @version 1.1.2
  */
 public class BasicMove extends Move {
 
@@ -115,16 +116,10 @@ public class BasicMove extends Move {
 	 * @return true if card can be played on the target, else false.
 	 */
 	private boolean cardAndTargetAreCompatible( Player targetPlayer ) {
-		if ( targetPlayer.equals( this.origin ) ) {
-			if ( this.cardToPlay instanceof RemedyCard
-					|| this.cardToPlay instanceof DistanceCard
-					|| this.cardToPlay instanceof SafetyCard ) {
-				return true;
-			}
-		} else if ( !targetPlayer.equals( this.origin ) ) {
-			if ( this.cardToPlay instanceof HazardCard ) {
-				return true;
-			}
+		if ( targetPlayer == this.origin ) {
+			return this.cardToPlay instanceof RemedyCard || this.cardToPlay instanceof DistanceCard	|| this.cardToPlay instanceof SafetyCard;
+		} else if ( targetPlayer != this.origin ) {
+			return this.cardToPlay instanceof HazardCard;
 		}
 
 		return false;
@@ -195,6 +190,8 @@ public class BasicMove extends Move {
 			} else if ( targetPlayer.isSlowed()
 					&& ( (DistanceCard) this.cardToPlay ).getRange() > 50 ) {
 				throw new PlayerIsSlowedException( "Your speed is limited." );
+			} else if ( targetPlayer.getDistanceStack().maxNumberOfDistance200IsReached() ) {
+				throw new MaxNumberOfDistance200IsReached();
 			}
 		}
 
