@@ -88,7 +88,7 @@ public class TUIGameController {
 			
 			tui.tickBox( currentPlayer.isSlowed(), "Speed limitation." + '\n' );
 			
-			String attacked = currentPlayer.isAttacked() ? currentPlayer.getBattleStackContent().toString() : "Not attacked";
+			String attacked = currentPlayer.isAttacked() ? currentPlayer.getBattleStack().peek().toString() : "Not attacked";
 			tui.tickBox( currentPlayer.isAttacked(), attacked + '\n' );
 			
 			String safetyList = currentPlayer.getSafetyStack().isEmpty() ? "No safety." : currentPlayer.getSafetyStack().toString(); 
