@@ -12,8 +12,9 @@ public class DrawingStepController extends StepController {
 		super( t, g );
 	}
 
-	public void run() {
+	public boolean run() {
 		this.draw();
+		return false;
 	}
 	
 	private void draw() {

@@ -16,7 +16,7 @@ public abstract class StepController {
 		this.currentGame = g;
 	}
 
-	abstract public void run ( );
+	abstract public boolean run ( );
 	
 	public Player getCurrentPlayer() {
 		return currentPlayer;

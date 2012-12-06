@@ -66,7 +66,7 @@ public class TUIGameController {
 		
 		Player currentPlayer = currentGame.getPlayers()[firstPlayerIndex];
 
-		boolean gameIsOver = false;
+		boolean gameIsOver = false, replay = false;
 		int currentPlayerIndex = firstPlayerIndex;
 		
 		do {
@@ -99,7 +99,8 @@ public class TUIGameController {
 			tui.tickBox( ! currentPlayer.getSafetyStack().isEmpty(), safetyList + '\n' );
 			
 			playingStepController.setCurrentPlayer( currentPlayer );
-			playingStepController.run();
+			
+			replay = playingStepController.run();
 			
 			// STEP 4 : discard a card
 			if ( currentPlayer.getHandStack().size() > HandStack.MAX_CARD_NB ) {
@@ -112,11 +113,10 @@ public class TUIGameController {
 			gameIsOver = currentPlayer.getDistanceStack().getTravelledDistance() == currentGame.getGoal();
 			
 			// STEP 6 : switch to next player
-			if ( ! gameIsOver ) {
+			if ( ! gameIsOver && ! replay ) {
 				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getPlayers().length - 1 ) ? 0 : currentPlayerIndex ;
 				currentPlayer = currentGame.getPlayers()[currentPlayerIndex];
 			}
-			
 		} while ( ! gameIsOver );
 		
 		tui.inform( currentPlayer.getAlias() + " has won !" );

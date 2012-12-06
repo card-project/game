@@ -30,8 +30,8 @@ public class PlayingStepController extends StepController {
 	// ------------ METHODS ------------ //
 	
 	@Override
-	public void run() {
-		this.play();
+	public boolean run() {
+		return this.play();
 	}
 
 	/**
@@ -40,7 +40,10 @@ public class PlayingStepController extends StepController {
 	 * 
 	 * @param p Player who plays.
 	 */
-	private void play( ) {
+	private boolean play( ) {
+		
+		boolean replay = false;
+		
 		if ( super.currentPlayer instanceof AIPlayer ) {
 			
 			( ( AIPlayer ) super.currentPlayer ).play( );
@@ -90,7 +93,7 @@ public class PlayingStepController extends StepController {
 			
 				// STEP 3 : play the card
 				try {
-					bm.realize();
+					replay = bm.realize();
 				} catch ( IllegalCardTypeException e ) {
 					e.printStackTrace();
 				}
@@ -98,8 +101,9 @@ public class PlayingStepController extends StepController {
 			} else {
 				System.out.println( "No card to play." );
 			}
-						
 		}
+		
+		return replay;
 	}
 	
 	/**

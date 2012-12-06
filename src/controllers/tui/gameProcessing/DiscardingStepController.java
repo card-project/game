@@ -14,8 +14,9 @@ public class DiscardingStepController extends StepController {
 		super( t, g );
 	}
 
-	public void run() {
+	public boolean run() {
 		this.discard();
+		return false;
 	}
 	
 	private void discard() {
