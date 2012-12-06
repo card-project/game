@@ -55,7 +55,6 @@ public class TUIMenuController {
 		this.defineDistanceGoal();
 		this.defineHumanPlayersAlias();
 		this.defineAIPlayersAlias();
-		this.defineAIPlayersLevel();
 	}
 
 	private void defineGlobalPlayersNumber() {
@@ -159,34 +158,5 @@ public class TUIMenuController {
 	
 	private void defineAIPlayersAlias() {
 		currentGame.setAIPlayersAlias();
-	}
-	
-	private void defineAIPlayersLevel() {
-		for( Player p : currentGame.getPlayers() ) {
-			if ( p instanceof AIPlayer ) {
-				boolean userChoiceIsCorrect;
-				int chosenLevel = 0;
-				do {
-					userChoiceIsCorrect = true;
-					try {
-						chosenLevel = tui.askAIPlayerLevel( (AIPlayer) p );
-					} catch ( NumberFormatException e ) {
-						tui.warn( "Please enter a number." );
-						userChoiceIsCorrect = false;
-					}
-					
-					if ( userChoiceIsCorrect ) {
-						try {
-							currentGame.setAIPlayerLevel( (AIPlayer) p, chosenLevel );
-						} catch ( IllegalAILevelException e ) {
-							tui.warn( "Please enter a number between 1 and 3." );
-							userChoiceIsCorrect = false;
-						}
-					}
-
-				} while ( ! userChoiceIsCorrect );
-			}
-		}
-	}
-	
+	}	
 }
