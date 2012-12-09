@@ -13,6 +13,11 @@ import models.players.strategies.Strategy;
 import models.players.strategies.Trapper;
 import models.stacks.game.GameStack;
 
+/**
+ * @author Adrien Saunier
+ * @author Simon RENOULT
+ *
+ */
 public class Brain {
 
 	// ------------ ATTRIBUTES ------------ //

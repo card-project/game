@@ -79,7 +79,7 @@ public class BasicMove extends Move {
 			target.getDistanceStack().discardHazards();
 			origin.discard( cardToPlay );
 		} else {
-			if ( cardToPlay.getType() == CardType.GoRoll && ! target.getBattleStack().initialGoRollIsPlayed() ) {
+			if ( cardToPlay.getType() == CardType.GoRoll && ! target.hasStarted() ) {
 				target.getHandStack().shiftTo( target.getBattleStack(), cardToPlay );
 			} else {
 				target.getBattleStack().discardHazards();
@@ -178,18 +178,13 @@ public class BasicMove extends Move {
 	 */
 	public boolean performDistanceCardVerification( Player targetPlayer )
 			throws IllegalMoveException {
-		if ( !targetPlayer.getBattleStack().initialGoRollIsPlayed() ) {
-			throw new InitialGoRollNotPlayedException(
-					"Initial GoRoll card has not been played yet." );
+		if ( !targetPlayer.hasStarted() ) {
+			throw new InitialGoRollNotPlayedException();
 		} else {
-			if ( targetPlayer.isAttacked()
-					&& ( !targetPlayer.isProtectedFrom( (HazardCard) targetPlayer
-							.getBattleStack().peek() ) ) ) {
-				throw new PlayerIsAttackedException( "You are under attack : "
-						+ targetPlayer.getBattleStack().peek() );
-			} else if ( targetPlayer.isSlowed()
-					&& ( (DistanceCard) this.cardToPlay ).getRange() > 50 ) {
-				throw new PlayerIsSlowedException( "Your speed is limited." );
+			if ( targetPlayer.isAttacked() ) {
+				throw new PlayerIsAttackedException( targetPlayer.getBattleStack().peek() );
+			} else if ( targetPlayer.isSlowed() && ( (DistanceCard) this.cardToPlay ).getRange() > 50 ) {
+				throw new PlayerIsSlowedException();
 			} else if ( targetPlayer.getDistanceStack().maxNumberOfDistance200IsReached() ) {
 				throw new MaxNumberOfDistance200IsReached();
 			}
@@ -208,18 +203,13 @@ public class BasicMove extends Move {
 	 */
 	public boolean performHazardCardVerification( Player targetPlayer )
 			throws IllegalMoveException {
-		if ( targetPlayer.getBattleStack().initialGoRollIsPlayed() ) {
+		if ( targetPlayer.hasStarted() ) {
 			if ( targetPlayer.isProtectedFrom( (HazardCard) this.cardToPlay ) ) {
-				throw new PlayerIsProtectedException(
-						"Your opponent is protected from this kind of attack." );
-			} else if ( this.cardToPlay.getFamily() == CardFamily.Speed
-					&& targetPlayer.isSlowed() ) {
-				throw new PlayerIsSlowedException(
-						"Your opponent is already slowed." );
-			} else if ( this.cardToPlay.getFamily() != CardFamily.Speed
-					&& targetPlayer.isAttacked() ) {
-				throw new PlayerIsAttackedException(
-						"Your opponent is already under attack." );
+				throw new PlayerIsProtectedException( );
+			} else if ( this.cardToPlay.getFamily() == CardFamily.Speed && targetPlayer.isSlowed() ) {
+				throw new PlayerIsSlowedException();
+			} else if ( this.cardToPlay.getFamily() != CardFamily.Speed && targetPlayer.isAttacked() ) {
+				throw new PlayerIsAttackedException(this.cardToPlay);
 			}
 		} else {
 			throw new IllegalMoveException( "Your opponent has not started to play yet." );
@@ -243,7 +233,7 @@ public class BasicMove extends Move {
 				throw new PlayerIsNotSlowedException( "You are not slowed." );
 			}
 		} else {
-			if ( ! targetPlayer.getBattleStack().initialGoRollIsPlayed() && cardToPlay.getType() == CardType.GoRoll ) {
+			if ( ! targetPlayer.hasStarted() && cardToPlay.getType() == CardType.GoRoll ) {
 				return true;
 			} else {
 				if ( !targetPlayer.isAttacked() ) {
@@ -260,10 +250,8 @@ public class BasicMove extends Move {
 	}
 
 	@Override
-	public boolean targetIsCompatible( Player targetPlayer )
-			throws IllegalMoveException {
-		return cardAndTargetAreCompatible( targetPlayer )
-				&& cardAndPlayerStackAreCompatible( targetPlayer );
+	public boolean targetIsCompatible( Player targetPlayer ) throws IllegalMoveException {
+		return cardAndTargetAreCompatible( targetPlayer ) && cardAndPlayerStackAreCompatible( targetPlayer );
 	}
 	
 	public Boolean isAnAttack() {

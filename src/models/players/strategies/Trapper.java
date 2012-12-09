@@ -5,8 +5,8 @@ import models.cards.RemedyCard;
 import models.players.AIPlayer;
 
 /**
- * The Trapper strategy is pretty similar with the Protector strategy.
- * This main difference is that it will play his safeties only when someone is attacking him.
+ * The Trapper strategy is pretty similar to the {@link Protector} strategy.
+ * The only difference is that it will play his safeties only when someone is attacking him.
  * 
  * @author Adrien SAUNIER
  */

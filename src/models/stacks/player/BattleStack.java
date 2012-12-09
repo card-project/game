@@ -28,10 +28,14 @@ public class BattleStack extends PlayerStack {
 		}
 	}
 	
-	public void discardHazards() throws IllegalCardTypeException {
+	public void discardHazards() {
 		for ( int i = 0; i < super.cards.size() ; i++ ) {
 			if ( super.cards.get( i ) instanceof HazardCard ) {
-				this.shiftTo( DiscardStack.getInstance(), super.cards.get( i ) );
+				try {
+					this.shiftTo( DiscardStack.getInstance(), super.cards.get( i ) );
+				} catch ( IllegalCardTypeException e ) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

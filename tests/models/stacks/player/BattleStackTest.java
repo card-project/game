@@ -81,11 +81,7 @@ public class BattleStackTest {
 			e.printStackTrace();
 		}
 		
-		try {
-			this.battleStack.discardHazards();
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
+		this.battleStack.discardHazards();
 		
 		assertTrue( this.battleStack.peek().getType() == CardType.GoRoll );
 		assertTrue( DiscardStack.getInstance().peek().getType() == CardType.Accident );

@@ -6,6 +6,10 @@ public class PlayerIsProtectedException extends IllegalMoveException {
 		super( string );
 	}
 
+	public PlayerIsProtectedException() {
+		this("Your opponent is protected from this kind of attack.");
+	}
+
 	/**
 	 * 
 	 */

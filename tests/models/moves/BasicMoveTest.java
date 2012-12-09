@@ -458,11 +458,7 @@ public class BasicMoveTest {
 		
 		// -- > Reset context
 		
-		try {
-			bm.target.getBattleStack().discardHazards();
-		} catch ( IllegalCardTypeException e1 ) {
-			e1.printStackTrace();
-		}
+		bm.target.getBattleStack().discardHazards();
 		
 		// -- > Case 4
 		

@@ -46,8 +46,12 @@ public abstract class Player {
 		return handStack.peek();
 	}
 
-	public void discard( Card cardToDiscard ) throws IllegalCardTypeException {
-		this.handStack.shiftTo( DiscardStack.getInstance(), cardToDiscard );
+	public void discard( Card cardToDiscard ) {
+		try {
+			this.handStack.shiftTo( DiscardStack.getInstance(), cardToDiscard );
+		} catch ( IllegalCardTypeException e ) {
+			e.printStackTrace();
+		}
 	}
 
 	public void discard( Integer discardingCardIndex ) throws IllegalCardTypeException, DiscardChoiceOutOfBoundsException {
@@ -106,6 +110,14 @@ public abstract class Player {
 		return false;
 	}
 
+	public boolean hasStarted() {
+		return battleStack.initialGoRollIsPlayed();
+	}
+	
+	public int getTravelledDistance() {
+		return this.distanceStack.getTravelledDistance();
+	}
+	
 	/**
 	 * -- > Safety -- > OK -- > Hazard -- > SpeedLimit -- > DistanceStack is not
 	 * slowed -- > OK -- > Other -- > BattleStack is not attacked -- > OK -- >
@@ -136,7 +148,7 @@ public abstract class Player {
 	protected boolean canPlayHazard(ArrayList<Player> opponents) {
 		if ( handStack.containsHazard() ) {
 			for ( Player p : opponents ) {
-				if ( p.getBattleStack().initialGoRollIsPlayed() ) {
+				if ( p.hasStarted() ) {
 					for ( Card handCard : handStack.getCards() ) {
 						if ( handCard instanceof HazardCard ) {
 							HazardCard hazardCard = ( HazardCard ) handCard;
@@ -167,7 +179,7 @@ public abstract class Player {
 				return true;
 			} else if ( this.isSlowed() && handStack.exists( CardType.GoRoll ) ) {
 				return true;
-			} else if ( !battleStack.initialGoRollIsPlayed() ) {
+			} else if ( !hasStarted()) {
 				if ( handStack.exists( CardType.GoRoll ) ) {
 					return true;
 				}
@@ -183,7 +195,7 @@ public abstract class Player {
 	 * @return
 	 */
 	protected boolean canPlayDistance( int distanceGoal ) {
-		if ( handStack.containsDistance() && battleStack.initialGoRollIsPlayed() ) {
+		if ( handStack.containsDistance() && hasStarted() ) {
 			if ( !this.isAttacked() ) {
 				if ( !this.isSlowed() ) {
 					for( Card c : handStack.getCards() ) {

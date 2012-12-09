@@ -7,6 +7,10 @@ public class PlayerIsSlowedException extends IllegalMoveException {
 		super( string );
 	}
 
+	public PlayerIsSlowedException() {
+		super ( "Your speed is limited." );
+	}
+
 	/**
 	 * 
 	 */

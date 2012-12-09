@@ -74,7 +74,7 @@ public class TUIGameController {
 			
 			// STEP 0 : Show player's turn name.
 			
-			String status =  currentPlayer.getBattleStack().initialGoRollIsPlayed() ? "Started" : "Not started";
+			String status =  currentPlayer.hasStarted() ? "Started" : "Not started";
 			status += "/" + ( currentPlayer.isSlowed() ? "Slowed" : "Not slowed" );
 			status += "/" + (currentPlayer.isAttacked() ? currentPlayer.getBattleStack().peek().toString() : "Not attacked" );
 			

@@ -13,6 +13,11 @@ import models.stacks.game.DeckStack;
 import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 
+/**
+ * @author Adrien Saunier
+ * @author Simon RENOULT
+ *
+ */
 public class Roadhog implements Strategy {
 
 	// ------------ ATTRIBUTES ------------ //

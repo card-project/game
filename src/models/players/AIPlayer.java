@@ -3,13 +3,13 @@ package models.players;
 import java.util.ArrayList;
 
 import models.exceptions.IllegalCardTypeException;
-import models.players.strategies.Strategy;
-import models.stacks.game.DiscardStack;
 
 /**
  * Virtual player.
  * 
  * @author Simon RENOULT
+ * @author Adrien SAUNIER
+ * 
  * @version 0.1.1
  */
 public class AIPlayer extends Player {

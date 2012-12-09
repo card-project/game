@@ -1,12 +1,10 @@
 package models.players.strategies;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import models.cards.Card;
 import models.cards.CardType;
 import models.cards.DistanceCard;
-import models.cards.RemedyCard;
 import models.exceptions.moveExceptions.IllegalMoveException;
 import models.moves.BasicMove;
 import models.players.AIPlayer;
@@ -14,6 +12,16 @@ import models.stacks.game.DeckStack;
 import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 
+/**
+ * @version 0.1
+ * 
+ * AI player strategy.
+ * 
+ * 
+ * 
+ * @author Adrien Saunier
+ * @author Simon RENOULT
+ */
 public class Driver implements Strategy {
 
 	// ------------ ATTRIBUTES ------------ //
@@ -22,75 +30,60 @@ public class Driver implements Strategy {
 
 	// ------------ CONSTRUCTORS ------------ //
 
+	/**
+	 * @param player
+	 */
 	public Driver( AIPlayer player ) {
 		this.player = player;
 	}
 
 	// ------------ METHODS ------------ //
 
+	/**
+	 * Draw a {@link DistanceCard} as soon as possible.
+	 * 
+	 * @see models.players.strategies.Strategy#chooseStackToDraw()
+	 * @return the {@link GameStack} to draw on.
+	 */
 	@Override
 	public GameStack chooseStackToDraw() {
 
 		GameStack stackToDraw = null;
-		Card cardDisCard = DiscardStack.getInstance().peek();
 
-		if ( cardDisCard instanceof DistanceCard )
+		if ( DiscardStack.getInstance().peek() instanceof DistanceCard ) {
 			stackToDraw = DiscardStack.getInstance();
-		else
+		} else {
 			stackToDraw = DeckStack.getInstance();
+		}
 
 		return stackToDraw;
 	}
 
+	/**
+	 * Priorities :
+	 * 1 - GoRoll if player has no started yet.
+	 * 2 - Maximum available distance.
+	 * 
+	 * @see models.players.strategies.Strategy#chooseCardToPlay()
+	 */
 	@Override
 	public Card chooseCardToPlay() {
 
 		Card chosenCard = null;
-		boolean initialGoRoll = this.player.getBattleStack()
-				.initialGoRollIsPlayed();
+		boolean initialGoRollIsPlayed = this.player.hasStarted();
 
-		BasicMove move = new BasicMove( this.player );
-		LinkedList<Card> list = this.player.getHandStack().getCards();
-
-		for ( Card card : list ) {
-			if ( initialGoRoll == false ) {
-				if ( card instanceof RemedyCard ) {
-					RemedyCard cardChecked = (RemedyCard) card;
-
-					if ( initialGoRoll == false
-							&& cardChecked.getType() == CardType.GoRoll )
-						chosenCard = cardChecked;
-
-					move.setCardToPlay( chosenCard );
-
-					try {
-						move.setTarget( this.player );
-					} catch ( IllegalMoveException e ) {
-						// TODO Check the kind of IllegalMoveException
-						e.printStackTrace();
-					} catch ( IllegalAccessError e ) {
-						e.printStackTrace();
-					}
-				}
+		for ( Card handCard : this.player.getHandStack().getCards() ) {
+			if ( ! initialGoRollIsPlayed && handCard.getType() == CardType.GoRoll ) {
+					chosenCard = handCard;
 			} else {
-				if ( card instanceof DistanceCard ) {
-					DistanceCard cardChecked = (DistanceCard) card;
+				if ( handCard instanceof DistanceCard ) {
+					DistanceCard currentDistanceCard = (DistanceCard) handCard;
 
-					try {
-						move.setCardToPlay( cardChecked );
-						move.setTarget( this.player );
-
-						if ( move.performDistanceCardVerification( this.player ) )
-							if ( cardChecked.getRange() > ( (DistanceCard) chosenCard )
-									.getRange() )
-								chosenCard = cardChecked;
-
-					} catch ( IllegalMoveException e ) {
-						e.printStackTrace();
-					} catch ( IllegalAccessError e ) {
-						e.printStackTrace();
+					if ( chosenCard == null ) {
+						chosenCard = currentDistanceCard;
+					} else if ( currentDistanceCard.getRange() > ( ( DistanceCard ) chosenCard ).getRange() ) {
+						chosenCard = currentDistanceCard;
 					}
-
 				}
 			}
 		}
@@ -98,18 +91,19 @@ public class Driver implements Strategy {
 		return chosenCard;
 	}
 
+	/**
+	 * @see models.players.strategies.Strategy#chooseCardToDiscard()
+	 */
 	@Override
 	public Card chooseCardToDiscard() {
 
-		boolean cardChosen = false;
-
+		boolean cardIsChosen = false;
 		Card cardToDiscard = null;
 		BasicMove bm = new BasicMove( this.player );
 
-		Iterator<Card> handCardsIterator = this.player.getHandStack()
-				.getCards().iterator();
+		Iterator<Card> handCardsIterator = this.player.getHandStack().getCards().iterator();
 
-		while ( handCardsIterator.hasNext() && !cardChosen ) {
+		while ( handCardsIterator.hasNext() && ! cardIsChosen ) {
 			Card card = handCardsIterator.next();
 
 			if ( card instanceof DistanceCard ) {
@@ -118,8 +112,8 @@ public class Driver implements Strategy {
 				bm.setCardToPlay( cardUnderTest );
 				try {
 
-					// We check if the card is possible to play
-					if ( bm.setTarget( player ) ) {
+					// We check if the card is playable
+					if ( bm.setTarget( this.player ) ) {
 						if ( cardUnderTest.getRange() < ( (DistanceCard) cardToDiscard )
 								.getRange() )
 							cardToDiscard = cardUnderTest;
@@ -128,12 +122,11 @@ public class Driver implements Strategy {
 
 					// If a distance card can't be played, we can discard it.
 					cardToDiscard = cardUnderTest;
-					cardChosen = true;
+					cardIsChosen = true;
 				}
 			}
 		}
 
 		return cardToDiscard;
 	}
-
 }

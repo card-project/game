@@ -94,7 +94,7 @@ public abstract class Move {
 		} else if ( targetPlayer == null ) {
 			throw new IllegalAccessError( "Target player must be defined." );
 		} else {
-			if ( targetIsCompatible( targetPlayer ) ) {
+			if ( this.targetIsCompatible( targetPlayer ) ) {
 				this.target = targetPlayer;
 				return true;
 			} else {

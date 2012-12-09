@@ -89,10 +89,14 @@ public class DistanceStack extends PlayerStack {
 		BONUS_300_CPT = 0;
 	}
 	
-	public void discardHazards() throws IllegalCardTypeException {
+	public void discardHazards() {
 		for ( int i = 0; i < super.cards.size() ; i++ ) {
 			if ( super.cards.get( i ) instanceof HazardCard ) {
-				shiftTo( DiscardStack.getInstance(), super.cards.get( i ) );
+				try {
+					shiftTo( DiscardStack.getInstance(), super.cards.get( i ) );
+				} catch ( IllegalCardTypeException e ) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
