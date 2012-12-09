@@ -1,7 +1,6 @@
 package controllers.tui.gameProcessing;
 
 import models.Game;
-import models.exceptions.DiscardChoiceOutOfBoundsException;
 import models.exceptions.IllegalCardTypeException;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
@@ -42,17 +41,13 @@ public class DiscardingStepController extends StepController {
 				}
 				
 				if ( userChoiceIsCorrect ) {
-					try {
-						super.currentPlayer.discard( discardCardIndex - 1 );
-					} catch ( IllegalCardTypeException e ) {
-						tui.warn( e.getMessage() );
-						userChoiceIsCorrect = false;
-					} catch ( DiscardChoiceOutOfBoundsException e ) {
-						tui.warn( e.getMessage() );
+					if ( discardCardIndex < HandStack.MIN_CARD_NB || discardCardIndex > HandStack.MAX_IN_PLAY_CARD ) {
 						userChoiceIsCorrect = false;
 					}
 				}
 			} while ( ! userChoiceIsCorrect );
+			
+			super.currentPlayer.discard( super.currentPlayer.getHandStack().get( discardCardIndex - 1 ) );
 		}
 	}
 }

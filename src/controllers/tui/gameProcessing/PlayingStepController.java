@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import models.Game;
 import models.cards.Card;
+import models.cards.DistanceCard;
 import models.cards.HazardCard;
-import models.exceptions.IllegalCardTypeException;
-import models.exceptions.moveExceptions.IllegalMoveException;
-import models.moves.BasicMove;
+import models.cards.RemedyCard;
+import models.cards.SafetyCard;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
@@ -52,50 +52,50 @@ public class PlayingStepController extends StepController {
 			
 			if ( currentPlayer.canPlay( getOpponents( currentPlayer ), currentGame.getGoal() ) ) {
 
-				BasicMove bm = new BasicMove( super.currentPlayer );
 				boolean userChoiceIsCorrect;
 				
+				Card chosenCard = null;
+				Player chosenTarget = null;
+				
 				do {
+					
 					userChoiceIsCorrect = true;
 				
-					// STEP 1 : Choose card to play.		
-					bm.setCardToPlay( this.chooseCardToPlay( super.currentPlayer ) );
+					// STEP 1 : Choose card to play.	
+					chosenCard = this.chooseCardToPlay( super.currentPlayer );
 					
 					// STEP 2 : Check its type.
-					
 					// STEP 2.1 : Hazard card has been chosen.
-					if ( bm.getCardToPlay() instanceof HazardCard ) {
+					if ( chosenCard instanceof HazardCard ) {
 						// STEP 2.1.1 : Choose an opponent.
-						try {
-							userChoiceIsCorrect = bm.setTarget( this.chooseTarget( super.currentPlayer ) );
-						} catch ( IllegalAccessError e ) { 
-							userChoiceIsCorrect = false;
-							tui.warn( e.getMessage() );
-						} catch ( IllegalMoveException e ) {
-							userChoiceIsCorrect = false;
-							tui.warn( e.getMessage() );
-						}
+						chosenTarget = this.chooseTarget( currentPlayer );
+						userChoiceIsCorrect = ( ( HazardCard ) chosenCard ).isPlayableOn( chosenTarget );
 					}
-					// STEP 2.2 : Remedy/Distance/Safety card has been chosen.
-					else {
-						try {
-							userChoiceIsCorrect = bm.setTarget( super.currentPlayer );
-						} catch ( IllegalAccessError e ) { 
-							userChoiceIsCorrect = false;
-							tui.warn( e.getMessage() );
-						} catch ( IllegalMoveException e ) {
-							userChoiceIsCorrect = false;
-							tui.warn( e.getMessage() );
-						}
-					}					
-				
+					// STEP 2.2 : Distance card has been chosen.
+					else if ( chosenCard instanceof DistanceCard ) {
+						chosenTarget = currentPlayer;
+						userChoiceIsCorrect = ( ( DistanceCard ) chosenCard ).isPlayableOn( chosenTarget, currentGame.getGoal() );
+					}
+					// STEP 2.3 : Remedy card has been chosen.
+					else if ( chosenCard instanceof RemedyCard ) {
+						chosenTarget = currentPlayer;
+						userChoiceIsCorrect = ( ( RemedyCard ) chosenCard).isPlayableOn( chosenTarget );
+					}
+					// STEP 2.4 : Safety card has been chosen.
+					else if ( chosenCard instanceof SafetyCard ) {
+						chosenTarget = currentPlayer;
+						userChoiceIsCorrect = ( ( SafetyCard ) chosenCard).isPlayableOn( chosenTarget );
+					}
 				} while ( ! userChoiceIsCorrect );
-			
-				// STEP 3 : play the card
-				try {
-					replay = bm.realize();
-				} catch ( IllegalCardTypeException e ) {
-					e.printStackTrace();
+
+				if ( chosenCard instanceof HazardCard ) {
+					( ( HazardCard ) chosenCard ).playOn( currentPlayer, chosenTarget );
+				} else if ( chosenCard instanceof DistanceCard ) {
+					( ( DistanceCard ) chosenCard ).playOn( chosenTarget );
+				} else if ( chosenCard instanceof RemedyCard ) {
+					( ( RemedyCard ) chosenCard ).playOn( chosenTarget );
+				} else if ( chosenCard instanceof SafetyCard ) {
+					( ( SafetyCard ) chosenCard ).playOn( chosenTarget );
 				}
 			
 			} else {

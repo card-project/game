@@ -2,13 +2,10 @@ package controllers.tui;
 
 import models.Game;
 import models.exceptions.AliasAlreadyChosenException;
-import models.exceptions.IllegalAILevelException;
 import models.exceptions.IllegalDistanceException;
 import models.exceptions.IllegalHumanPlayerNumberException;
 import models.exceptions.IllegalPlayerNumberException;
-import models.players.AIPlayer;
 import models.players.HumanPlayer;
-import models.players.Player;
 import views.tui.TUIMenuView;
 
 /**

@@ -70,7 +70,8 @@ public class TUIGameController {
 		int currentPlayerIndex = firstPlayerIndex;
 		
 		do {
-			int distance = currentPlayer.getDistanceStack().getTravelledDistance();
+			
+			int distance = currentPlayer.getDistanceStack().getTraveledDistance();
 			
 			// STEP 0 : Show player's turn name.
 			
@@ -110,7 +111,7 @@ public class TUIGameController {
 			}
 			
 			// STEP 5 : check if game is over
-			gameIsOver = currentPlayer.getDistanceStack().getTravelledDistance() == currentGame.getGoal();
+			gameIsOver = currentPlayer.getDistanceStack().getTraveledDistance() == currentGame.getGoal();
 			
 			// STEP 6 : switch to next player
 			if ( ! gameIsOver && ! replay ) {
