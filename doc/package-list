@@ -1,1 +1,14 @@
+controllers.tui
+controllers.tui.gameProcessing
+launcher
+models
+models.cards
+models.exceptions
+models.exceptions.moveExceptions
 models.moves
+models.players
+models.players.strategies
+models.stacks
+models.stacks.game
+models.stacks.player
+views.tui
