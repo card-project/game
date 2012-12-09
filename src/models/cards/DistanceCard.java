@@ -1,5 +1,8 @@
 package models.cards;
 
+import models.exceptions.IllegalCardTypeException;
+import models.players.Player;
+
 
 /**
  * Distance card "factory".
@@ -48,6 +51,33 @@ public class DistanceCard extends Card {
 			this.type = CardType.Distance200;
 			break;
 		}		
+	}
+	
+	public boolean isPlayableOn ( Player p, int distanceGoal ) {
+		if ( ! p.hasStarted() ) {
+			return false;
+		} else {
+			if ( p.isAttacked() ) {
+				return false;
+			} else if ( p.isSlowed() && this.getRange() > 50 ) {
+				return false;
+			} else if ( this.getRange() + p.getTravelledDistance() > distanceGoal ) {
+				return false;
+			} else if ( this.getRange() == 200 && p.getDistanceStack().maxNumberOfDistance200IsReached() ) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public boolean play( Player p ) {
+		try {
+			p.getHandStack().shiftTo( p.getDistanceStack(), this );
+		} catch ( IllegalCardTypeException e ) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	@Override

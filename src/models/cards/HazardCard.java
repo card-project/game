@@ -1,5 +1,9 @@
 package models.cards;
 
+import models.exceptions.IllegalCardTypeException;
+import models.players.Player;
+import models.stacks.player.PlayerStack;
+
 /**
  * Create a hazard card object. Allow a player to attack another player.
  * 
@@ -20,5 +24,37 @@ public class HazardCard extends Card {
 
 	protected HazardCard( CardFamily initialFamily, CardType cardType ) {
 		super( initialFamily, cardType );
+	}
+	
+	// ------------ METHODS ------------ //
+	
+	public boolean isPlayableOn( Player opponent ) {
+		if ( ! opponent.hasStarted() ) {
+			return false;
+		} else {
+			if ( opponent.isProtectedFrom( this ) ) {
+				return false;
+			} else {
+				if ( opponent.isSlowed() && this.getFamily() == CardFamily.Speed ) {
+					return false;
+				} else if ( opponent.isAttacked() && this.getFamily() != CardFamily.Speed ) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	public boolean play( Player p ) {
+		PlayerStack destination = ( this.getFamily() == CardFamily.Speed ) ? p.getDistanceStack() : p.getBattleStack();
+		
+		try {
+			destination.push( this );
+		} catch ( IllegalCardTypeException e ) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 }
