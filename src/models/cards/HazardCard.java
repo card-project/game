@@ -46,15 +46,15 @@ public class HazardCard extends Card {
 		return true;
 	}
 	
-	public boolean play( Player p ) {
-		PlayerStack destination = ( this.getFamily() == CardFamily.Speed ) ? p.getDistanceStack() : p.getBattleStack();
+	public boolean playOn( Player p, Player opponent ) {
+		PlayerStack destination = ( this.getFamily() == CardFamily.Speed ) ? opponent.getDistanceStack() : opponent.getBattleStack();
 		
 		try {
-			destination.push( this );
+			p.getHandStack().shiftTo( destination, this );
 		} catch ( IllegalCardTypeException e ) {
 			e.printStackTrace();
 		}
-		
+
 		return false;
 	}
 }

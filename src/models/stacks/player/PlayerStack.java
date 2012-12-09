@@ -41,7 +41,7 @@ public abstract class PlayerStack extends CardsStack {
 	
 	public void shiftTo( CardsStack destination, Card c ) throws IllegalCardTypeException {
 		destination.push( c );
-		cards.remove( c );
+		this.cards.remove( c );
 	}
 	
 	@Override

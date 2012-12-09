@@ -5,6 +5,7 @@ import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.exceptions.IllegalCardTypeException;
+import models.exceptions.moveExceptions.MaxNumberOfDistance200IsReached;
 import models.stacks.game.DiscardStack;
 
 /**
@@ -25,11 +26,13 @@ public class DistanceStack extends PlayerStack {
 
 	@Override
 	public void push( Card item ) throws IllegalCardTypeException {
-		if ( maxNumberOfDistance200IsReached() ) {
-			throw new IllegalCardTypeException( "There are already two 200 distances." );
-		} else {
-			super.cards.push( item );
+		if ( item instanceof DistanceCard ) {
+			if ( ( ( DistanceCard ) item ).getRange() == 200 && maxNumberOfDistance200IsReached() ) {
+				throw new MaxNumberOfDistance200IsReached();
+			}
 		}
+
+		super.cards.push( item );
 	}
 	
 	/**
@@ -37,7 +40,7 @@ public class DistanceStack extends PlayerStack {
 	 * 
 	 * @return the amount of driven kilometers.
 	 */
-	public int getTravelledDistance() {
+	public int getTraveledDistance() {
 		int currentDistance = 0;
 		for( Card c : super.cards ) {
 			if ( c instanceof DistanceCard ) {

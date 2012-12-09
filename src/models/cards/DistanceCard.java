@@ -12,13 +12,15 @@ import models.players.Player;
  */
 public class DistanceCard extends Card {
 	
-	// ------------ ATTRIBUTES ------------ //
+	// ------------ CONSTANTS ------------ //
 	
 	public static final int MAX_25 = 6;
 	public static final int MAX_50 = 6;
 	public static final int MAX_75 = 6;
 	public static final int MAX_100 = 9;
 	public static final int MAX_200 = 3;
+	
+	// ------------ ATTRIBUTES ------------ //
 	
 	private int range;
 
@@ -71,12 +73,13 @@ public class DistanceCard extends Card {
 		return true;
 	}
 	
-	public boolean play( Player p ) {
+	public boolean playOn( Player p ) {
 		try {
 			p.getHandStack().shiftTo( p.getDistanceStack(), this );
 		} catch ( IllegalCardTypeException e ) {
 			e.printStackTrace();
 		}
+		
 		return false;
 	}
 	

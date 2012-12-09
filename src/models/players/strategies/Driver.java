@@ -1,12 +1,8 @@
 package models.players.strategies;
 
-import java.util.Iterator;
-
 import models.cards.Card;
 import models.cards.CardType;
 import models.cards.DistanceCard;
-import models.exceptions.moveExceptions.IllegalMoveException;
-import models.moves.BasicMove;
 import models.players.AIPlayer;
 import models.stacks.game.DeckStack;
 import models.stacks.game.DiscardStack;
