@@ -1,5 +1,6 @@
 package models.players;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -8,8 +9,8 @@ import java.util.ArrayList;
 import models.cards.CardFactory;
 import models.cards.CardType;
 import models.cards.HazardCard;
+import models.cards.RemedyCard;
 import models.exceptions.IllegalCardTypeException;
-import models.stacks.player.PlayerStack;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -110,289 +111,96 @@ public class PlayerTest {
 		
 	}
 	
-	// ------------ SAFETY ------------ //
-	
-	@Test public void testCanPlaySafety() {
-		canPlaySafety( CardType.DrivingAce );
-		canPlaySafety( CardType.PunctureProof );
-		canPlaySafety( CardType.RightOfWay );
-		canPlaySafety( CardType.ExtraTank );
-	}
-	
-	private void canPlaySafety( CardType type ) {
-		try {
-			testPlayer.handStack.push( CardFactory.createCard( type ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
+	@Test public void testCanPlay() throws IllegalCardTypeException {
 		
-		assertTrue( testPlayer.canPlay( opponents, GOAL ));
-		testPlayer.handStack.pop();
-	}
+		// -- > Case 1 : Player has not started yet : Distance
 
-	// ------------ HAZARD ------------ //
-
-	@Test public void testCanPlayHazard() throws IllegalCardTypeException {
-		canPlayHazard( CardType.Accident );
-		canPlayHazard( CardType.Stop );
-		canPlayHazard( CardType.FlatTire );
-		canPlayHazard( CardType.OutOfGas );
-		canPlayHazard( CardType.SpeedLimit );
-	}
-	
-	private void canPlayHazard( CardType hazardType ) throws IllegalCardTypeException {
-			
-		// -- > Setting context : Add the hazard in the hand
-		
-		testPlayer.handStack.push( CardFactory.createCard( hazardType ) );
-		
-		// -- > Case 1 : No initial GoRoll
-		
-		assertFalse( testPlayer.canPlayHazard( opponents ));
-		
-		// -- > Setting context : Add initial GoRoll
-		
-		opponent.battleStack.push( CardFactory.createCard( CardType.GoRoll ) );
-		
-		// -- > Case 2 : Attack a free opponent
-		
-		assertTrue( testPlayer.canPlayHazard( opponents ));
-		
-		// -- > Setting context : Add an attack on battle stack
-		
-		opponent.battleStack.push( CardFactory.createCard( CardType.Stop ) );
-		
-		// -- > Case 3 : Attack an attacked opponent
-		
-		if ( hazardType == CardType.SpeedLimit ) {
-			assertTrue( testPlayer.canPlayHazard( opponents) );
-		} else {
-			assertFalse( testPlayer.canPlayHazard( opponents) );
-		}
-		
-		// -- > Reseting context
-		
-		opponent.battleStack.pop();
-		
-		// -- > Setting context : Add a speed limit on distance stack
-		
-		opponent.distanceStack.push( CardFactory.createCard( CardType.SpeedLimit ) );
-		
-		// -- > Case 4 : Slow a slowed opponents
-		
-		if ( hazardType == CardType.SpeedLimit ) {
-			assertFalse( testPlayer.canPlayHazard( opponents) );
-		} else {
-			assertTrue( testPlayer.canPlayHazard( opponents) );
-		}
-		
-		// -- > Reseting context
-		
-		opponent.distanceStack.pop();
-		
-		// -- > Case 5 : Attack a protected opponent
-		
-		// -- > Case 5.1 : DrivingAce
-		
-		opponent.safetyStack.push( CardFactory.createCard( CardType.DrivingAce ) );
-		
-		if ( hazardType == CardType.Accident ) {
-			assertFalse( testPlayer.canPlayHazard( opponents ) );
-		} else {
-			assertTrue( testPlayer.canPlayHazard( opponents ) );
-		}
-
-		opponent.safetyStack.pop();
-		
-		// -- > Case 5.2 : ExtraTank
-
-		opponent.safetyStack.push( CardFactory.createCard( CardType.ExtraTank ) );
-		
-		if ( hazardType == CardType.OutOfGas ) {
-			assertFalse( testPlayer.canPlayHazard( opponents ) );
-		} else {
-			assertTrue( testPlayer.canPlayHazard( opponents ) );
-		}
-
-		opponent.safetyStack.pop();
-		
-		// -- > Case 5.3 : PunctureProof
-		
-		opponent.safetyStack.push( CardFactory.createCard( CardType.PunctureProof ) );
-		
-		if ( hazardType == CardType.FlatTire ) {
-			assertFalse( testPlayer.canPlayHazard( opponents ) );
-		} else {
-			assertTrue( testPlayer.canPlayHazard( opponents ) );
-		}
-
-		opponent.safetyStack.pop();
-		
-		// -- > Case 5.4 : RightOfWay
-		
-		opponent.safetyStack.push( CardFactory.createCard( CardType.RightOfWay ) );
-		
-		if ( hazardType == CardType.Stop || hazardType == CardType.SpeedLimit ) {
-			assertFalse( testPlayer.canPlayHazard( opponents ) );
-		} else {
-			assertTrue( testPlayer.canPlayHazard( opponents ) );
-		}
-
-		opponent.safetyStack.pop();
-		
-		initialize();
-	}
-	
-	// ------------ DISTANCE ------------ //
-	
-	@Test public void testCanPlayDistance() {
-		canPlayDistance( CardType.Distance25 );
-		canPlayDistance( CardType.Distance50 );
-		canPlayDistance( CardType.Distance75 );
-		canPlayDistance( CardType.Distance100 );
-		canPlayDistance( CardType.Distance200 );
-	}
-	
-	private void canPlayDistance( CardType type ) {
-		
-		// -- > Case 1 : you have not started yet
-		
-		try {
-			testPlayer.handStack.push( CardFactory.createCard( type ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-		
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Distance25 ) );
 		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
-		testPlayer.handStack.pop();
+		testPlayer.getHandStack().pop();
+
+		// -- > Case 2 : Player has not started yet : Safety
 		
-		// -- > Set context for incoming tests : set initialGoRoll as true
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
+		testPlayer.getHandStack().pop();
+
+		// -- > Case 3 : Player has started
 		
-		try {
-			testPlayer.battleStack.push( CardFactory.createCard( CardType.GoRoll ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
+		testPlayer.getHandStack().pop();
+
+		// -- > Case 4 : Repairs if not attacked
 		
-		// -- > Case 2 : initial GoRoll is played
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
+		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
+		testPlayer.getHandStack().pop();
+
+		// -- > Case 5 : Hazard if opponent is not attacked
 		
-		try {
-			testPlayer.handStack.push( CardFactory.createCard( type ) );
-		} catch ( IllegalCardTypeException e1 ) {
-			e1.printStackTrace();
-		}
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
+		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
+		testPlayer.getHandStack().pop();
+
+		// -- > Case 6 : Hazard on not started opponent
+
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
+		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
+		testPlayer.getHandStack().pop();
+		
+		// -- > Case 7 : Hazard on started opponent
+
+		opponent.getBattleStack().push( CardFactory.createCard( CardType.GoRoll ) );
+
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
+		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
+		testPlayer.getHandStack().pop();
+
+		// -- > Case 8 : Hazard on (started) attacked opponent
+		
+		opponent.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
+		
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.FlatTire ) );
+		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
+		testPlayer.getHandStack().pop();
+
+		opponent.getBattleStack().pop();
+		
+		// -- > Case 9 : Remedy if not attacked
+		
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
+		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
+		testPlayer.getHandStack().pop();
+
+		// -- > Case 10 : Remedy if attacked
+
+		testPlayer.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
+		
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
+		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
+		testPlayer.getHandStack().pop();
+		
+		testPlayer.getBattleStack().pop();
+		
+		// -- > Case 11 : Safety
+		
+		testPlayer.getHandStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
+		
+	}
+
+	@Test public void test() throws IllegalCardTypeException {
+		testPlayer.handStack.push( CardFactory.createCard( CardType.OutOfGas ) );
+		testPlayer.handStack.push( CardFactory.createCard( CardType.Distance200 ) );
+		testPlayer.handStack.push( CardFactory.createCard( CardType.EndOfLimit ) );
+		testPlayer.handStack.push( CardFactory.createCard( CardType.Distance100 ) );
+		testPlayer.handStack.push( CardFactory.createCard( CardType.SpeedLimit ) );
+		
+		( ( RemedyCard )CardFactory.createCard( CardType.GoRoll ) ).playOn( testPlayer );
 		
 		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
-		testPlayer.handStack.pop();
 		
-		// -- > Case 3 : you are attacked
-
-		try {
-			testPlayer.battleStack.push( CardFactory.createCard( CardType.Accident ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-		
-		try {
-			testPlayer.handStack.push( CardFactory.createCard( type ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-		
-		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
-		testPlayer.battleStack.pop();
-		testPlayer.handStack.pop();
-		
-		// -- > Case 4 : you are slowed
-	
-		try {
-			testPlayer.distanceStack.push( CardFactory.createCard( CardType.SpeedLimit ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-		
-		try {
-			testPlayer.handStack.push( CardFactory.createCard( type ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-		
-		if ( type == CardType.Distance25 || type == CardType.Distance50 ) {
-			assertTrue( testPlayer.canPlay( opponents, GOAL ) );
-		} else {
-			assertFalse( testPlayer.canPlay( opponents, GOAL ) );
-		}
-		
-		initialize();
-	}
-
-	// ------------ REMEDY ------------ //
-	
-	@Test public void testCanPlayRemedy() {
-		canPlayRemedy( CardType.EndOfLimit, CardType.SpeedLimit );
-		canPlayRemedy( CardType.Gasoline, CardType.OutOfGas );
-		canPlayRemedy( CardType.GoRoll, CardType.Stop );
-		canPlayRemedy( CardType.Repairs, CardType.Accident );
-		canPlayRemedy( CardType.SpareTire, CardType.FlatTire );
 	}
 	
-	private void canPlayRemedy( CardType type, CardType opposite ) {
-		// -- > Case 1 : initial GoRoll is not played
-		
-		try {
-			testPlayer.handStack.push( CardFactory.createCard( type ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-
-		if ( type == CardType.GoRoll ) {
-			assertTrue( testPlayer.canPlay( opponents, GOAL ) );
-		} else {
-			assertFalse( testPlayer.canPlay( opponents, GOAL ) );
-		}
-		
-		testPlayer.handStack.pop();
-		
-		// -- > Set context : add initial GoRoll
-		
-		try {
-			testPlayer.battleStack.push( CardFactory.createCard( CardType.GoRoll ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-		
-		// -- > Case 2 : attacked/slowed and good family
-		
-		PlayerStack destination;
-		destination = type == CardType.SpeedLimit ? testPlayer.distanceStack : testPlayer .battleStack;
-		
-		try {
-			destination.push( CardFactory.createCard( opposite ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-		
-		try {
-			testPlayer.handStack.push( CardFactory.createCard( type ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-		
-		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
-		testPlayer.battleStack.pop();
-		testPlayer.handStack.pop();
-		
-		// -- > Case 3 : not attacked
-		
-		try {
-			testPlayer.handStack.push( CardFactory.createCard( type ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-		
-		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
-		testPlayer.handStack.pop();
-		
-		initialize();
-	}
 }

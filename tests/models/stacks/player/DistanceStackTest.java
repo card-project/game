@@ -87,7 +87,7 @@ public class DistanceStackTest {
 		int total = c25.getRange() + c50.getRange() + c75.getRange()
 				+ c100.getRange() + c200.getRange();
 
-		assertEquals( total, distanceStack.getTravelledDistance() );
+		assertEquals( total, distanceStack.getTraveledDistance() );
 
 	}
 
@@ -144,7 +144,7 @@ public class DistanceStackTest {
 
 		this.distanceStack.increaseBy100();
 
-		assertEquals( distanceStack.getTravelledDistance(), total + 100 );
+		assertEquals( distanceStack.getTraveledDistance(), total + 100 );
 	}
 
 	@Test
@@ -175,7 +175,7 @@ public class DistanceStackTest {
 
 		this.distanceStack.increaseBy300();
 
-		assertEquals( distanceStack.getTravelledDistance(), total + 300 );
+		assertEquals( distanceStack.getTraveledDistance(), total + 300 );
 	}
 
 }

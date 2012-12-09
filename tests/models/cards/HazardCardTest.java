@@ -1,12 +1,11 @@
 package models.cards;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import models.exceptions.IllegalCardTypeException;
 import models.players.HumanPlayer;
 import models.players.Player;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class HazardCardTest {
@@ -65,5 +64,13 @@ public class HazardCardTest {
 		// -- > Case 6 : Player is not attacked
 
 		assertTrue( c.isPlayableOn( p ) );
+	}
+
+	@Test public void testPlayOn() throws IllegalCardTypeException {
+		Player p = new HumanPlayer();
+		p.getHandStack().push( c );
+		
+		assertFalse( p.getHandStack().exists( CardType.Distance25 ) );
+		assertTrue( p.getDistanceStack().exists( CardType.Distance25 ) );
 	}
 }

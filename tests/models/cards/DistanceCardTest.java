@@ -89,4 +89,14 @@ public class DistanceCardTest {
 	
 		assertFalse( c.isPlayableOn( p, GOAL ) );
 	}
+
+	@Test public void testPlayOn() throws IllegalCardTypeException {
+		Player p = new HumanPlayer();
+		p.getHandStack().push( c );
+		
+		assertFalse( c.playOn( p ) );
+		assertFalse( p.getHandStack().exists( CardType.Distance25 ) );
+		assertTrue( p.getDistanceStack().exists( CardType.Distance25 ) );
+		assertTrue( p.getDistanceStack().getTraveledDistance() == 25 );
+	}
 }

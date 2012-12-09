@@ -1,6 +1,8 @@
 package models.cards;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -17,7 +19,7 @@ public class CardTest {
 		CardFamily refFamily = CardFamily.Gas;
 		CardType refType = CardType.OutOfGas;
 		Card reference = new Card( refFamily, refType ) {};
-		
+
 		assertEquals( refFamily, reference.families.get( 0 ) );
 		assertEquals( refType, reference.type );
 	}
