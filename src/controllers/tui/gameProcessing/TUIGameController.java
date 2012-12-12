@@ -11,7 +11,7 @@ import views.tui.TUIGameView;
  * Allow users to play the game.
  * 
  * @author Simon RENOULT
- * @version 0.4.4
+ * @version 0.5.4
  *
  */
 public class TUIGameController {
@@ -71,49 +71,15 @@ public class TUIGameController {
 		
 		do {
 			
-			int distance = currentPlayer.getDistanceStack().getTraveledDistance();
+			this.showTitle( currentPlayer );
+			this.drawCard( currentPlayer );
 			
-			// STEP 0 : Show player's turn name.
+			replay = this.playCard( currentPlayer );
 			
-			String status =  currentPlayer.hasStarted() ? "Started" : "Not started";
-			status += "/" + ( currentPlayer.isSlowed() ? "Slowed" : "Not slowed" );
-			status += "/" + (currentPlayer.isAttacked() ? currentPlayer.getBattleStack().peek().toString() : "Not attacked" );
-			
-			tui.title( "TURN OF " + currentPlayer.getAlias() + " - " + distance + "km - " + status );
-			
-			// STEP 2 : draw a card
-			tui.inform( '\n' + "-- > DRAWING" + '\n' );
-			drawingStepController.setCurrentPlayer( currentPlayer );
-			drawingStepController.run();
-			
-			// STEP 3 : play a card
-			tui.inform( '\n' + "-- > PLAYING" + '\n');
-			
-			tui.tickBox( currentPlayer.getBattleStack().initialGoRollIsPlayed(), "Initial GoRoll status." + '\n' );
-			
-			tui.tickBox( currentPlayer.isSlowed(), "Speed limitation." + '\n' );
-			
-			String attacked = currentPlayer.isAttacked() ? currentPlayer.getBattleStack().peek().toString() : "Not attacked";
-			tui.tickBox( currentPlayer.isAttacked(), attacked + '\n' );
-			
-			String safetyList = currentPlayer.getSafetyStack().isEmpty() ? "No safety." : currentPlayer.getSafetyStack().toString(); 
-			tui.tickBox( ! currentPlayer.getSafetyStack().isEmpty(), safetyList + '\n' );
-			
-			playingStepController.setCurrentPlayer( currentPlayer );
-			
-			replay = playingStepController.run();
-			
-			// STEP 4 : discard a card
-			if ( currentPlayer.getHandStack().size() > HandStack.MAX_CARD_NB ) {
-				tui.inform( '\n' + "-- > DISCARDING STEP" + '\n' );
-				discardingStepControler.setCurrentPlayer( currentPlayer );
-				discardingStepControler.run();
-			}
-			
-			// STEP 5 : check if game is over
+			this.discardCard( currentPlayer );
+
 			gameIsOver = currentPlayer.getDistanceStack().getTraveledDistance() == currentGame.getGoal();
 			
-			// STEP 6 : switch to next player
 			if ( ! gameIsOver && ! replay ) {
 				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getPlayers().length - 1 ) ? 0 : currentPlayerIndex ;
 				currentPlayer = currentGame.getPlayers()[currentPlayerIndex];
@@ -122,4 +88,48 @@ public class TUIGameController {
 		
 		tui.inform( currentPlayer.getAlias() + " has won !" );
 	}
+
+	private void showTitle( Player p ) {
+		int distance = p.getDistanceStack().getTraveledDistance();
+		
+		String status =  p.hasStarted() ? "Started" : "Not started";
+		status += "/" + ( p.isSlowed() ? "Slowed" : "Not slowed" );
+		status += "/" + (p.isAttacked() ? p.getBattleStack().peek().toString() : "Not attacked" );
+		
+		this.tui.title( "TURN OF " + p.getAlias() + " - " + distance + "km - " + status );
+	}
+	
+	private void drawCard( Player p ) {
+
+		this.tui.inform( '\n' + "-- > DRAWING" + '\n' );
+		this.drawingStepController.setCurrentPlayer( p );
+		this.drawingStepController.run();		
+	}
+	
+	private boolean playCard( Player p ) {
+		tui.inform( '\n' + "-- > PLAYING" + '\n');
+		
+		tui.tickBox( p.getBattleStack().initialGoRollIsPlayed(), "Initial GoRoll status." + '\n' );
+		
+		tui.tickBox( p.isSlowed(), "Speed limitation." + '\n' );
+		
+		String attacked = p.isAttacked() ? p.getBattleStack().peek().toString() : "Not attacked";
+		tui.tickBox( p.isAttacked(), attacked + '\n' );
+		
+		String safetyList = p.getSafetyStack().isEmpty() ? "No safety." : p.getSafetyStack().toString(); 
+		tui.tickBox( ! p.getSafetyStack().isEmpty(), safetyList + '\n' );
+		
+		playingStepController.setCurrentPlayer( p );
+		
+		return playingStepController.run();		
+	}
+	
+	private void discardCard( Player p ) {
+		if ( p.getHandStack().size() > HandStack.MAX_CARD_NB ) {
+			tui.inform( '\n' + "-- > DISCARDING STEP" + '\n' );
+			discardingStepControler.setCurrentPlayer( p );
+			discardingStepControler.run();
+		}		
+	}
+
 }

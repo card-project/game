@@ -15,9 +15,15 @@ import models.stacks.player.HandStack;
 import views.tui.TUIGameView;
 
 /**
- * @author Simon RENOULT
- * @version 0.2
+ * @version 1.0
  *
+ * TUI Playing step controller.
+ * 
+ * Perform the playing process for each AI and Human players.
+ * 
+ * TODO : Coup-fourré
+ * 
+ * @author Simon RENOULT
  */
 public class PlayingStepController extends StepController {
 
@@ -38,72 +44,81 @@ public class PlayingStepController extends StepController {
 	 * Playing card method.
 	 * Allow a player to play a card. 
 	 * 
-	 * @param p Player who plays.
+	 * @return True if the player can replay.
 	 */
 	private boolean play( ) {
-		
 		boolean replay = false;
-		
 		if ( super.currentPlayer instanceof AIPlayer ) {
-			
-			( ( AIPlayer ) super.currentPlayer ).play( );
-		
+			return this.performAIPlayingStep();
 		} else if ( super.currentPlayer instanceof HumanPlayer ) {
-			
-			if ( currentPlayer.canPlay( getOpponents( currentPlayer ), currentGame.getGoal() ) ) {
-
-				boolean userChoiceIsCorrect;
-				
-				Card chosenCard = null;
-				Player chosenTarget = null;
-				
-				do {
-					
-					userChoiceIsCorrect = true;
-				
-					// STEP 1 : Choose card to play.	
-					chosenCard = this.chooseCardToPlay( super.currentPlayer );
-					
-					// STEP 2 : Check its type.
-					// STEP 2.1 : Hazard card has been chosen.
-					if ( chosenCard instanceof HazardCard ) {
-						// STEP 2.1.1 : Choose an opponent.
-						chosenTarget = this.chooseTarget( currentPlayer );
-						userChoiceIsCorrect = ( ( HazardCard ) chosenCard ).isPlayableOn( chosenTarget );
-					}
-					// STEP 2.2 : Distance card has been chosen.
-					else if ( chosenCard instanceof DistanceCard ) {
-						chosenTarget = currentPlayer;
-						userChoiceIsCorrect = ( ( DistanceCard ) chosenCard ).isPlayableOn( chosenTarget, currentGame.getGoal() );
-					}
-					// STEP 2.3 : Remedy card has been chosen.
-					else if ( chosenCard instanceof RemedyCard ) {
-						chosenTarget = currentPlayer;
-						userChoiceIsCorrect = ( ( RemedyCard ) chosenCard).isPlayableOn( chosenTarget );
-					}
-					// STEP 2.4 : Safety card has been chosen.
-					else if ( chosenCard instanceof SafetyCard ) {
-						chosenTarget = currentPlayer;
-						userChoiceIsCorrect = ( ( SafetyCard ) chosenCard).isPlayableOn( chosenTarget );
-					}
-				} while ( ! userChoiceIsCorrect );
-
-				if ( chosenCard instanceof HazardCard ) {
-					( ( HazardCard ) chosenCard ).playOn( currentPlayer, chosenTarget );
-				} else if ( chosenCard instanceof DistanceCard ) {
-					( ( DistanceCard ) chosenCard ).playOn( chosenTarget );
-				} else if ( chosenCard instanceof RemedyCard ) {
-					( ( RemedyCard ) chosenCard ).playOn( chosenTarget );
-				} else if ( chosenCard instanceof SafetyCard ) {
-					( ( SafetyCard ) chosenCard ).playOn( chosenTarget );
-				}
-			
-			} else {
-				System.out.println( "No card to play." );
-			}
+			return this.performHumanPlayingStep();
 		}
 		
 		return replay;
+	}
+	
+	private boolean performAIPlayingStep() {
+		return ( ( AIPlayer ) super.currentPlayer ).play( );
+	}
+	
+	private boolean performHumanPlayingStep() {
+		
+		if ( currentPlayer.canPlay( getOpponents( super.currentPlayer ), super.currentGame.getGoal() ) ) {
+
+			boolean userChoiceIsCorrect;
+			
+			Card chosenCard = null;
+			Player chosenTarget = null;
+			
+			do {
+				
+				userChoiceIsCorrect = true;
+			
+				chosenCard = this.chooseCardToPlay( super.currentPlayer );
+				
+				if ( chosenCard instanceof HazardCard ) {
+					chosenTarget = this.chooseTarget( super.currentPlayer );
+					userChoiceIsCorrect = ( ( HazardCard ) chosenCard ).isPlayableOn( chosenTarget );
+				} else {
+					chosenTarget = super.currentPlayer;
+					if ( chosenCard instanceof DistanceCard ) {
+						userChoiceIsCorrect = ( ( DistanceCard ) chosenCard ).isPlayableOn( chosenTarget, super.currentGame.getGoal() );
+					} else if ( chosenCard instanceof RemedyCard ) {
+						userChoiceIsCorrect = ( ( RemedyCard ) chosenCard).isPlayableOn( chosenTarget );
+					} else if ( chosenCard instanceof SafetyCard ) {
+						userChoiceIsCorrect = ( ( SafetyCard ) chosenCard).isPlayableOn( chosenTarget );
+					}
+				}
+				
+				if( ! userChoiceIsCorrect ) {
+					tui.warn( "Unauthorized choice. Try again." );
+				}
+				
+			} while ( ! userChoiceIsCorrect );
+
+			return this.playCard( chosenCard, chosenTarget );
+		
+		} else {
+			System.out.println( "No card to play." );
+			return false;
+		}
+	}
+	
+	/**
+	 * @return True if the player can replay.
+	 */
+	private boolean playCard( Card chosenCard, Player chosenTarget ) {
+		if ( chosenCard instanceof HazardCard ) {
+			return ( ( HazardCard ) chosenCard ).playOn( currentPlayer, chosenTarget );
+		} else if ( chosenCard instanceof DistanceCard ) {
+			return ( ( DistanceCard ) chosenCard ).playOn( chosenTarget );
+		} else if ( chosenCard instanceof RemedyCard ) {
+			return ( ( RemedyCard ) chosenCard ).playOn( chosenTarget );
+		} else if ( chosenCard instanceof SafetyCard ) {
+			return ( ( SafetyCard ) chosenCard ).playOn( chosenTarget );
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -144,8 +159,8 @@ public class PlayingStepController extends StepController {
 	}
 	
 	/**
-	 * @param p
-	 * @return
+	 * @param p The current {@link Player} (in order to determine who are the opponents).
+	 * @return The targeted {@link Player}.
 	 */
 	private Player chooseTarget( Player p ) {
 

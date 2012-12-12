@@ -4,6 +4,15 @@ import models.Game;
 import views.tui.TUIGamePreparationView;
 import views.tui.TUIGameView;
 
+/**
+ * @version 1.0
+ * 
+ * TUI (Textual User Interface) game preparation menu.
+ * 
+ * Prepare the upcoming {@link Game}. 
+ * 
+ * @author Simon RENOULT
+ */
 public class TUIGamePreparationController {
 
 	// ------------ ATTRIBUTES ------------ //
@@ -56,7 +65,7 @@ public class TUIGamePreparationController {
 			
 			try {
 				
-				firstPlayerIndex = menu.askFirstPlayer( this.getPlayerListWithIndexString() );
+				firstPlayerIndex = menu.askFirstPlayer( this.getPlayersListWithIndex() );
 			} catch ( NumberFormatException e ) {
 				menu.warn( "Please enter a number" );
 				userChoiceIsCorrect = false;
@@ -67,7 +76,7 @@ public class TUIGamePreparationController {
 					userChoiceIsCorrect = false;
 					menu.warn( "Please enter a number between 0 and " + currentGame.getPlayers().length );
 				} else if ( firstPlayerIndex == RANDOM_INDEX ) {
-					firstPlayerIndex = this.getRandomFirstPlayerIndex();
+					firstPlayerIndex = this.getFirstPlayerIndexAsRandom();
 				} else {
 					// Need to decrement as the player chooses between 1 and X
 					// instead of 0 and X-1.
@@ -80,17 +89,11 @@ public class TUIGamePreparationController {
 		return firstPlayerIndex;
 	}
 	
-	/**
-	 * @return
-	 */
-	private int getRandomFirstPlayerIndex() {
+	private int getFirstPlayerIndexAsRandom() {
 		return (int) ( Math.random() * ( currentGame.getPlayers().length ) );
 	}
 	
-	/**
-	 * @return
-	 */
-	private String getPlayerListWithIndexString() {
+	private String getPlayersListWithIndex() {
 		String playerList = "| ";
 		for ( int i = 0; i < currentGame.getPlayers().length; i++, playerList += " | " ) {
 			playerList += (i+1) + " : " + currentGame.getPlayers()[i].getAlias();
