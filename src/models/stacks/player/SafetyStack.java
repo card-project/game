@@ -1,7 +1,6 @@
 package models.stacks.player;
 
 import models.cards.Card;
-import models.cards.CardFamily;
 import models.cards.SafetyCard;
 import models.exceptions.IllegalCardTypeException;
 
