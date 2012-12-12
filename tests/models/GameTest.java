@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import models.exceptions.AliasAlreadyChosenException;
-import models.exceptions.IllegalAILevelException;
 import models.exceptions.IllegalDistanceException;
 import models.exceptions.IllegalHumanPlayerNumberException;
 import models.exceptions.IllegalPlayerNumberException;
@@ -59,12 +58,6 @@ public class GameTest {
 
 			testGame.setAIPlayersAlias();
 
-			for ( Player p : testGame.getPlayers() ) {
-				if ( p instanceof AIPlayer ) {
-					testGame.setAIPlayerLevel( (AIPlayer) p,
-							DEFAULT_AI_PLAYER_LEVEL );
-				}
-			}
 		} catch ( Exception e ) {
 			System.out
 					.println( "SHOULD NOT HAPPEN ! Something went wrong on default game setting." );
@@ -219,38 +212,6 @@ public class GameTest {
 	@Test
 	public void testSetAIPlayersAlias() {
 		assertNull( null );
-	}
-
-	@Test
-	public void testSetAIPlayerLevel() {
-		setAIPlayerLevel( Game.MIN_AI_LEVEL - 1 );
-		setAIPlayerLevel( Game.MIN_AI_LEVEL );
-		setAIPlayerLevel( Game.MAX_AI_LEVEL );
-		setAIPlayerLevel( Game.MAX_AI_LEVEL + 1 );
-	}
-
-	private void setAIPlayerLevel( int aiPlayerLevel ) {
-		Throwable caught = null;
-
-		try {
-			testGame.setAIPlayerLevel( testGame.getAIPlayers()[0],
-					aiPlayerLevel );
-		} catch ( IllegalAILevelException e ) {
-			caught = e;
-		}
-
-		switch ( aiPlayerLevel ) {
-		case Game.MIN_AI_LEVEL - 1:
-		case Game.MAX_AI_LEVEL + 1:
-			assertNotNull( caught );
-			break;
-		case Game.MIN_AI_LEVEL:
-		case Game.MAX_AI_LEVEL:
-			assertNull( caught );
-			break;
-		default:
-			fail( "Wrong AI player level value." );
-		}
 	}
 
 	@Test
