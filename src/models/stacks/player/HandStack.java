@@ -40,55 +40,96 @@ public class HandStack extends PlayerStack {
 		return false;
 	}
 	
-	public boolean containsSafety() {
-		for ( Card c : super.cards ) {
-			if ( c instanceof SafetyCard ) {
-				return true;
-			}
-		}
+	public Card chooseMaxDistance() {
+		Card chosenCard = null;
 		
-		return false;
-	}
-
-	public boolean containsHazard() {
-		for ( Card c : super.cards ) {
-			if ( c instanceof HazardCard ) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	public boolean containsRemedy() {
-		for ( Card c : super.cards ) {
-			if ( c instanceof RemedyCard ) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	public boolean containsDistance() {
-		for ( Card c : super.cards ) {
-			if ( c instanceof DistanceCard ) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public boolean containsSlowDistanceCard() {
-		for ( Card c : super.cards ) {
-			if ( c instanceof DistanceCard ) {
-				if ( ( ( DistanceCard ) c ).getRange() <= 50 ) {
-					return true;
+		for( Card handCard : this.getCards() ) {
+			if ( handCard instanceof DistanceCard ) {
+				DistanceCard currentDistanceCard = (DistanceCard) handCard;
+				
+				if ( chosenCard == null ) {
+					chosenCard = currentDistanceCard;
+				} else if ( currentDistanceCard.getRange() > ( ( DistanceCard ) chosenCard ).getRange() ) {
+					chosenCard = currentDistanceCard;
 				}
 			}
 		}
-
-		return false;
+		
+		return chosenCard;
+	}
+	
+	public Card chooseMinDistance() {
+		Card chosenCard = null;
+		
+		for( Card handCard : this.cards ) {
+			if ( handCard instanceof DistanceCard ) {
+				DistanceCard currentDistanceCard = (DistanceCard) handCard;
+				
+				if ( chosenCard == null ) {
+					chosenCard = currentDistanceCard;
+				} else if ( currentDistanceCard.getRange() < ( ( DistanceCard ) chosenCard ).getRange() ) {
+					chosenCard = currentDistanceCard;
+				}
+			}
+		}
+		
+		return chosenCard;
+	}
+	
+	public Card chooseGoRoll() {
+		
+		for( Card handCard : this.cards ) {
+			if( handCard instanceof RemedyCard ) {
+				if( handCard.getFamily() == CardFamily.GoStop ) {
+					return handCard;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	public Card getSafetyOf ( CardFamily searchedFamily ) {
+		for( Card c : this.cards ) {
+			if ( c instanceof SafetyCard ) {
+				for ( CardFamily cf : c.getFamilies() ) {
+					if ( cf == searchedFamily ) {
+						return c;
+					}
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	public Card getRemedyOf ( CardFamily searchedFamily ) {
+		for( Card c : this.cards ) {
+			if ( c instanceof SafetyCard ) {
+				for ( CardFamily cf : c.getFamilies() ) {
+					if ( cf == searchedFamily ) {
+						return c;
+					}
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	public Card getSlowRemedy() {
+		return getRemedyOf( CardFamily.Speed );
+	}
+	
+	public Card getAttackRemedy( BattleStack b ) {
+		return getRemedyOf( b.peek().getFamily() );
+	}
+	
+	public Card getSlowSafety() {
+		return getSafetyOf( CardFamily.Speed );
+	}
+	
+	public Card getAttackSafety( BattleStack b ) {
+		return getSafetyOf( b.peek().getFamily() );
 	}
 }
