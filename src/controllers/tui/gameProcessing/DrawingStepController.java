@@ -7,7 +7,7 @@ import models.players.HumanPlayer;
 import views.tui.TUIGameView;
 
 /**
- * @version 1.0
+ * @version 1.0.1
  *
  * TUI Drawing step controller.
  * 
@@ -63,6 +63,8 @@ public class DrawingStepController extends StepController {
 			
 			do {
 
+				tui.inform( "HAND : " + this.currentPlayer.getHandStack() );
+				
 				userChoiceIsCorrect = true;
 				userChoice = tui.askDrawingStack( currentGame.getDiscardStack().peek().toString() );
 				
