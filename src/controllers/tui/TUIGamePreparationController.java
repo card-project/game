@@ -27,8 +27,8 @@ public class TUIGamePreparationController {
 	 * {@link TUIGameView} and {@link Game} defined in the mother
 	 * class to current object attributes.
 	 * 
-	 * @param tuiGame {@link TUIGameView} to work on.
-	 * @param currentGame {@link Game} to work on.
+	 * @param gv {@link TUIGamePreparationView} to work on.
+	 * @param g {@link Game} to work on.
 	 */
 	public TUIGamePreparationController( TUIGamePreparationView gv, Game g ) {
 		this.menu = gv;

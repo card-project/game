@@ -1,6 +1,7 @@
 package models.cards;
 
 import models.exceptions.IllegalCardTypeException;
+import models.exceptions.moveExceptions.AvailableCoupFourreException;
 import models.players.Player;
 import models.stacks.player.PlayerStack;
 
@@ -46,15 +47,21 @@ public class HazardCard extends Card {
 		return true;
 	}
 	
-	public boolean playOn( Player p, Player opponent ) {
-		PlayerStack destination = ( this.getFamily() == CardFamily.Speed ) ? opponent.getDistanceStack() : opponent.getBattleStack();
+	public boolean playOn( Player p, Player opponent ) throws AvailableCoupFourreException {
 		
-		try {
-			p.getHandStack().shiftTo( destination, this );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
+		if ( opponent.getHandStack().hasSafetyFor( this.getFamily() ) ) {
+			SafetyCard c = opponent.getHandStack().getSafetyOf( this.getFamily() );
+			throw new AvailableCoupFourreException( c, opponent, this );
+		} else {
+			PlayerStack destination = ( this.getFamily() == CardFamily.Speed ) ? opponent.getDistanceStack() : opponent.getBattleStack();
+			
+			try {
+				p.getHandStack().shiftTo( destination, this );
+			} catch ( IllegalCardTypeException e ) {
+				e.printStackTrace();
+			}
 		}
-
+		
 		return false;
 	}
 }

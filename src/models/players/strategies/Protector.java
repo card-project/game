@@ -1,9 +1,7 @@
 package models.players.strategies;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import models.cards.Card;
+import models.cards.CardFamily;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
 import models.players.AIPlayer;
@@ -12,9 +10,16 @@ import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 
 /**
- * @author Adrien Saunier
+ * @version 0.1
+ * 
+ * AI player strategy.
+ * 
+ * Draw a safety/remedy as soon as possible.
+ * Play a safety/remedy as soon as possible.
+ * Discard hazards.
+ * 
+ * @author Adrien SAUNIER
  * @author Simon RENOULT
- *
  */
 public class Protector implements Strategy {
 
@@ -24,107 +29,108 @@ public class Protector implements Strategy {
 	
 	// ------------ CONSTRUCTORS ------------ //
 	
-	public Protector(AIPlayer player) {
-		this.player = player;
+	public Protector(AIPlayer p) {
+		this.player = p;
 	}
 	
 	// ------------ METHODS ------------ //
 
 	/**
-	 * @return {@link GameStack}
+	 * Priorities :
+	 * 1 - GoRoll if not started
+	 * 2 - Correspondent remedy/safety if attacked 
+	 * 3 - New remedy 
+	 * 
+	 * @return The chosen {@link GameStack} to draw on.
 	 */
 	@Override
 	public GameStack chooseStackToDraw() {
-
-		GameStack stackToDraw = null;
-		Card cardDisCard = DiscardStack.getInstance().peek();
-		boolean keepAnalysing = true;
+		Card discardedCard = DiscardStack.getInstance().peek();
+		GameStack chosenStack = null;
 		
-		if(cardDisCard instanceof RemedyCard)
-		{
-			// If the player is attacked and there is the right remedy on the discard stack
-			if(this.player.isAttacked() && cardDisCard.getType() == this.player.getBattleStack().peek().getType())
-				stackToDraw = DiscardStack.getInstance();
-			else
-			{
-				// Otherwise, we check if we already have an instance of the type of card	
-				Iterator<Card> iteratorHandStack = this.player.getHandStack().getCards().iterator();
-				
-				while (iteratorHandStack.hasNext() && keepAnalysing) {
-					Card testedCard = iteratorHandStack.next();
-					
-					if(testedCard.getType() == cardDisCard.getType())
-						keepAnalysing = false;
-				}
-				
-				if(keepAnalysing)
-					stackToDraw = DiscardStack.getInstance();
-				else
-					stackToDraw = DeckStack.getInstance();
+		if ( ! this.player.hasStarted() && discardedCard.isGoRoll() ) {
+			chosenStack = DiscardStack.getInstance();
+		} else if ( this.player.isAttacked() ) {
+			if ( discardedCard.counteract( this.player.getBattleStack().peek().getFamily() ) ) {
+				chosenStack = DiscardStack.getInstance();
 			}
-
+		} else if ( this.player.isSlowed() ) {
+			if ( discardedCard.counteract( CardFamily.Speed ) ) {
+				chosenStack = DiscardStack.getInstance();
+			}
+		} else if ( discardedCard instanceof RemedyCard ) {
+			chosenStack = DiscardStack.getInstance();
 		}
-		else
-			stackToDraw = DeckStack.getInstance();
-
-		return stackToDraw;
+		
+		return ( chosenStack == null ) ? DeckStack.getInstance() : chosenStack ;
+		
 	}
 
 	/**
-	 * Choose a card and return it.
-	 * 		If the player is attacked and he has as an appropriate remedy, we play that one.
-	 * 		If not, we play a {@link SafetyCard}
+	 * Priorities :
+	 * 1 : player is attacked, play the correspondent remedy/safety
+	 * 2 : player is not attacked, play a safety
+	 *
+	 * @return The chosen {@link Card} to play.
 	 */
 	@Override
 	public Card chooseCardToPlay() {
-
 		Card chosenCard = null;
 		
-		if(this.player.isAttacked())
-		{
-			for (Card card : this.player.getHandStack().getCards()) {
-				if(this.player.getBattleStack().peek().getType() == card.getType())
-					chosenCard = (RemedyCard) card;
+		if ( this.player.isAttacked() ) {
+			if ( ( chosenCard = this.player.getHandStack().getCorrespondentSafety( this.player.getBattleStack() ) ) == null ) {
+				chosenCard = this.player.getHandStack().getCorrespondentRemedy( this.player.getBattleStack() );
 			}
-		}
-		else
-		{
-			for (Card card : this.player.getHandStack().getCards()) {
-				if(card instanceof SafetyCard)
-					chosenCard = (SafetyCard) card;
+		} else if ( this.player.isSlowed() ) {
+			if ( ( chosenCard = this.player.getHandStack().getSlowSafety() ) == null ) {
+				chosenCard = this.player.getHandStack().getSlowRemedy();
+			}
+		} else {
+			for ( Card c : this.player.getHandStack().getCards() ) {
+				if ( c instanceof SafetyCard ) {
+					chosenCard = c;
+				}
 			}
 		}
 		
 		return chosenCard;
 	}
 
+	/**
+	 * Priorities :
+	 * 1 : Remedy having the same family than a played safety.
+	 * 2 : Duplicate remedy.
+	 * 
+	 * @return The chosen {@link Card} to discard.
+	 */
 	@Override
 	public Card chooseCardToDiscard() {
-		
-		boolean cardChosen = false;
 		Card cardToDiscard = null;
 		
-		Iterator<Card> handCardsIterator = this.player.getHandStack().getCards().iterator();
-		LinkedList<Card> safeties =  this.player.getSafetyStack().getCards();
-		
-		while(handCardsIterator.hasNext() && !cardChosen)
-		{
-			Card card = handCardsIterator.next();
-			
-			if((card instanceof RemedyCard) && (safeties.size() > 0))
-			{
-				RemedyCard cardUnderTest = (RemedyCard) card;
-				
-				for (Card safety : safeties) {
-					
-					// If we find a safety card that we can't play (already protected thanks to the Safeties)
-					// we discard it.
-					if(cardUnderTest.getFamily() == safety.getFamily()) {
-						cardToDiscard = cardUnderTest;
-						cardChosen = true;
+		for ( Card handCard: this.player.getHandStack().getCards() ) {
+			if ( handCard instanceof RemedyCard ) {
+				for ( Card safety : this.player.getSafetyStack().getCards() ) {
+					for ( CardFamily cf : safety.getFamilies() ) {
+						if ( handCard.getFamily() == cf ) {
+							cardToDiscard = handCard;
+						}
 					}
 				}
-				
+			}
+		}
+		
+		if ( cardToDiscard == null ) {
+			Card tmp = null;
+			for( Card handCard : this.player.getHandStack().getCards() ) {
+				if ( handCard instanceof RemedyCard ) {
+					if ( tmp == null ) {
+						tmp = handCard;
+					} else {
+						if ( tmp.getFamily() == handCard.getFamily() ) {
+							cardToDiscard = handCard;
+						}
+					}
+				}
 			}
 		}
 		

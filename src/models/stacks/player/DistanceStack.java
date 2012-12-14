@@ -16,9 +16,12 @@ public class DistanceStack extends PlayerStack {
 
 	// ------------ CONSTANTS ------------ //
 	
-	// ------------ ATTRIBUTES ------------ //
+	public static final int MAX_DISTANCE200 = 2;
+	public static final int BONUS_100 = 100;
+	public static final int BONUS_300 = 300;
 	
-	private static int MAX_DISTANCE200 = 2;
+	// ------------ ATTRIBUTES ------------ //
+
 	private int BONUS_100_CPT = 0;
 	private int BONUS_300_CPT = 0;
 	
@@ -48,7 +51,7 @@ public class DistanceStack extends PlayerStack {
 			}
 		}
 		
-		return currentDistance + 100 * BONUS_100_CPT + 300 * BONUS_300_CPT;
+		return currentDistance + BONUS_100 * BONUS_100_CPT + BONUS_300 * BONUS_300_CPT;
 	}
 	
 	/**

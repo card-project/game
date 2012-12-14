@@ -1,12 +1,9 @@
 package models.players.strategies;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import models.cards.Card;
 import models.cards.HazardCard;
-import models.exceptions.moveExceptions.IllegalMoveException;
-import models.moves.BasicMove;
 import models.players.AIPlayer;
 import models.players.Player;
 import models.stacks.game.DeckStack;
@@ -14,9 +11,16 @@ import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 
 /**
+ * @version 0.1
+ * 
+ * {@link AIPlayer} strategy.
+ * 
+ * Draw a hazard as soon as possible.
+ * Play a hazard as soon as possible.
+ * Discard a duplicate hazard.
+ * 
  * @author Adrien Saunier
  * @author Simon RENOULT
- *
  */
 public class Roadhog implements Strategy {
 
@@ -35,68 +39,68 @@ public class Roadhog implements Strategy {
 	// ------------ METHODS ------------ //
 	
 	/**
-	 * Always draw on the DiscardStack if it's a {@link DiscardStack}.
+	 * Always draw on the DiscardStack if it's a {@link HazardCard}.
 	 */
 	@Override
 	public GameStack chooseStackToDraw() {
-		
-		GameStack stackToDraw = null;
-		Card cardDisCard = DiscardStack.getInstance().peek();
-		
-		if(cardDisCard instanceof HazardCard)
-			stackToDraw = DiscardStack.getInstance();
-		else
-			stackToDraw = DeckStack.getInstance();
-
-		return stackToDraw;
+		return DiscardStack.getInstance().peek() instanceof HazardCard 
+			? DiscardStack.getInstance()
+			: DeckStack.getInstance();
 	}
 
 	@Override
 	public Card chooseCardToPlay() {
-		Card choosenCard = null;
-		BasicMove bm = new BasicMove(this.player);
-		ArrayList<Player> opponentsPerPriority = new ArrayList<Player>();
+		Card chosenCard = null;
 		
-		for (Player p : this.opponents) {
-			for(Card c : this.player.getHandStack().getCards()) {
-				
-				bm.setCardToPlay(c);
-				try {
-					if(bm.setTarget(player)) {
-						// TODO Choisir la carte
+		for ( Card handCard : this.player.getHandStack().getCards() ) {
+			if ( handCard instanceof HazardCard) {
+				for ( Player p : opponents ) {
+					if ( p.hasStarted() && ! p.isProtectedFrom( ( HazardCard ) handCard ) ) {
+						chosenCard = handCard;
 					}
-				} catch (IllegalMoveException e) {
-					e.printStackTrace();
 				}
 			}
 		}
 		
-		return choosenCard;
+		return chosenCard;
 	}
 
+	/**
+	 * Priorities :
+	 * 1 : Protected types
+	 * 2 : Duplicate
+	 */
 	@Override
 	public Card chooseCardToDiscard() {
-		
-		// TODO Improve this strategy.
-			// Choose a card in particular if there is 2 or more copies
-			// Choose a card in term of priority (player <=> road already done <=> safeties)
-
-		boolean cardChosen = false;
 		Card cardToDiscard = null;
-		
-		Iterator<Card> handCardsIterator = this.player.getHandStack().getCards().iterator();
-		while(handCardsIterator.hasNext() && !cardChosen) {
-			
-			Card card = handCardsIterator.next();
-			
-			if(card instanceof HazardCard) {
-				HazardCard cardUnderTest = (HazardCard) card;
-				
-				cardToDiscard = cardUnderTest;
-				cardChosen = true;
-			}
+
+		if ( opponents.size() == 1 ) {
+			for ( Player p : opponents ) {
+				for ( Card safety : p.getSafetyStack().getCards() ) {
+					for ( Card handCard : this.player.getHandStack().getCards() ) {
+						if ( safety.getFamily() == handCard.getFamily() ) {
+							cardToDiscard = handCard;
+						}
+					}
+				}
+			}	
 		}
 		
+		if ( cardToDiscard == null ) {
+			Card tmp = null;
+			for ( Card handCard : this.player.getHandStack().getCards() ) {
+				if ( handCard instanceof HazardCard ) {
+					if ( tmp == null ) {
+						tmp = handCard;
+					} else {
+						if ( tmp.getFamily() == handCard.getFamily() ) {
+							cardToDiscard = tmp;
+						}
+					}
+				}
+			}
+		}
+
 		return cardToDiscard;
 	}
 

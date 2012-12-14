@@ -8,6 +8,7 @@ import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
+import models.exceptions.moveExceptions.AvailableCoupFourreException;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
@@ -36,7 +37,7 @@ public class PlayingStepController extends StepController {
 	// ------------ METHODS ------------ //
 	
 	@Override
-	public boolean run() {
+	public boolean run() throws AvailableCoupFourreException {
 		return this.play();
 	}
 
@@ -45,8 +46,9 @@ public class PlayingStepController extends StepController {
 	 * Allow a player to play a card. 
 	 * 
 	 * @return True if the player can replay.
+	 * @throws AvailableCoupFourreException 
 	 */
-	private boolean play( ) {
+	private boolean play( ) throws AvailableCoupFourreException {
 		boolean replay = false;
 		if ( super.currentPlayer instanceof AIPlayer ) {
 			return this.performAIPlayingStep();
@@ -61,7 +63,7 @@ public class PlayingStepController extends StepController {
 		return ( ( AIPlayer ) super.currentPlayer ).play( );
 	}
 	
-	private boolean performHumanPlayingStep() {
+	private boolean performHumanPlayingStep() throws AvailableCoupFourreException {
 		
 		if ( currentPlayer.canPlay( getOpponents( super.currentPlayer ), super.currentGame.getGoal() ) ) {
 
@@ -99,15 +101,16 @@ public class PlayingStepController extends StepController {
 			return this.playCard( chosenCard, chosenTarget );
 		
 		} else {
-			System.out.println( "No card to play." );
+			tui.warn( "No card to play." );
 			return false;
 		}
 	}
 	
 	/**
 	 * @return True if the player can replay.
+	 * @throws AvailableCoupFourreException 
 	 */
-	private boolean playCard( Card chosenCard, Player chosenTarget ) {
+	private boolean playCard( Card chosenCard, Player chosenTarget ) throws AvailableCoupFourreException {
 		if ( chosenCard instanceof HazardCard ) {
 			return ( ( HazardCard ) chosenCard ).playOn( currentPlayer, chosenTarget );
 		} else if ( chosenCard instanceof DistanceCard ) {
@@ -115,7 +118,7 @@ public class PlayingStepController extends StepController {
 		} else if ( chosenCard instanceof RemedyCard ) {
 			return ( ( RemedyCard ) chosenCard ).playOn( chosenTarget );
 		} else if ( chosenCard instanceof SafetyCard ) {
-			return ( ( SafetyCard ) chosenCard ).playOn( chosenTarget );
+			return ( ( SafetyCard ) chosenCard ).playOn( chosenTarget, currentGame.getGoal() );
 		}
 		
 		return false;

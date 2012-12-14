@@ -3,7 +3,6 @@ package models;
 import java.util.ArrayList;
 
 import models.exceptions.AliasAlreadyChosenException;
-import models.exceptions.IllegalAILevelException;
 import models.exceptions.IllegalDistanceException;
 import models.exceptions.IllegalHumanPlayerNumberException;
 import models.exceptions.IllegalPlayerNumberException;
@@ -15,18 +14,18 @@ import models.stacks.game.DiscardStack;
 import models.stacks.player.HandStack;
 
 /**
- * TODO : replay when safety 
+ * @version 0.2.2
+ * 
  * TODO : when deck is empty, turn discard stack into deck and shuffle
  * 
  * @author Simon RENOULT
- * @vresion 0.2.2
  */
 public class Game {
 
 	// ------------ CONSTANTS ------------ //
 
 	public static final int MIN_PLAYERS_NB = 2;
-	public static final int MAX_PLAYERS_NB = 6;
+	public static final int MAX_PLAYERS_NB = 4;
 	// Allow IA vs IA game.
 	public static final int MIN_HUMAN_PLAYERS_NB = 0;
 	public static final int MIN_DISTANCE_GOAL = 700;
@@ -115,7 +114,7 @@ public class Game {
 	}
 	
 	public void setAIPlayersAlias() {
-		String[] aiAliases = { "ann", "bob", "celo", "dan", "emile", "fanny" };
+		String[] aiAliases = { "ann", "bob", "lea", "dan", "emile", "fanny" };
 		
 		for ( int i = 0; i < this.players.length; i++ ) {
 			if ( players[i] instanceof AIPlayer ) {
@@ -132,15 +131,17 @@ public class Game {
 		}
 	}
 	
-	public void setAIPlayerLevel( AIPlayer p, Integer chosenLevel ) throws IllegalAILevelException {
-		if ( chosenLevel < MIN_AI_LEVEL || chosenLevel > MAX_AI_LEVEL ) {
-			throw new IllegalAILevelException();
-		} else {
-			p.setLevel( chosenLevel );
-		}
-	}
-	
 	// ------------ GETTERS------------ // 
+	
+	public int getIndexOf( Player searchedPlayer ) {
+		for ( int i = 0; i < this.players.length; i++ ) {
+			if ( this.players[i].equals( searchedPlayer ) ) {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
 	
 	public Player[] getPlayers() {
 		return this.players;

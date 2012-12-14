@@ -3,10 +3,11 @@ package models.cards;
 import java.util.ArrayList;
 
 /**
+ * @version 1.0
+ * 
  * Top Card class. Create a Card object with its type and its families.
  * 
  * @author Simon RENOULT
- * @version 1.0
  */
 public abstract class Card {
 	
@@ -34,6 +35,29 @@ public abstract class Card {
 	
 	public String toString() {
 		return this.type.toString();
+	}
+	
+	public boolean isGoRoll() {
+		boolean isGoStopFamily = false;
+		for( CardFamily cf : this.getFamilies() ) {
+			if( cf == CardFamily.GoStop ) {
+				isGoStopFamily = true;
+			}
+		}
+		
+		return this instanceof RemedyCard && isGoStopFamily ;
+	}
+	
+	public boolean counteract( CardFamily hazardFamily ) {
+		if ( this instanceof RemedyCard || this instanceof SafetyCard ) {
+			for ( CardFamily cf : this.getFamilies() ) {
+				if ( cf == hazardFamily ) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	// ------------ GETTERS ------------ //

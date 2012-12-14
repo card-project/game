@@ -3,7 +3,6 @@ package models.stacks.player;
 import models.cards.Card;
 import models.cards.CardFamily;
 import models.cards.DistanceCard;
-import models.cards.HazardCard;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
 import models.exceptions.IllegalCardTypeException;
@@ -89,12 +88,12 @@ public class HandStack extends PlayerStack {
 		return null;
 	}
 	
-	public Card getSafetyOf ( CardFamily searchedFamily ) {
+	public SafetyCard getSafetyOf ( CardFamily searchedFamily ) {
 		for( Card c : this.cards ) {
 			if ( c instanceof SafetyCard ) {
 				for ( CardFamily cf : c.getFamilies() ) {
 					if ( cf == searchedFamily ) {
-						return c;
+						return (SafetyCard) c;
 					}
 				}
 			}
@@ -121,7 +120,7 @@ public class HandStack extends PlayerStack {
 		return getRemedyOf( CardFamily.Speed );
 	}
 	
-	public Card getAttackRemedy( BattleStack b ) {
+	public Card getCorrespondentRemedy( BattleStack b ) {
 		return getRemedyOf( b.peek().getFamily() );
 	}
 	
@@ -129,7 +128,21 @@ public class HandStack extends PlayerStack {
 		return getSafetyOf( CardFamily.Speed );
 	}
 	
-	public Card getAttackSafety( BattleStack b ) {
+	public Card getCorrespondentSafety( BattleStack b ) {
 		return getSafetyOf( b.peek().getFamily() );
 	}
+
+	public boolean hasSafetyFor( CardFamily family ) {
+		for ( Card c : this.cards ) {
+			if ( c instanceof SafetyCard ) {
+				for ( CardFamily cf : c.getFamilies() ) {
+					if ( cf == family ) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+}
 }

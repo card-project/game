@@ -1,6 +1,7 @@
 package controllers.tui.gameProcessing;
 
 import models.Game;
+import models.exceptions.moveExceptions.AvailableCoupFourreException;
 import models.players.Player;
 import models.stacks.player.HandStack;
 import views.tui.TUIGameView;
@@ -32,8 +33,8 @@ public class TUIGameController {
 	 * {@link TUIGameView} and {@link Game} defined in the mother
 	 * class to current object attributes.
 	 * 
-	 * @param tuiGame {@link TUIGameView} to work on.
-	 * @param currentGame {@link Game} to work on.
+	 * @param gv {@link TUIGameView} to work on.
+	 * @param g {@link Game} to work on.
 	 */
 	public TUIGameController( TUIGameView gv, Game g ) {
 		this.tui = gv;
@@ -66,7 +67,7 @@ public class TUIGameController {
 		
 		Player currentPlayer = currentGame.getPlayers()[firstPlayerIndex];
 
-		boolean gameIsOver = false, replay = false;
+		boolean gameIsOver = false, replay = false, coupFourre = false;
 		int currentPlayerIndex = firstPlayerIndex;
 		
 		do {
@@ -74,7 +75,22 @@ public class TUIGameController {
 			this.showTitle( currentPlayer );
 			this.drawCard( currentPlayer );
 			
-			replay = this.playCard( currentPlayer );
+			try {
+				replay = this.playCard( currentPlayer );
+			} catch ( AvailableCoupFourreException e ) {
+				
+				tui.warn( e.getCoupFourreInitiator().getAlias() + " plays a coup-fourre !" );
+				
+				coupFourre = true;
+				
+				replay = e.getSafety().playCoupFourre( e.getCoupFourreInitiator(), currentPlayer, e.getHazardCardInitiator(), currentGame.getGoal() );
+
+				currentPlayer = e.getCoupFourreInitiator();
+				currentPlayerIndex = this.currentGame.getIndexOf( e.getCoupFourreInitiator() );
+
+				this.showTitle( e.getCoupFourreInitiator() );
+				this.drawCard( currentPlayer );
+			}
 			
 			this.discardCard( currentPlayer );
 
@@ -84,11 +100,12 @@ public class TUIGameController {
 				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getPlayers().length - 1 ) ? 0 : currentPlayerIndex ;
 				currentPlayer = currentGame.getPlayers()[currentPlayerIndex];
 			}
+			
 		} while ( ! gameIsOver );
 		
 		tui.inform( currentPlayer.getAlias() + " has won !" );
 	}
-
+	
 	private void showTitle( Player p ) {
 		int distance = p.getDistanceStack().getTraveledDistance();
 		
@@ -106,7 +123,7 @@ public class TUIGameController {
 		this.drawingStepController.run();		
 	}
 	
-	private boolean playCard( Player p ) {
+	private boolean playCard( Player p ) throws AvailableCoupFourreException {
 		tui.inform( '\n' + "-- > PLAYING" + '\n');
 		
 		tui.tickBox( p.getBattleStack().initialGoRollIsPlayed(), "Initial GoRoll status." + '\n' );
@@ -123,7 +140,7 @@ public class TUIGameController {
 		
 		return playingStepController.run();		
 	}
-	
+
 	private void discardCard( Player p ) {
 		if ( p.getHandStack().size() > HandStack.MAX_CARD_NB ) {
 			tui.inform( '\n' + "-- > DISCARDING STEP" + '\n' );

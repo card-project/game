@@ -63,7 +63,7 @@ public class DrawingStepController extends StepController {
 			
 			do {
 
-				tui.inform( "HAND : " + this.currentPlayer.getHandStack() );
+				tui.inform( "HAND : " + this.currentPlayer.getHandStack() + '\n' );
 				
 				userChoiceIsCorrect = true;
 				userChoice = tui.askDrawingStack( currentGame.getDiscardStack().peek().toString() );

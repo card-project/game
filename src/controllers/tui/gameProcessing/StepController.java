@@ -1,6 +1,7 @@
 package controllers.tui.gameProcessing;
 
 import models.Game;
+import models.exceptions.moveExceptions.AvailableCoupFourreException;
 import models.players.Player;
 import views.tui.TUIGameView;
 
@@ -37,8 +38,9 @@ public abstract class StepController {
 	 * The overall step controller processing are performed inside.
 	 * 
 	 * @return True if the execution of this method implies to replay.
+	 * @throws AvailableCoupFourreException 
 	 */
-	abstract public boolean run ( );
+	abstract public boolean run ( ) throws AvailableCoupFourreException;
 	
 	// ------------ GETTERS ------------ //
 	

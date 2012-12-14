@@ -2,6 +2,7 @@ package models.cards;
 
 import models.exceptions.IllegalCardTypeException;
 import models.players.Player;
+import models.stacks.player.DistanceStack;
 
 /**
  * @author Simon RENOULT
@@ -21,7 +22,7 @@ public class SafetyCard extends Card {
 		return true;
 	}
 	
-	public boolean playOn( Player p ) {
+	public boolean playOn( Player p, int distanceGoal ) {
 		
 		// Move the safety to the right stack and remove it from the player's hand
 		try {
@@ -31,7 +32,9 @@ public class SafetyCard extends Card {
 		}
 		
 		// As the card is a safety, increase the traveled distance by 100
-		p.getDistanceStack().increaseBy100();
+		if ( p.getDistanceStack().getTraveledDistance() + DistanceStack.BONUS_100 < distanceGoal ) {
+			p.getDistanceStack().increaseBy100();
+		}
 		
 		// Remove the hazard if the safety's family corresponds
 		if ( p.isAttacked() ) {
@@ -44,6 +47,23 @@ public class SafetyCard extends Card {
 		
 		if ( p.isSlowed() && this.getType() == CardType.RightOfWay ) {
 			p.getDistanceStack().discardHazards();
+		}
+		
+		return true;
+	}
+
+	public boolean playCoupFourre( Player coupFourreInitiator,  Player assailant, HazardCard hazardCard, int distanceGoal ) {
+		assailant.discard( hazardCard );
+		
+		try {
+			coupFourreInitiator.getHandStack().shiftTo( coupFourreInitiator.getSafetyStack(), this );
+		} catch ( IllegalCardTypeException e ) {
+			e.printStackTrace();
+		}
+
+		// As the card is a safety, increase the traveled distance by 100
+		if ( coupFourreInitiator.getDistanceStack().getTraveledDistance() + DistanceStack.BONUS_100 < distanceGoal ) {
+			coupFourreInitiator.getDistanceStack().increaseBy300();
 		}
 		
 		return true;

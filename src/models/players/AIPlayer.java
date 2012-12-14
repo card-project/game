@@ -2,7 +2,8 @@ package models.players;
 
 import java.util.ArrayList;
 
-import models.exceptions.IllegalCardTypeException;
+import models.cards.Card;
+import models.players.strategies.Brain;
 
 /**
  * Virtual player.
@@ -16,8 +17,9 @@ public class AIPlayer extends Player {
 
 	// ------------ ATTRIBUTES ------------ //
 
-	private Brain mind = null;
-
+	private Brain brain;
+	private ArrayList<Player> opponents;
+	
 	// ------------ CONSTRUCTORS ------------ //
 
 	public AIPlayer() {
@@ -25,30 +27,26 @@ public class AIPlayer extends Player {
 	}
 	
 	public AIPlayer( ArrayList<Player> opponents ) {
-		this.mind = new Brain( this, opponents );
+		this.opponents = opponents;
 	}
 
 	// ------------ METHODS ------------ //
 
-	public void draw() {
-		super.draw( mind.chooseStackToDraw() );
+	public Card draw() {
+		return super.draw( brain.chooseStackToDraw() );
 	}
-
-	public void play() {
-		// super.play(mind.chooseCardToPlay());
+	
+	public boolean play() {
+		return false;
 	}
-
-	public void discard( ) throws IllegalCardTypeException {
-		super.discard( mind.chooseCardToDiscard() );
+	
+	public void discard() {
+		super.discard( brain.chooseCardToDiscard() );
 	}
-
+	
 	@Override
 	public String toString() {
 		return this.alias;
-	}
-
-	public void setLevel( Integer chosenLevel ) {
-		
 	}
 
 }

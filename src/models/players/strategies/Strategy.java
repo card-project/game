@@ -9,7 +9,7 @@ import models.stacks.game.GameStack;
  *
  */
 public interface Strategy {
-	public GameStack chooseStackToDraw();	
-	public Card chooseCardToPlay();
-	public Card chooseCardToDiscard();
+	GameStack chooseStackToDraw();	
+	Card chooseCardToPlay();
+	Card chooseCardToDiscard();
 }
