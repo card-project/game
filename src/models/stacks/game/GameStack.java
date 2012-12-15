@@ -57,7 +57,7 @@ public abstract class GameStack extends CardsStack {
 	
 	@Override
 	public Card peek() {
-		return this.cards.peek();
+		return ( this.isEmpty() ) ? null : this.cards.peek();
 	}
 	
 	@Override

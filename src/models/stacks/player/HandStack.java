@@ -39,8 +39,8 @@ public class HandStack extends PlayerStack {
 		return false;
 	}
 	
-	public Card chooseMaxDistance() {
-		Card chosenCard = null;
+	public DistanceCard chooseMaxDistance() {
+		DistanceCard chosenCard = null;
 		
 		for( Card handCard : this.getCards() ) {
 			if ( handCard instanceof DistanceCard ) {
@@ -57,8 +57,8 @@ public class HandStack extends PlayerStack {
 		return chosenCard;
 	}
 	
-	public Card chooseMinDistance() {
-		Card chosenCard = null;
+	public DistanceCard chooseMinDistance() {
+		DistanceCard chosenCard = null;
 		
 		for( Card handCard : this.cards ) {
 			if ( handCard instanceof DistanceCard ) {
@@ -75,12 +75,12 @@ public class HandStack extends PlayerStack {
 		return chosenCard;
 	}
 	
-	public Card chooseGoRoll() {
+	public RemedyCard chooseGoRoll() {
 		
 		for( Card handCard : this.cards ) {
 			if( handCard instanceof RemedyCard ) {
 				if( handCard.getFamily() == CardFamily.GoStop ) {
-					return handCard;
+					return (RemedyCard) handCard;
 				}
 			}
 		}
@@ -102,34 +102,18 @@ public class HandStack extends PlayerStack {
 		return null;
 	}
 	
-	public Card getRemedyOf ( CardFamily searchedFamily ) {
+	public RemedyCard getRemedyOf ( CardFamily searchedFamily ) {
 		for( Card c : this.cards ) {
-			if ( c instanceof SafetyCard ) {
+			if ( c instanceof RemedyCard ) {
 				for ( CardFamily cf : c.getFamilies() ) {
 					if ( cf == searchedFamily ) {
-						return c;
+						return (RemedyCard) c;
 					}
 				}
 			}
 		}
 		
 		return null;
-	}
-	
-	public Card getSlowRemedy() {
-		return getRemedyOf( CardFamily.Speed );
-	}
-	
-	public Card getCorrespondentRemedy( BattleStack b ) {
-		return getRemedyOf( b.peek().getFamily() );
-	}
-	
-	public Card getSlowSafety() {
-		return getSafetyOf( CardFamily.Speed );
-	}
-	
-	public Card getCorrespondentSafety( BattleStack b ) {
-		return getSafetyOf( b.peek().getFamily() );
 	}
 
 	public boolean hasSafetyFor( CardFamily family ) {
@@ -144,5 +128,5 @@ public class HandStack extends PlayerStack {
 		}
 
 		return false;
-}
+	}
 }

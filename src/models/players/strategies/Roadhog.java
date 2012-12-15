@@ -3,10 +3,10 @@ package models.players.strategies;
 import java.util.ArrayList;
 
 import models.cards.Card;
+import models.cards.CardFamily;
 import models.cards.HazardCard;
 import models.players.AIPlayer;
 import models.players.Player;
-import models.stacks.game.DeckStack;
 import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 
@@ -26,7 +26,7 @@ public class Roadhog implements Strategy {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private AIPlayer player;
+	protected AIPlayer player;
 	private ArrayList<Player> opponents;
 	
 	// ------------ CONSTRUCTORS ------------ //
@@ -43,28 +43,42 @@ public class Roadhog implements Strategy {
 	 */
 	@Override
 	public GameStack chooseStackToDraw() {
-		return DiscardStack.getInstance().peek() instanceof HazardCard 
-			? DiscardStack.getInstance()
-			: DeckStack.getInstance();
+		if ( ! DiscardStack.getInstance().isEmpty() ) {
+			if ( DiscardStack.getInstance().peek() instanceof HazardCard ) {
+				return DiscardStack.getInstance();
+			}
+		}
+		
+		return null;
 	}
 
 	@Override
 	public Card chooseCardToPlay() {
-		Card chosenCard = null;
-		
+		return (Card) lookFor( true );
+	}
+
+	public Player chooseTargetToAttack() {
+		return (Player) lookFor( false );
+	}
+
+	private Object lookFor( boolean lookForACard ) {
+		Object choice = null;
 		for ( Card handCard : this.player.getHandStack().getCards() ) {
 			if ( handCard instanceof HazardCard) {
 				for ( Player p : opponents ) {
 					if ( p.hasStarted() && ! p.isProtectedFrom( ( HazardCard ) handCard ) ) {
-						chosenCard = handCard;
+						if ( handCard.getFamily() == CardFamily.Speed && ! p.isSlowed() ) {
+							choice = lookForACard ? handCard : p;
+						} else if ( ! p.isAttacked() ) {
+							choice = lookForACard ? handCard : p;
+						}
 					}
 				}
 			}
 		}
-		
-		return chosenCard;
+		return choice;
 	}
-
+	
 	/**
 	 * Priorities :
 	 * 1 : Protected types

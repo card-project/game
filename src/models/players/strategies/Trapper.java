@@ -1,6 +1,7 @@
 package models.players.strategies;
 
 import models.cards.Card;
+import models.cards.CardFamily;
 import models.players.AIPlayer;
 
 /**
@@ -15,22 +16,23 @@ import models.players.AIPlayer;
  */
 public class Trapper extends Protector {
 
+	// ------------ CONSTRUCTORS ------------ //
+	
 	public Trapper( AIPlayer player ) {
 		super( player );
 	}
+	
+	// ------------ METHODS ------------ //
 
 	@Override
 	public Card chooseCardToPlay() {
 		Card chosenCard = null;
 		
 		if ( this.player.isAttacked() ) {
-			if ( ( chosenCard = this.player.getHandStack().getCorrespondentSafety( this.player.getBattleStack() ) ) == null ) {
-				chosenCard = this.player.getHandStack().getCorrespondentRemedy( this.player.getBattleStack() );
-			}
+			CardFamily attackingFamily = player.getBattleStack().peek().getFamily();
+			chosenCard = this.player.getHandStack().getRemedyOf( attackingFamily );
 		} else if ( this.player.isSlowed() ) {
-			if ( ( chosenCard = this.player.getHandStack().getSlowSafety() ) == null ) {
-				chosenCard = this.player.getHandStack().getSlowRemedy();
-			}
+			chosenCard = this.player.getHandStack().getRemedyOf( CardFamily.Speed );
 		} 
 		
 		return chosenCard;

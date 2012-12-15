@@ -3,8 +3,9 @@ package views.tui;
 import java.util.Scanner;
 
 /**
- * @author Simon RENOULT
  * @version 1.1
+ * 
+ * @author Simon RENOULT
  */
 public abstract class TUIView {
 	
@@ -36,7 +37,7 @@ public abstract class TUIView {
 	/**
 	 * Ask something to the user.
 	 * 
-	 * @param question
+	 * @param question Question to ask.
 	 */
 	public void ask( String question ) {
 		System.out.print( question + '\n' + "> ");
@@ -46,7 +47,7 @@ public abstract class TUIView {
 	 * Ask somethinf to the user with a precondition.
 	 * 
 	 * @param previousInformation
-	 * @param question
+	 * @param question Question to ask.
 	 */
 	public void ask( String previousInformation, String question ) {
 		this.inform( previousInformation + '\n' );
@@ -63,18 +64,14 @@ public abstract class TUIView {
 	}
 	
 	/**
-	 * Return the standard input as an integer.
-	 * 
-	 * @return
+	 * @return the standard input as an integer.
 	 */
 	public int getAnswerAsInteger() {
 		return Integer.valueOf( this.input.nextLine() );
 	}
 	
 	/**
-	 * Return the standard input as a String.
-	 * 
-	 * @return
+	 * @return the standard input as a String.
 	 */
 	public String getAnswerAsString() {
 		return this.input.nextLine();

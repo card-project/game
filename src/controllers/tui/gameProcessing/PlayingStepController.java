@@ -22,8 +22,6 @@ import views.tui.TUIGameView;
  * 
  * Perform the playing process for each AI and Human players.
  * 
- * TODO : Coup-fourré
- * 
  * @author Simon RENOULT
  */
 public class PlayingStepController extends StepController {
@@ -65,7 +63,9 @@ public class PlayingStepController extends StepController {
 	
 	private boolean performHumanPlayingStep() throws AvailableCoupFourreException {
 		
-		if ( currentPlayer.canPlay( getOpponents( super.currentPlayer ), super.currentGame.getGoal() ) ) {
+		boolean replay = false;
+		
+		if ( currentPlayer.canPlay( super.currentGame.getOpponents( super.currentPlayer ), super.currentGame.getGoal() ) ) {
 
 			boolean userChoiceIsCorrect;
 			
@@ -98,30 +98,14 @@ public class PlayingStepController extends StepController {
 				
 			} while ( ! userChoiceIsCorrect );
 
-			return this.playCard( chosenCard, chosenTarget );
+			replay = this.currentPlayer.play( chosenCard, chosenTarget, super.currentGame.getGoal() );
 		
 		} else {
 			tui.warn( "No card to play." );
-			return false;
-		}
-	}
-	
-	/**
-	 * @return True if the player can replay.
-	 * @throws AvailableCoupFourreException 
-	 */
-	private boolean playCard( Card chosenCard, Player chosenTarget ) throws AvailableCoupFourreException {
-		if ( chosenCard instanceof HazardCard ) {
-			return ( ( HazardCard ) chosenCard ).playOn( currentPlayer, chosenTarget );
-		} else if ( chosenCard instanceof DistanceCard ) {
-			return ( ( DistanceCard ) chosenCard ).playOn( chosenTarget );
-		} else if ( chosenCard instanceof RemedyCard ) {
-			return ( ( RemedyCard ) chosenCard ).playOn( chosenTarget );
-		} else if ( chosenCard instanceof SafetyCard ) {
-			return ( ( SafetyCard ) chosenCard ).playOn( chosenTarget, currentGame.getGoal() );
+			replay = false;
 		}
 		
-		return false;
+		return replay;
 	}
 	
 	/**
@@ -169,7 +153,7 @@ public class PlayingStepController extends StepController {
 
 		boolean userChoiceIsCorrect = true;
 		int opponentIndex = 0;
-		ArrayList<Player> opponents = this.getOpponents( p );
+		ArrayList<Player> opponents = this.currentGame.getOpponents( p );
 		
 		do {
 			
@@ -190,17 +174,6 @@ public class PlayingStepController extends StepController {
 		} while ( ! userChoiceIsCorrect );
 		
 		return opponents.get( opponentIndex - 1 );
-	}
-	
-	private ArrayList<Player> getOpponents( Player currentPlayer ) {
-		ArrayList<Player> opponents = new ArrayList<Player>();
-		for ( Player p : this.currentGame.getPlayers() ) {
-			if ( ! p.equals( currentPlayer ) ) {
-				opponents.add( p );
-			}
-		}
-		
-		return opponents;
 	}
 	
 	private String getOpponentsAlias( ArrayList<Player> opponents ) {

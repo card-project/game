@@ -5,7 +5,6 @@ import models.cards.CardFamily;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
 import models.players.AIPlayer;
-import models.stacks.game.DeckStack;
 import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 
@@ -45,25 +44,29 @@ public class Protector implements Strategy {
 	 */
 	@Override
 	public GameStack chooseStackToDraw() {
-		Card discardedCard = DiscardStack.getInstance().peek();
 		GameStack chosenStack = null;
-		
-		if ( ! this.player.hasStarted() && discardedCard.isGoRoll() ) {
-			chosenStack = DiscardStack.getInstance();
-		} else if ( this.player.isAttacked() ) {
-			if ( discardedCard.counteract( this.player.getBattleStack().peek().getFamily() ) ) {
-				chosenStack = DiscardStack.getInstance();
+
+		if ( ! DiscardStack.getInstance().isEmpty() ) {
+			Card discardedCard = DiscardStack.getInstance().peek();
+			
+			if ( discardedCard != null ) {
+				if ( ! this.player.hasStarted() && discardedCard.isGoRoll() ) {
+					chosenStack = DiscardStack.getInstance();
+				} else if ( this.player.isAttacked() ) {
+					if ( discardedCard.counteract( this.player.getBattleStack().peek().getFamily() ) ) {
+						chosenStack = DiscardStack.getInstance();
+					}
+				} else if ( this.player.isSlowed() ) {
+					if ( discardedCard.counteract( CardFamily.Speed ) ) {
+						chosenStack = DiscardStack.getInstance();
+					}
+				} else if ( discardedCard instanceof RemedyCard ) {
+					chosenStack = DiscardStack.getInstance();
+				}
 			}
-		} else if ( this.player.isSlowed() ) {
-			if ( discardedCard.counteract( CardFamily.Speed ) ) {
-				chosenStack = DiscardStack.getInstance();
-			}
-		} else if ( discardedCard instanceof RemedyCard ) {
-			chosenStack = DiscardStack.getInstance();
 		}
 		
-		return ( chosenStack == null ) ? DeckStack.getInstance() : chosenStack ;
-		
+		return chosenStack;
 	}
 
 	/**
@@ -78,12 +81,13 @@ public class Protector implements Strategy {
 		Card chosenCard = null;
 		
 		if ( this.player.isAttacked() ) {
-			if ( ( chosenCard = this.player.getHandStack().getCorrespondentSafety( this.player.getBattleStack() ) ) == null ) {
-				chosenCard = this.player.getHandStack().getCorrespondentRemedy( this.player.getBattleStack() );
+			CardFamily attackingFamily = player.getBattleStack().peek().getFamily();
+			if ( ( chosenCard = this.player.getHandStack().getSafetyOf( attackingFamily ) ) == null ) {
+				chosenCard = this.player.getHandStack().getRemedyOf( attackingFamily );
 			}
 		} else if ( this.player.isSlowed() ) {
-			if ( ( chosenCard = this.player.getHandStack().getSlowSafety() ) == null ) {
-				chosenCard = this.player.getHandStack().getSlowRemedy();
+			if ( ( chosenCard = this.player.getHandStack().getSafetyOf( CardFamily.Speed ) ) == null ) {
+				chosenCard = this.player.getHandStack().getRemedyOf( CardFamily.Speed );
 			}
 		} else {
 			for ( Card c : this.player.getHandStack().getCards() ) {

@@ -1,8 +1,10 @@
 package models.cards;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import models.exceptions.IllegalCardTypeException;
+import models.exceptions.moveExceptions.AvailableCoupFourreException;
 import models.players.HumanPlayer;
 import models.players.Player;
 
@@ -68,9 +70,19 @@ public class HazardCardTest {
 
 	@Test public void testPlayOn() throws IllegalCardTypeException {
 		Player p = new HumanPlayer();
-		p.getHandStack().push( c );
+
+		Throwable caught = null;
 		
-		assertFalse( p.getHandStack().exists( CardType.Distance25 ) );
-		assertTrue( p.getDistanceStack().exists( CardType.Distance25 ) );
+		Player opponent = new HumanPlayer();
+		opponent.getHandStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		
+		HazardCard hazard = (HazardCard) CardFactory.createCard( CardType.Accident );
+		try {
+			hazard.playOn( p, opponent );
+		} catch ( AvailableCoupFourreException e ) {
+			caught = e;
+		}
+		
+		assertNotNull( caught );
 	}
 }

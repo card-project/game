@@ -44,9 +44,13 @@ public class Driver implements Strategy {
 	 */
 	@Override
 	public GameStack chooseStackToDraw() {
-		return ( DiscardStack.getInstance().peek() instanceof DistanceCard )
-			? DiscardStack.getInstance()
-			: DeckStack.getInstance();
+		if ( ! DiscardStack.getInstance().isEmpty() ) {
+			if ( DiscardStack.getInstance().peek() instanceof DistanceCard ) {
+				return DiscardStack.getInstance();
+			}
+		}
+		
+		return null;
 	}
 
 	/**

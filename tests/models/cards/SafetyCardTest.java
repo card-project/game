@@ -26,7 +26,7 @@ public class SafetyCardTest {
 		Player p = new HumanPlayer();
 		p.getHandStack().push( c );
 		
-		assertTrue( c.playOn( p ) );
+		assertTrue( c.playOn( p, 0 ) );
 		assertFalse( p.getHandStack().exists( CardType.DrivingAce ) );
 		assertTrue( p.getSafetyStack().exists( CardType.DrivingAce ) );
 	}

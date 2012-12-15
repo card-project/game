@@ -10,6 +10,7 @@ import models.cards.HazardCard;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
 import models.exceptions.IllegalCardTypeException;
+import models.exceptions.moveExceptions.AvailableCoupFourreException;
 import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 import models.stacks.player.BattleStack;
@@ -47,6 +48,20 @@ public abstract class Player {
 		return handStack.peek();
 	}
 
+	public boolean play( Card chosenCard, Player target, int distanceGoal ) throws AvailableCoupFourreException {
+		boolean replay = false;
+		if ( chosenCard instanceof HazardCard ) {
+			replay = ( ( HazardCard ) chosenCard ).playOn( this, target );
+		} else if ( chosenCard instanceof DistanceCard ) {
+			replay = ( ( DistanceCard ) chosenCard ).playOn( target );
+		} else if ( chosenCard instanceof RemedyCard ) {
+			replay = ( ( RemedyCard ) chosenCard ).playOn( target  );
+		} else if ( chosenCard instanceof SafetyCard ) {
+			replay = ( ( SafetyCard ) chosenCard ).playOn( target, distanceGoal );
+		}
+		return replay;
+	}
+	
 	public void discard( Card cardToDiscard ) {
 		try {
 			this.handStack.shiftTo( DiscardStack.getInstance(), cardToDiscard );

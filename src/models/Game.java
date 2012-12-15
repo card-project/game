@@ -89,6 +89,13 @@ public class Game {
 			for ( int i = 0; i < this.players.length; i++ ) {
 				this.players[i] = ( i < humanPlayersNumber ) ? new HumanPlayer() : new AIPlayer();
 			}
+			
+			for( Player p : this.players ) {
+				if ( p instanceof AIPlayer ) {
+					( (AIPlayer) p ).setOpponents( getOpponents( p ) );
+					( (AIPlayer) p ).setDistanceGoal( this.goal );
+				}
+			}
 		}
 	}	
 	
@@ -132,6 +139,17 @@ public class Game {
 	}
 	
 	// ------------ GETTERS------------ // 
+
+	public ArrayList<Player> getOpponents( Player ignoredPlayer ) {
+		ArrayList<Player> opponents = new ArrayList<Player>();
+		for ( Player p : this.players ) {
+			if ( ! p.equals( ignoredPlayer ) ) {
+				opponents.add( p );
+			}
+		}
+		
+		return opponents;
+	}
 	
 	public int getIndexOf( Player searchedPlayer ) {
 		for ( int i = 0; i < this.players.length; i++ ) {
