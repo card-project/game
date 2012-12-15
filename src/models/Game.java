@@ -2,6 +2,8 @@ package models;
 
 import java.util.ArrayList;
 
+import models.cards.CardFamily;
+import models.cards.HazardCard;
 import models.exceptions.AliasAlreadyChosenException;
 import models.exceptions.IllegalDistanceException;
 import models.exceptions.IllegalHumanPlayerNumberException;
@@ -145,6 +147,25 @@ public class Game {
 		for ( Player p : this.players ) {
 			if ( ! p.equals( ignoredPlayer ) ) {
 				opponents.add( p );
+			}
+		}
+		
+		return opponents;
+	}
+	
+	public ArrayList<Player> getAttackableOpponents( Player ignoredPlayer, HazardCard c ) {
+		ArrayList<Player> opponents = getOpponents( ignoredPlayer );
+		
+		for ( int i = 0; i < opponents.size(); i++ ) {
+			Player p = opponents.get( i );
+			if ( ! p.hasStarted() ) {
+				opponents.remove( p );
+			} else if ( c.getFamily() == CardFamily.Speed && p.isSlowed() ) {
+				opponents.remove( p );
+			} else if ( p.isAttacked() ) {
+				opponents.remove( p );
+			} else if ( p.isProtectedFrom( c ) ) {
+				opponents.remove( p );
 			}
 		}
 		

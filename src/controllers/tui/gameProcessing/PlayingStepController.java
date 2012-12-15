@@ -79,7 +79,7 @@ public class PlayingStepController extends StepController {
 				chosenCard = this.chooseCardToPlay( super.currentPlayer );
 				
 				if ( chosenCard instanceof HazardCard ) {
-					chosenTarget = this.chooseTarget( super.currentPlayer );
+					chosenTarget = this.chooseTarget( super.currentPlayer, (HazardCard) chosenCard );
 					userChoiceIsCorrect = ( ( HazardCard ) chosenCard ).isPlayableOn( chosenTarget );
 				} else {
 					chosenTarget = super.currentPlayer;
@@ -136,7 +136,6 @@ public class PlayingStepController extends StepController {
 					tui.warn( "Please enter a number between " + HandStack.MIN_CARD_NB +
 							" and " + HandStack.MAX_IN_PLAY_CARD );
 					userChoiceIsCorrect = false;
-				
 				}
 			}
 				
@@ -149,11 +148,11 @@ public class PlayingStepController extends StepController {
 	 * @param p The current {@link Player} (in order to determine who are the opponents).
 	 * @return The targeted {@link Player}.
 	 */
-	private Player chooseTarget( Player p ) {
+	private Player chooseTarget( Player p, HazardCard c ) {
 
 		boolean userChoiceIsCorrect = true;
 		int opponentIndex = 0;
-		ArrayList<Player> opponents = this.currentGame.getOpponents( p );
+		ArrayList<Player> opponents = this.currentGame.getAttackableOpponents( p, c );
 		
 		do {
 			
