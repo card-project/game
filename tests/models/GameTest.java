@@ -28,7 +28,6 @@ public class GameTest {
 	private static final int DEFAULT_DISTANCE_GOAL = 700;
 	private static final String[] DEFAULT_HUMAN_PLAYER_ALIAS = { "simon",
 			"adrien" };
-	private static final int DEFAULT_AI_PLAYER_LEVEL = 1;
 
 	// ------------ ATTRIBUTES ------------ //
 
@@ -36,8 +35,7 @@ public class GameTest {
 
 	// ------------ METHODS ------------ //
 
-	@Before
-	public void setDefaultGame() {
+	@Before public void init() {
 
 		testGame = new Game();
 
@@ -66,8 +64,7 @@ public class GameTest {
 		}
 	}
 
-	@Test
-	public void testDistributeCardsToPlayers() {
+	@Test public void testDistributeCardsToPlayers() {
 		int initialDeckSize = testGame.getDeckStack().size();
 
 		testGame.distributeCardsToPlayers();
@@ -79,8 +76,7 @@ public class GameTest {
 		// TODO check if initial deck stack size == new deck stack size + hands
 	}
 
-	@Test
-	public void testSetPlayersNumber() {
+	@Test public void testSetPlayersNumber() {
 		setPlayersNumber( Game.MIN_PLAYERS_NB - 1 );
 		setPlayersNumber( Game.MIN_PLAYERS_NB );
 		setPlayersNumber( Game.MAX_PLAYERS_NB );
@@ -110,14 +106,13 @@ public class GameTest {
 		}
 	}
 
-	@Test
-	public void testSetHumanPlayers() {
+	@Test public void testSetHumanPlayers() {
 		setHumanPlayersNumber( Game.MIN_HUMAN_PLAYERS_NB - 1 );
 		setHumanPlayersNumber( Game.MIN_HUMAN_PLAYERS_NB );
 		setHumanPlayersNumber( testGame.getPlayers().length );
 		setHumanPlayersNumber( testGame.getPlayers().length + 1 );
 	}
-
+ 
 	private void setHumanPlayersNumber( int humanPlayerNumber ) {
 		Throwable caught = null;
 
@@ -138,8 +133,7 @@ public class GameTest {
 		}
 	}
 
-	@Test
-	public void testSetDistanceGoal() {
+	@Test public void testSetDistanceGoal() {
 		setDistanceGoal( Game.MIN_DISTANCE_GOAL - 1 );
 		setDistanceGoal( Game.MIN_DISTANCE_GOAL );
 		setDistanceGoal( Game.MAX_DISTANCE_GOAL );
@@ -169,8 +163,7 @@ public class GameTest {
 		}
 	}
 
-	@Test
-	public void testSetPlayerAlias() {
+	@Test public void testSetPlayerAlias() {
 		// Reset players alias
 		for ( Player p : testGame.getPlayers() ) {
 			p.setAlias( null );
@@ -209,44 +202,37 @@ public class GameTest {
 	}
 
 	// Always true
-	@Test
-	public void testSetAIPlayersAlias() {
+	@Test public void testSetAIPlayersAlias() {
 		assertNull( null );
 	}
 
-	@Test
-	public void testGetPlayers() {
+	@Test public void testGetPlayers() {
 		assertNotNull( testGame.getPlayers() );
 	}
 
-	@Test
-	public void testGetAIPlayers() {
+	@Test public void testGetAIPlayers() {
 		for ( Player p : testGame.getAIPlayers() ) {
 			assertTrue( p instanceof AIPlayer );
 		}
 	}
 
-	@Test
-	public void testGetHumanPlayers() {
+	@Test public void testGetHumanPlayers() {
 		for ( Player p : testGame.getHumanPlayers() ) {
 			assertTrue( p instanceof HumanPlayer );
 		}
 	}
 
-	@Test
-	public void testGetDeckStack() {
+	@Test public void testGetDeckStack() {
 		assertNotNull( testGame.getDeckStack() );
 		assertEquals( testGame.getDeckStack(), DeckStack.getInstance() );
 	}
 
-	@Test
-	public void testGetDiscardStack() {
+	@Test public void testGetDiscardStack() {
 		assertNotNull( testGame.getDiscardStack() );
 		assertEquals( testGame.getDiscardStack(), DiscardStack.getInstance() );
 	}
 
-	@Test
-	public void testGetGoal() {
+	@Test public void testGetGoal() {
 		assertNotNull( testGame.getGoal() );
 	}
 
