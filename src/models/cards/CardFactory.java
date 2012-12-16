@@ -6,57 +6,79 @@ package models.cards;
  * Allow lighter/softer dependencies between classes.
  * 
  * @author Simon RENOULT
- * @version 1.1
+ * @version 1.2
  */
 public class CardFactory {
-	public static Card createCard( CardType ct ) {
-		switch ( ct ) {
-		// Distances
-		case Distance25:
-			return new DistanceCard( 25 );
-		case Distance50:
-			return new DistanceCard( 50 );
-		case Distance75:
-			return new DistanceCard( 75 );
-		case Distance100:
-			return new DistanceCard( 100 );
-		case Distance200:
-			return new DistanceCard( 200 );
-			// Hazards
-		case Accident:
-			return new HazardCard( CardFamily.StateOfCar, CardType.Accident );
-		case FlatTire:
-			return new HazardCard( CardFamily.Tire, CardType.FlatTire );
-		case OutOfGas:
-			return new HazardCard( CardFamily.Gas, CardType.OutOfGas );
-		case SpeedLimit:
-			return new HazardCard( CardFamily.Speed, CardType.SpeedLimit );
-		case Stop:
-			return new HazardCard( CardFamily.GoStop, CardType.Stop );
-			// Remedies
-		case GoRoll:
-			return new RemedyCard( CardFamily.GoStop, CardType.GoRoll );
-		case EndOfLimit:
-			return new RemedyCard( CardFamily.Speed, CardType.EndOfLimit );
-		case Gasoline:
-			return new RemedyCard( CardFamily.Gas, CardType.Gasoline );
-		case Repairs:
-			return new RemedyCard( CardFamily.StateOfCar, CardType.Repairs );
-		case SpareTire:
-			return new RemedyCard( CardFamily.Tire, CardType.SpareTire );
-			// Safeties
-		case DrivingAce:
-			return new SafetyCard( CardFamily.StateOfCar, CardType.DrivingAce );
-		case ExtraTank:
-			return new SafetyCard( CardFamily.Gas, CardType.ExtraTank );
-		case PunctureProof:
-			return new SafetyCard( CardFamily.Tire, CardType.PunctureProof );
-		case RightOfWay:
-			SafetyCard sc = new SafetyCard( CardFamily.GoStop, CardType.RightOfWay );
-			sc.addFamily( CardFamily.Speed );
-			return sc;
-		default:
-			return null;
+
+	public static HazardCard createHazard( CardFamily cf ) {
+		switch ( cf ) {
+		case Gas: 
+			return new HazardCard( cf, CardType.OutOfGas );
+		case GoStop: 
+			return new HazardCard( cf, CardType.Stop );
+		case Speed: 
+			return new HazardCard( cf, CardType.SpeedLimit );
+		case StateOfCar: 
+			return new HazardCard( cf, CardType.Accident);
+		case Tire: 
+			return new HazardCard( cf, CardType.FlatTire );
 		}
+		
+		return null;
+	}
+
+	public static RemedyCard createRemedy( CardFamily cf ) {
+		switch ( cf ) {
+		case Gas: 
+			return new RemedyCard( cf, CardType.Gasoline );
+		case GoStop: 
+			return new RemedyCard( cf, CardType.GoRoll);
+		case Speed: 
+			return new RemedyCard( cf, CardType.EndOfLimit );
+		case StateOfCar: 
+			return new RemedyCard( cf, CardType.Repairs );
+		case Tire: 
+			return new RemedyCard( cf, CardType.SpareTire );
+		}
+		
+		return null;
+	}
+
+	public static DistanceCard createDistance( int value ) {
+		switch ( value ) {
+		case 25: 
+			return new DistanceCard( 25 );
+		case 50: 
+			return new DistanceCard( 50 );
+		case 75: 
+			return new DistanceCard( 75 );
+		case 100: 
+			return new DistanceCard( 100 );
+		case 200: 
+			return new DistanceCard( 200 );
+		}
+		
+		return null;
+	}
+
+	public static SafetyCard createSafety( CardFamily cf ) {
+		switch ( cf ) {
+		case Gas: 
+			return new SafetyCard( cf, CardType.ExtraTank );
+		case GoStop: 
+			SafetyCard sc1 = new SafetyCard( cf, CardType.RightOfWay );
+			sc1.addFamily( CardFamily.Speed );
+			return sc1;
+		case Speed: 
+			SafetyCard sc2 = new SafetyCard( cf, CardType.RightOfWay );
+			sc2.addFamily( CardFamily.GoStop );
+			return sc2;
+		case StateOfCar: 
+			return new SafetyCard( cf, CardType.DrivingAce );
+		case Tire: 
+			return new SafetyCard( cf, CardType.PunctureProof );
+		}
+		
+		return null;
 	}
 }

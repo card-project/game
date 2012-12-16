@@ -2,8 +2,9 @@ package models.stacks.game;
 
 import java.util.Collections;
 
+import models.cards.Card;
 import models.cards.CardFactory;
-import models.cards.CardType;
+import models.cards.CardFamily;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
@@ -22,49 +23,41 @@ public class DeckStack extends GameStack {
 	}
 	
 	private DeckStack() {
-		
-		/* ADD HAZARDS CARDS */
 
-		addCards( HazardCard.MAX_ACCIDENT, CardType.Accident );
-		addCards( HazardCard.MAX_OUT_OF_GAS, CardType.OutOfGas );
-		addCards( HazardCard.MAX_STOP, CardType.Stop );
-		addCards( HazardCard.MAX_FLAT_TIRE, CardType.FlatTire );
-		addCards( HazardCard.MAX_SPEED_LIMIT, CardType.SpeedLimit );
+		addCard( CardFactory.createDistance( 25 ), DistanceCard.MAX_25 );
+		addCard( CardFactory.createDistance( 50 ), DistanceCard.MAX_50 );
+		addCard( CardFactory.createDistance( 75 ), DistanceCard.MAX_75 );
+		addCard( CardFactory.createDistance( 100 ), DistanceCard.MAX_100 );
+		addCard( CardFactory.createDistance( 200 ), DistanceCard.MAX_200 );
 
-		/* ADD REMEDIES CARDS */
+		super.cards.add( CardFactory.createSafety( CardFamily.GoStop ) );
+		super.cards.add( CardFactory.createSafety( CardFamily.Gas) );
+		super.cards.add( CardFactory.createSafety( CardFamily.StateOfCar ) );
+		super.cards.add( CardFactory.createSafety( CardFamily.Tire ) );
 
-		addCards( RemedyCard.MAX_REPAIRS, CardType.Repairs );
-		addCards( RemedyCard.MAX_GASOLINE, CardType.Gasoline );
-		addCards( RemedyCard.MAX_SPARE_TIRE, CardType.SpareTire );
-		addCards( RemedyCard.MAX_GO_ROLL, CardType.GoRoll );
-		addCards( RemedyCard.MAX_END_OF_LIMIT, CardType.EndOfLimit );
+		addCard( CardFactory.createHazard( CardFamily.Gas ), HazardCard.MAX_OUT_OF_GAS );
+		addCard( CardFactory.createHazard( CardFamily.GoStop ), HazardCard.MAX_STOP );
+		addCard( CardFactory.createHazard( CardFamily.Speed ), HazardCard.MAX_SPEED_LIMIT );
+		addCard( CardFactory.createHazard( CardFamily.StateOfCar ), HazardCard.MAX_ACCIDENT );
+		addCard( CardFactory.createHazard( CardFamily.Tire ), HazardCard.MAX_FLAT_TIRE );
 
-		/* ADD SAFETIES CARDS */
-
-		cards.add( CardFactory.createCard( CardType.RightOfWay ) );
-		cards.add( CardFactory.createCard( CardType.DrivingAce ));
-		cards.add( CardFactory.createCard( CardType.ExtraTank ) );
-		cards.add( CardFactory.createCard( CardType.PunctureProof ) );
-
-		/* ADD DISTANCES CARDS */
-
-		addCards( DistanceCard.MAX_25, CardType.Distance25 );
-		addCards( DistanceCard.MAX_50, CardType.Distance50 );
-		addCards( DistanceCard.MAX_75, CardType.Distance75 );
-		addCards( DistanceCard.MAX_100, CardType.Distance100 );
-		addCards( DistanceCard.MAX_200, CardType.Distance200 );
+		addCard( CardFactory.createRemedy( CardFamily.Gas ), RemedyCard.MAX_GASOLINE );
+		addCard( CardFactory.createRemedy( CardFamily.GoStop ), RemedyCard.MAX_GO_ROLL );
+		addCard( CardFactory.createRemedy( CardFamily.Speed ), RemedyCard.MAX_END_OF_LIMIT );
+		addCard( CardFactory.createRemedy( CardFamily.StateOfCar ), RemedyCard.MAX_REPAIRS );
+		addCard( CardFactory.createRemedy( CardFamily.Tire ), RemedyCard.MAX_SPARE_TIRE );
 	}
 
 	// ------------ METHODS ------------ //
 
-	public static DeckStack getInstance() {
-		return DeckStackHolder.INSTANCE;
+	private void addCard( Card c, int number ) {
+		for ( int i = 0; i < number ; i++ ) {
+			super.cards.add( c );
+		}
 	}
 	
-	private void addCards( int maxNumber, CardType type ) {
-		for ( int i = 0; i < maxNumber ; i++ ) {
-			cards.add( CardFactory.createCard( type ) );
-		}
+	public static DeckStack getInstance() {
+		return DeckStackHolder.INSTANCE;
 	}
 	
 	public void shuffle() {
