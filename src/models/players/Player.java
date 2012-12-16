@@ -119,7 +119,7 @@ public abstract class Player {
 
 	public boolean isSlowed() {
 		for ( int i = 0; i < distanceStack.size() ; i++) {
-			if ( distanceStack.get( i ).getType() == CardType.SpeedLimit ) {
+			if ( distanceStack.get( i ).isSpeedLimit() ) {
 				return true;
 			}
 		}

@@ -45,7 +45,7 @@ public class SafetyCard extends Card {
 			}
 		}
 		
-		if ( p.isSlowed() && this.getType() == CardType.RightOfWay ) {
+		if ( p.isSlowed() && this.isRightOfWay() ) {
 			p.getDistanceStack().discardHazards();
 		}
 		

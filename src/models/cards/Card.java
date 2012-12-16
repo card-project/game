@@ -48,6 +48,29 @@ public abstract class Card {
 		return this instanceof RemedyCard && isGoStopFamily ;
 	}
 	
+	public boolean isSpeedLimit() {
+		boolean isSpeedFamily = false;
+		for( CardFamily cf : this.getFamilies() ) {
+			if ( cf == CardFamily.Speed ) {
+				isSpeedFamily = true;
+			}
+		}
+		
+		return this instanceof HazardCard && isSpeedFamily;
+	}
+	
+	public boolean isRightOfWay() {
+		if ( this instanceof SafetyCard ) {
+			for( CardFamily cf : this.getFamilies() ) {
+				if ( cf == CardFamily.Speed || cf == CardFamily.GoStop ) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	public boolean counteract( CardFamily hazardFamily ) {
 		if ( this instanceof RemedyCard || this instanceof SafetyCard ) {
 			for ( CardFamily cf : this.getFamilies() ) {

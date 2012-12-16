@@ -1,7 +1,6 @@
 package models.stacks.player;
 
 import models.cards.Card;
-import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.exceptions.IllegalCardTypeException;
@@ -62,8 +61,10 @@ public class DistanceStack extends PlayerStack {
 	public Boolean maxNumberOfDistance200IsReached() {
 		int distances200Counter = 0;
 		for ( Card c : super.cards ) {
-			if ( c.getType() == CardType.Distance200 ) {
-				distances200Counter++;
+			if ( c instanceof DistanceCard ) {
+				if ( ( ( DistanceCard ) c ).getRange() == 200 ) {
+					distances200Counter++;
+				}
 			}
 		}
 		
@@ -71,7 +72,12 @@ public class DistanceStack extends PlayerStack {
 	}
 
 	public boolean isSlowed() {
-		return exists( CardType.SpeedLimit );
+		for ( Card c : super.cards ) {
+			if ( c.isSpeedLimit() ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void increaseBy100() {

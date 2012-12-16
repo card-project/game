@@ -1,7 +1,6 @@
 package models.stacks.player;
 
 import models.cards.Card;
-import models.cards.CardType;
 import models.cards.HazardCard;
 import models.exceptions.IllegalCardTypeException;
 import models.stacks.game.DiscardStack;
@@ -20,7 +19,7 @@ public class BattleStack extends PlayerStack {
 	public void push( Card item ) throws IllegalCardTypeException {
 		if ( item instanceof HazardCard ) {
 			this.cards.push( item );
-		} else if ( ( ! initialGoRollIsPlayed && item.getType() == CardType.GoRoll ) ) {
+		} else if ( ( ! initialGoRollIsPlayed && item.isGoRoll() ) ) {
 			initialGoRollIsPlayed = true;
 			this.cards.push( item );
 		} else {

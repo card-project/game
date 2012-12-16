@@ -3,7 +3,6 @@ package models.stacks.player;
 import java.util.LinkedList;
 
 import models.cards.Card;
-import models.cards.CardType;
 import models.exceptions.IllegalCardTypeException;
 import models.stacks.CardsStack;
 
@@ -23,16 +22,6 @@ public abstract class PlayerStack extends CardsStack {
 
 	public Card get( int index ) {
 		return this.cards.get( index );
-	}
-
-	public boolean exists( CardType ct ) {
-		for ( Card c : this.cards ) {
-			if ( ct == c.getType() ) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public void remove( Card item ) {
