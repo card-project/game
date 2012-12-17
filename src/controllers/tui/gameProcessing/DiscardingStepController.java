@@ -1,6 +1,7 @@
 package controllers.tui.gameProcessing;
 
 import models.Game;
+import models.cards.Card;
 import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.stacks.player.HandStack;
@@ -40,7 +41,8 @@ public class DiscardingStepController extends StepController {
 	}
 	
 	private void performAIDiscardingStep() {
-		( ( AIPlayer ) super.currentPlayer ).discard( );
+		Card discardedCard = ( ( AIPlayer ) super.currentPlayer ).discard( );
+		tui.inform( "DISCARDED : " + discardedCard + '\n' );
 	}
 	
 	private void performHumanDiscardingStep() {

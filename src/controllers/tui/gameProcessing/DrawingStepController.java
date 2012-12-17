@@ -41,7 +41,10 @@ public class DrawingStepController extends StepController {
 	
 	private void performAIPlayingStep() {
 
+		System.out.println( ( ( AIPlayer ) super.currentPlayer ).getBrain().getMind() );
+		
 		( ( AIPlayer ) super.currentPlayer ).draw();
+		tui.inform( "HAND : " + super.currentPlayer.getHandStack() );
 
 	}
 	

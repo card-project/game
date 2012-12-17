@@ -7,6 +7,7 @@ import java.util.Random;
 import models.cards.Card;
 import models.players.AIPlayer;
 import models.players.Player;
+import models.stacks.game.DeckStack;
 import models.stacks.game.GameStack;
 
 public class Brain implements Strategy {
@@ -15,7 +16,7 @@ public class Brain implements Strategy {
 
 	private LinkedList<Strategy> mind = new LinkedList<Strategy>();
 	private AIPlayer player;
-	private Integer goal;
+	private Integer gameDistanceGoal;
 	
 	// ------------ CONSTRUCTORS ------------ //
 	
@@ -34,60 +35,65 @@ public class Brain implements Strategy {
 	// ------------ METHODS ------------ //
 	
 	private void initStrategies( ArrayList<Player> opponents ) {
-		switch ( new Random().nextInt() % 4 ) {
+		switch ( new Random().nextInt( 3 ) ) {
 		case 0:
 			this.mind.add( new Driver( this.player ) );
 			this.mind.add( new Protector( this.player ) );
 			this.mind.add( new Roadhog( this.player, opponents ) );
 			break;
 		case 1:
-			this.mind.add( new Driver( this.player ) );
 			this.mind.add( new Roadhog( this.player, opponents ) );
+			this.mind.add( new Driver( this.player ) );
 			this.mind.add( new Protector( this.player ) );
 			break;
 		case 2:
-			this.mind.add( new Roadhog( this.player, opponents ) );
-			this.mind.add( new Protector( this.player ) );
-			this.mind.add( new Driver( this.player ) );
-			break;
-		case 3:
 			this.mind.add( new Driver( this.player ) );
 			this.mind.add( new Trapper( this.player ) );
-			this.mind.add( new Roadhog( this.player, opponents ) );
+			this.mind.add( new Protector( this.player ) );
 			break;
 		}
 	}
 	
 	@Override
 	public GameStack chooseStackToDraw() {
+		GameStack chosenStack = null;
 		for( Strategy s : this.mind ) {
-			if ( s.chooseStackToDraw() != null ) {
-				return s.chooseStackToDraw();
+			if ( chosenStack == null ) {
+				chosenStack = s.chooseStackToDraw();
 			}
 		}
 		
-		return null;
+		if ( chosenStack == null ) {
+			chosenStack =  DeckStack.getInstance();
+		}
+		
+		return chosenStack;
 	}
 
 	@Override
+	// FIXME
 	public Card chooseCardToPlay() {
-		if( this.player.canPlay( this.player.getOpponents(), this.goal ) ) {
+		Card chosenCard = null;
+		
+		if ( this.player.canPlay( this.player.getOpponents(), this.gameDistanceGoal ) ) {
+			System.out.println( "CAN PLAY" );
 			for( Strategy s : this.mind ) {
-				if ( s.chooseCardToPlay() != null ) {
-					return s.chooseCardToPlay();
+				if ( chosenCard == null ) {
+					chosenCard = s.chooseCardToPlay();
 				}
 			}
 		}
 		
-		return null;
+		return chosenCard;
 	}
 
 	@Override
 	public Card chooseCardToDiscard() {
 		Card cardToDiscard = null;
-		for ( int i = this.mind.size() ; i >= 0 ; i-- ) {
-			if ( this.mind.get( i ) != null ) {
-				cardToDiscard = this.mind.get( i ).chooseCardToDiscard();  
+		
+		for ( int i = this.mind.size() - 1 ; i >= 0 ; i-- ) {
+			if ( cardToDiscard == null ) {
+				cardToDiscard = this.mind.get( i ).chooseCardToDiscard();
 			}
 		}
 		
@@ -105,10 +111,16 @@ public class Brain implements Strategy {
 		return chosenTarget;
 	}
 	
+	// -------------- GETTERS -------------- //
+	
+	public LinkedList<Strategy> getMind() {
+		return mind;
+	}
+	
 	// ------------ SETTERS ------------ //
 
 	public void setDistanceGoal( Integer goal ) {
-		this.goal = goal;
+		this.gameDistanceGoal = goal;
 	}
 
 }

@@ -95,7 +95,6 @@ public class Game {
 			for( Player p : this.players ) {
 				if ( p instanceof AIPlayer ) {
 					( (AIPlayer) p ).setOpponents( getOpponents( p ) );
-					( (AIPlayer) p ).setDistanceGoal( this.goal );
 				}
 			}
 		}
@@ -106,9 +105,15 @@ public class Game {
 			throw new IllegalDistanceException();
 		} else {
 			this.goal = distanceGoal;
+			
+			for( Player p : this.players ) {
+				if ( p instanceof AIPlayer ) {
+					( (AIPlayer) p ).setDistanceGoal( this.goal );
+				}
+			}
+			
 		}
 	}
-	
 
 	public void setPlayerAlias( Player player, String askedPlayerAlias ) throws AliasAlreadyChosenException  {
 		for ( Player p : this.players ) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import models.cards.Card;
 import models.cards.CardFamily;
+import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.players.AIPlayer;
 import models.players.Player;
@@ -92,8 +93,10 @@ public class Roadhog implements Strategy {
 			for ( Player p : opponents ) {
 				for ( Card safety : p.getSafetyStack().getCards() ) {
 					for ( Card handCard : this.player.getHandStack().getCards() ) {
-						if ( safety.getFamily() == handCard.getFamily() ) {
-							cardToDiscard = handCard;
+						if ( ! ( handCard instanceof DistanceCard ) ) {
+							if ( safety.getFamily() == handCard.getFamily() ) {
+								cardToDiscard = handCard;
+							}
 						}
 					}
 				}

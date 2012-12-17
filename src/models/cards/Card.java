@@ -18,8 +18,6 @@ public abstract class Card {
 	
 	// ------------ CONSTRUCTORS ------------ //
 	
-	public Card() { }
-	
 	protected Card( CardFamily initialFamily, CardType cardType ) {
 		this.families = new ArrayList<CardFamily>();
 		this.addFamily( initialFamily );
@@ -60,15 +58,15 @@ public abstract class Card {
 	}
 	
 	public boolean isRightOfWay() {
-		if ( this instanceof SafetyCard ) {
-			for( CardFamily cf : this.getFamilies() ) {
-				if ( cf == CardFamily.Speed || cf == CardFamily.GoStop ) {
-					return true;
-				}
+		boolean isSpeedOrGoStopFamily = false;
+		
+		for( CardFamily cf : this.getFamilies() ) {
+			if ( cf == CardFamily.Speed || cf == CardFamily.GoStop ) {
+				isSpeedOrGoStopFamily = true;
 			}
 		}
 		
-		return false;
+		return this instanceof HazardCard && isSpeedOrGoStopFamily;
 	}
 	
 	public boolean counteract( CardFamily hazardFamily ) {

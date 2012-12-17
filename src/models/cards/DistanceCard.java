@@ -20,40 +20,24 @@ public class DistanceCard extends Card {
 	public static final int MAX_100 = 9;
 	public static final int MAX_200 = 3;
 	
+	private static final CardFamily cf = CardFamily.Speed;
+	
 	// ------------ ATTRIBUTES ------------ //
 	
 	private int range;
 
 	// ------------ CONSTRUCTORS ------------ //
 	
-	protected DistanceCard( int rangeValue ) {
-		super();
-		this.range = rangeValue;
-		
-		setType();
+	protected DistanceCard( CardType type ) {
+		super( cf, type );
+		try {
+			setRange();
+		} catch ( IllegalCardTypeException e ) {
+			e.printStackTrace();
+		}
 	}
 	
 	// ------------ METHODS ------------ //
-	
-	private void setType() {
-		switch ( this.range ) {
-		case 25:
-			this.type = CardType.Distance25;
-			break;
-		case 50:
-			this.type = CardType.Distance50;
-			break;
-		case 75:
-			this.type = CardType.Distance75;
-			break;
-		case 100:
-			this.type = CardType.Distance100;
-			break;
-		case 200:
-			this.type = CardType.Distance200;
-			break;
-		}		
-	}
 	
 	public boolean isPlayableOn ( Player p, int distanceGoal ) {
 		if ( ! p.hasStarted() ) {
@@ -95,8 +79,35 @@ public class DistanceCard extends Card {
 	}
 	
 	// ------------ SETTERS ------------ //
+	
+	private void setRange() throws IllegalCardTypeException {
+		switch ( super.type ) {
+		case Distance25:
+			this.range = 25;
+			break;
+		case Distance50:
+			this.range = 50;
+			break;
+		case Distance75:
+			this.range = 75;
+			break;
+		case Distance100:
+			this.range = 100;
+			break;
+		case Distance200:
+			this.range = 200;
+			break;
+		default:
+			throw new IllegalCardTypeException();
+		}
+	}
 
 	public void setRange( int range ) {
-		this.range = range;
+		if ( range == 25 && range == 50 && range == 75 && range == 100 && range == 200 ) {
+			throw new IllegalAccessError();
+		} else {
+			this.range = range;
+		}
 	}
+	
 }

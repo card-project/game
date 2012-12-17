@@ -47,15 +47,15 @@ public class CardFactory {
 	public static DistanceCard createDistance( int value ) {
 		switch ( value ) {
 		case 25: 
-			return new DistanceCard( 25 );
+			return new DistanceCard( CardType.Distance25 );
 		case 50: 
-			return new DistanceCard( 50 );
+			return new DistanceCard( CardType.Distance50 );
 		case 75: 
-			return new DistanceCard( 75 );
+			return new DistanceCard( CardType.Distance75 );
 		case 100: 
-			return new DistanceCard( 100 );
+			return new DistanceCard( CardType.Distance100 );
 		case 200: 
-			return new DistanceCard( 200 );
+			return new DistanceCard( CardType.Distance200 );
 		}
 		
 		return null;

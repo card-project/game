@@ -19,8 +19,9 @@ import models.stacks.player.HandStack;
 import models.stacks.player.SafetyStack;
 
 /**
- * @author Simon RENOULT
  * @version 1.2.4
+ * 
+ * @author Simon RENOULT
  */
 public abstract class Player {
 

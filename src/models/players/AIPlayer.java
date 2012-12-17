@@ -40,6 +40,7 @@ public class AIPlayer extends Player {
 	}
 	
 	// TODO END ME AND YOU WILL BE HAPPY !!
+	// FIXME
 	public boolean play() {
 		Card chosenCard = brain.chooseCardToPlay();
 		boolean replay = false;
@@ -62,8 +63,11 @@ public class AIPlayer extends Player {
 		return replay;
 	}
 	
-	public void discard() {
-		super.discard( brain.chooseCardToDiscard() );
+	public Card discard() {
+		Card chosenCard = brain.chooseCardToDiscard();
+		super.discard( chosenCard );
+		
+		return chosenCard;
 	}
 	
 	@Override
@@ -75,6 +79,10 @@ public class AIPlayer extends Player {
 	
 	public ArrayList<Player> getOpponents() {
 		return opponents;
+	}
+	
+	public Brain getBrain() {
+		return brain;
 	}
 	
 	// ------------ SETTERS ------------ //
