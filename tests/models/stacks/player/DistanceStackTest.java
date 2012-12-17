@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import models.cards.CardFactory;
+import models.cards.CardFamily;
 import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.exceptions.IllegalCardTypeException;
@@ -19,61 +20,22 @@ public class DistanceStackTest {
 
 	// ------------ METHODS ------------ //
 
-	@Before
-	public void initialize() {
+	@Before public void initialize() {
 		this.distanceStack.getCards().clear();
 		this.distanceStack.resetBonuses();
 	}
 
-	@Test
-	public void testPush() {
-		this.push( CardType.Distance25, true );
-		this.push( CardType.Distance25, true );
-		this.push( CardType.Distance25, true );
-
-		this.push( CardType.Distance50, true );
-		this.push( CardType.Distance50, true );
-		this.push( CardType.Distance50, true );
-
-		this.push( CardType.Distance75, true );
-		this.push( CardType.Distance75, true );
-		this.push( CardType.Distance75, true );
-
-		this.push( CardType.Distance100, true );
-		this.push( CardType.Distance100, true );
-		this.push( CardType.Distance100, true );
-
-		this.push( CardType.Distance200, true );
-		this.push( CardType.Distance200, true );
-
-		this.push( CardType.Distance200, false );
+	@Test public void testPush() {
+		assertTrue( "Not implemented yet.", false );
 	}
 
-	private void push( CardType type, boolean expected ) {
-		Throwable caught = null;
-
-		try {
-			this.distanceStack.push( CardFactory.createCard( type ) );
-		} catch ( IllegalCardTypeException e ) {
-			caught = e;
-		}
-
-		assertEquals( caught == null, expected );
-	}
-
-	@Test
-	public void testGetTravelledDistance() {
-		DistanceCard c25 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance25 );
-		DistanceCard c50 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance50 );
-		DistanceCard c75 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance75 );
-		DistanceCard c100 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance100 );
-		DistanceCard c200 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance200 );
-
+	@Test public void testGetTravelledDistance() {
+		DistanceCard c25 = CardFactory.createDistance( 25 );
+		DistanceCard c50 = CardFactory.createDistance( 50 );
+		DistanceCard c75 = CardFactory.createDistance( 75 );
+		DistanceCard c100 = CardFactory.createDistance( 100 );
+		DistanceCard c200 = CardFactory.createDistance( 200 );
+		
 		try {
 			this.distanceStack.push( c25 );
 			this.distanceStack.push( c50 );
@@ -88,27 +50,23 @@ public class DistanceStackTest {
 				+ c100.getRange() + c200.getRange();
 
 		assertEquals( total, distanceStack.getTraveledDistance() );
-
 	}
 
 	@Test
 	public void testMaxNumberOfDistance200IsReached() {
 		assertFalse( this.distanceStack.maxNumberOfDistance200IsReached() );
 
-		this.distanceStack.getCards().add(
-				CardFactory.createCard( CardType.Distance200 ) );
+		this.distanceStack.getCards().add( CardFactory.createDistance( 200 ) );
 		assertFalse( this.distanceStack.maxNumberOfDistance200IsReached() );
 
-		this.distanceStack.getCards().add(
-				CardFactory.createCard( CardType.Distance200 ) );
+		this.distanceStack.getCards().add( CardFactory.createDistance( 200 ) );
 		assertTrue( this.distanceStack.maxNumberOfDistance200IsReached() );
 	}
 
 	@Test
 	public void testIsSlowed() {
 		try {
-			this.distanceStack.push( CardFactory
-					.createCard( CardType.SpeedLimit ) );
+			this.distanceStack.push( CardFactory.createHazard( CardFamily.Speed ) );
 		} catch ( IllegalCardTypeException e ) {
 			e.printStackTrace();
 		}
@@ -118,16 +76,11 @@ public class DistanceStackTest {
 
 	@Test
 	public void testIncreaseBy100() {
-		DistanceCard c25 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance25 );
-		DistanceCard c50 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance50 );
-		DistanceCard c75 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance75 );
-		DistanceCard c100 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance100 );
-		DistanceCard c200 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance200 );
+		DistanceCard c25 = CardFactory.createDistance( 25 );
+		DistanceCard c50 = CardFactory.createDistance( 50 );
+		DistanceCard c75 = CardFactory.createDistance( 75 );
+		DistanceCard c100 = CardFactory.createDistance( 100 );
+		DistanceCard c200 = CardFactory.createDistance( 200 );
 
 		try {
 			this.distanceStack.push( c25 );
@@ -149,16 +102,11 @@ public class DistanceStackTest {
 
 	@Test
 	public void testIncreaseBy300() {
-		DistanceCard c25 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance25 );
-		DistanceCard c50 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance50 );
-		DistanceCard c75 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance75 );
-		DistanceCard c100 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance100 );
-		DistanceCard c200 = (DistanceCard) CardFactory
-				.createCard( CardType.Distance200 );
+		DistanceCard c25 = CardFactory.createDistance( 25 );
+		DistanceCard c50 = CardFactory.createDistance( 50 );
+		DistanceCard c75 = CardFactory.createDistance( 75 );
+		DistanceCard c100 = CardFactory.createDistance( 100 );
+		DistanceCard c200 = CardFactory.createDistance( 200 );
 
 		try {
 			this.distanceStack.push( c25 );

@@ -4,8 +4,6 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
-import models.stacks.game.DeckStack;
-
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,12 +1,9 @@
 package models.stacks.player;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import models.cards.Card;
 import models.cards.CardFactory;
 import models.cards.CardFamily;
-import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
@@ -25,14 +22,10 @@ public class SafetyStackTest {
 
 	@Test
 	public void testPush() {
-		SafetyCard correctCard = (SafetyCard) CardFactory
-				.createCard( CardType.DrivingAce );
-		DistanceCard distanceCard = (DistanceCard) CardFactory
-				.createCard( CardType.Distance25 );
-		HazardCard hazardCard = (HazardCard) CardFactory
-				.createCard( CardType.Accident );
-		RemedyCard remedyCard = (RemedyCard) CardFactory
-				.createCard( CardType.Repairs );
+		SafetyCard correctCard = CardFactory.createSafety( CardFamily.StateOfCar );
+		HazardCard hazardCard = CardFactory.createHazard( CardFamily.StateOfCar );
+		RemedyCard remedyCard = CardFactory.createRemedy( CardFamily.StateOfCar );
+		DistanceCard distanceCard = CardFactory.createDistance( 25 );
 
 		push( correctCard, true );
 		push( distanceCard, false );

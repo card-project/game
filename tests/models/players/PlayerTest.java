@@ -1,13 +1,12 @@
 package models.players;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
 import models.cards.CardFactory;
-import models.cards.CardType;
+import models.cards.CardFamily;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
 import models.exceptions.IllegalCardTypeException;
@@ -46,16 +45,15 @@ public class PlayerTest {
 	}
 	
 	@Test public void testIsProtectedFrom() throws IllegalCardTypeException {
-		isProtectedFrom( CardType.Accident );
-		isProtectedFrom( CardType.FlatTire );
-		isProtectedFrom( CardType.OutOfGas );
-		isProtectedFrom( CardType.SpeedLimit );
-		isProtectedFrom( CardType.Stop );
-	
+		isProtectedFrom( CardFamily.StateOfCar );
+		isProtectedFrom( CardFamily.Tire );
+		isProtectedFrom( CardFamily.Gas );
+		isProtectedFrom( CardFamily.Speed );
+		isProtectedFrom( CardFamily.GoStop );
 	}
 
-	private void isProtectedFrom( CardType hazardReference ) throws IllegalCardTypeException {
-		HazardCard hazardCard = (HazardCard) CardFactory.createCard( hazardReference );
+	private void isProtectedFrom( CardFamily cf ) throws IllegalCardTypeException {
+		HazardCard hazardCard = CardFactory.createHazard( cf );
 		
 		// -- > Case 1 : No protection
 		
@@ -63,9 +61,9 @@ public class PlayerTest {
 		
 		// -- > Case 2 : DrivingAce
 		
-		opponent.safetyStack.push( CardFactory.createCard( CardType.DrivingAce ) );
+		opponent.safetyStack.push( CardFactory.createSafety( CardFamily.StateOfCar ) );
 		
-		if ( hazardReference == CardType.Accident ) {
+		if ( cf == CardFamily.StateOfCar ) {
 			assertTrue( opponent.isProtectedFrom( hazardCard ) );
 		} else {
 			assertFalse( opponent.isProtectedFrom( hazardCard ) );
@@ -75,9 +73,9 @@ public class PlayerTest {
 		
 		// -- > Case 3 : ExtraTank
 
-		opponent.safetyStack.push( CardFactory.createCard( CardType.ExtraTank ) );
+		opponent.safetyStack.push( CardFactory.createSafety( CardFamily.Gas ) );
 
-		if ( hazardReference == CardType.OutOfGas ) {
+		if ( cf == CardFamily.Gas ) {
 			assertTrue( opponent.isProtectedFrom( hazardCard ) );
 		} else {
 			assertFalse( opponent.isProtectedFrom( hazardCard ) );			
@@ -87,9 +85,9 @@ public class PlayerTest {
 		
 		// -- > Case 4 : PunctureProof
 
-		opponent.safetyStack.push( CardFactory.createCard( CardType.PunctureProof ) );
+		opponent.safetyStack.push( CardFactory.createSafety( CardFamily.Tire ) );
 
-		if ( hazardReference == CardType.FlatTire ) {
+		if ( cf == CardFamily.Tire ) {
 			assertTrue( opponent.isProtectedFrom( hazardCard ) );
 		} else {
 			assertFalse( opponent.isProtectedFrom( hazardCard ) );			
@@ -99,9 +97,9 @@ public class PlayerTest {
 		
 		// -- > Case 5 : RightOfWay
 
-		opponent.safetyStack.push( CardFactory.createCard( CardType.RightOfWay ) );
+		opponent.safetyStack.push( CardFactory.createSafety( CardFamily.GoStop ) );
 
-		if ( hazardReference == CardType.Stop || hazardReference == CardType.SpeedLimit ) {
+		if ( cf == CardFamily.GoStop|| cf == CardFamily.Speed ) {
 			assertTrue( opponent.isProtectedFrom( hazardCard ) );
 		} else {
 			assertFalse( opponent.isProtectedFrom( hazardCard ) );			
@@ -115,53 +113,53 @@ public class PlayerTest {
 		
 		// -- > Case 1 : Player has not started yet : Distance
 
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Distance25 ) );
+		testPlayer.getHandStack().push( CardFactory.createDistance( 25 ) );
 		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.getHandStack().pop();
 
 		// -- > Case 2 : Player has not started yet : Safety
 		
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		testPlayer.getHandStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
 		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.getHandStack().pop();
 
 		// -- > Case 3 : Player has started
 		
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		testPlayer.getHandStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.getHandStack().pop();
 
 		// -- > Case 4 : Repairs if not attacked
 		
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
+		testPlayer.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
 		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.getHandStack().pop();
 
 		// -- > Case 5 : Hazard if opponent is not attacked
 		
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
+		testPlayer.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.getHandStack().pop();
 
 		// -- > Case 6 : Hazard on not started opponent
 
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
+		testPlayer.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.getHandStack().pop();
 		
 		// -- > Case 7 : Hazard on started opponent
 
-		opponent.getBattleStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		opponent.getBattleStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
+		testPlayer.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.getHandStack().pop();
 
 		// -- > Case 8 : Hazard on (started) attacked opponent
 		
-		opponent.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
+		opponent.getBattleStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.FlatTire ) );
+		testPlayer.getHandStack().push( CardFactory.createHazard( CardFamily.Tire ) );
 		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.getHandStack().pop();
 
@@ -169,15 +167,15 @@ public class PlayerTest {
 		
 		// -- > Case 9 : Remedy if not attacked
 		
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
+		testPlayer.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
 		assertFalse( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.getHandStack().pop();
 
 		// -- > Case 10 : Remedy if attacked
 
-		testPlayer.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
+		testPlayer.getBattleStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
+		testPlayer.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
 		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
 		testPlayer.getHandStack().pop();
 		
@@ -185,19 +183,19 @@ public class PlayerTest {
 		
 		// -- > Case 11 : Safety
 		
-		testPlayer.getHandStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		testPlayer.getHandStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
 		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
 		
 	}
 
 	@Test public void test() throws IllegalCardTypeException {
-		testPlayer.handStack.push( CardFactory.createCard( CardType.OutOfGas ) );
-		testPlayer.handStack.push( CardFactory.createCard( CardType.Distance200 ) );
-		testPlayer.handStack.push( CardFactory.createCard( CardType.EndOfLimit ) );
-		testPlayer.handStack.push( CardFactory.createCard( CardType.Distance100 ) );
-		testPlayer.handStack.push( CardFactory.createCard( CardType.SpeedLimit ) );
+		testPlayer.handStack.push( CardFactory.createHazard( CardFamily.Gas ) );
+		testPlayer.handStack.push( CardFactory.createDistance( 200 ) );
+		testPlayer.handStack.push( CardFactory.createRemedy( CardFamily.Speed ) );
+		testPlayer.handStack.push( CardFactory.createDistance( 100 ) );
+		testPlayer.handStack.push( CardFactory.createHazard( CardFamily.Speed ) );
 		
-		( ( RemedyCard )CardFactory.createCard( CardType.GoRoll ) ).playOn( testPlayer );
+		( ( RemedyCard )CardFactory.createRemedy( CardFamily.GoStop ) ).playOn( testPlayer );
 		
 		assertTrue( testPlayer.canPlay( opponents, GOAL ) );
 		

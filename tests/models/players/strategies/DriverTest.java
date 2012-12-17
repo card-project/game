@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import models.cards.CardFactory;
 import models.cards.CardFamily;
-import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.cards.RemedyCard;
 import models.exceptions.IllegalCardTypeException;
@@ -26,12 +25,12 @@ public class DriverTest {
 
 		// -- > Case 1 : No distance available on discard stack
 		
-		DiscardStack.getInstance().push( CardFactory.createCard( CardType.Accident ) );
+		DiscardStack.getInstance().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		assertNull( driver.chooseStackToDraw() );
 		
 		// -- > Case 2 : Distance available on discard stack
 		
-		DiscardStack.getInstance().push( CardFactory.createCard( CardType.Distance25 ) );
+		DiscardStack.getInstance().push( CardFactory.createDistance( 25 ) );
 		assertTrue( driver.chooseStackToDraw() instanceof DiscardStack );
 	}
 	
@@ -39,9 +38,9 @@ public class DriverTest {
 		
 		// -- > Setting context : Initiate player's hand
 		
-		driver.getPlayer().getHandStack().push( CardFactory.createCard( CardType.Distance100 ) );
-		driver.getPlayer().getHandStack().push( CardFactory.createCard( CardType.Distance50) );
-		driver.getPlayer().getHandStack().push( CardFactory.createCard( CardType.Accident ) );
+		driver.getPlayer().getHandStack().push( CardFactory.createDistance( 25 ) );
+		driver.getPlayer().getHandStack().push( CardFactory.createDistance( 50 ) );
+		driver.getPlayer().getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		
 		// -- > Case 1 : Nothing to play (need initial GoRoll)
 		
@@ -49,13 +48,13 @@ public class DriverTest {
 		
 		// -- > Case 2 : GoRoll in hand and player has not started
 		
-		driver.getPlayer().getHandStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		driver.getPlayer().getHandStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 		assertTrue( driver.chooseCardToPlay().getFamily() == CardFamily.GoStop );
 		assertTrue( driver.chooseCardToPlay() instanceof RemedyCard );
 		
 		// -- > Case 3 : Distance in hand and play has started
 		
-		driver.getPlayer().getBattleStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		driver.getPlayer().getBattleStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 		assertEquals( ( ( DistanceCard ) driver.chooseCardToPlay() ).getRange(), 100 ); 
 		assertTrue( driver.chooseCardToPlay() instanceof DistanceCard );
 	}
@@ -64,9 +63,9 @@ public class DriverTest {
 		
 		// -- > Setting context : Initiate player's hand
 	
-		driver.getPlayer().getHandStack().push( CardFactory.createCard( CardType.Distance100 ) );
-		driver.getPlayer().getHandStack().push( CardFactory.createCard( CardType.Distance50) );
-		driver.getPlayer().getHandStack().push( CardFactory.createCard( CardType.Accident ) );
+		driver.getPlayer().getHandStack().push( CardFactory.createDistance( 100 ) );
+		driver.getPlayer().getHandStack().push( CardFactory.createDistance( 50 ) );
+		driver.getPlayer().getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 
 		// -- > Case 1
 		

@@ -3,7 +3,7 @@ package models.stacks.player;
 import static org.junit.Assert.assertTrue;
 import models.cards.Card;
 import models.cards.CardFactory;
-import models.cards.CardType;
+import models.cards.CardFamily;
 import models.cards.HazardCard;
 import models.exceptions.IllegalCardTypeException;
 
@@ -25,8 +25,7 @@ public class HandStackTest {
 
 	@Test
 	public void testHasRemedyFor() {
-		CardType refType = CardType.Repairs;
-		Card c = CardFactory.createCard( refType );
+		Card c = CardFactory.createRemedy( CardFamily.StateOfCar );
 
 		try {
 			this.handStack.push( c );
@@ -36,7 +35,7 @@ public class HandStackTest {
 
 		assertTrue( handStack.hasRemedyFor( c.getFamily() ) );
 
-		HazardCard hc = (HazardCard) CardFactory.createCard( CardType.Accident );
+		HazardCard hc = CardFactory.createHazard( CardFamily.StateOfCar );
 
 		assertTrue( handStack.hasRemedyFor( hc.getFamily() ) );
 	}

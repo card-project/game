@@ -40,36 +40,36 @@ public class CardFactoryTest {
 	}
 	
 	private void testDistanceCard( CardType ct, int rangeValue ) {
-		c = CardFactory.createCard( ct );
+		c = CardFactory.createDistance( rangeValue );
 		assertTrue( c instanceof DistanceCard );
 		assertTrue( ( ( DistanceCard ) c ).getRange() == rangeValue ); 
 		assertTrue( c.getType() == ct ); 
-		assertTrue(  c.getFamilies() == null );
+		assertTrue(  c.getFamily() == CardFamily.Speed );
 	}
 	
 	private void testHazardCard( CardType ct, CardFamily cf ) {
-		c = CardFactory.createCard( ct );
+		c = CardFactory.createHazard( cf );
 		assertTrue( c instanceof HazardCard );
 		assertTrue( c.getType() == ct ); 
 		assertTrue(  c.getFamily() == cf );
 	}
 	
 	private void testRemedyCard ( CardType ct, CardFamily cf ) {
-		c = CardFactory.createCard( ct );
+		c = CardFactory.createRemedy( cf );
 		assertTrue( c instanceof RemedyCard );
 		assertTrue( c.getType() == ct ); 
 		assertTrue(  c.getFamily() == cf );
 	}
 	
 	private void testSafetyCard ( CardType ct, CardFamily cf ) {
-		c = CardFactory.createCard( ct );
+		c = CardFactory.createSafety( cf );
 		assertTrue( c instanceof SafetyCard );
 		assertTrue( c.getType() == ct ); 
 		assertTrue(  c.getFamily() == cf );
 	}
 	
 	private void testSafetyCard ( CardType ct, CardFamily cf1, CardFamily cf2 ) {
-		c = CardFactory.createCard( ct );
+		c = CardFactory.createSafety( cf1 );
 		assertTrue( c instanceof SafetyCard );
 		assertTrue( c.getType() == ct ); 
 		for ( CardFamily cf : c.getFamilies() ) {

@@ -1,11 +1,11 @@
 package models.players.strategies;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.fail;
-import models.cards.CardFamily;
-import models.cards.CardType;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import models.cards.CardFactory;
-import models.cards.DistanceCard;
+import models.cards.CardFamily;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
 import models.exceptions.IllegalCardTypeException;
@@ -31,13 +31,13 @@ public class ProtectorTest {
 		
 		// -- > Case 2 : Non corresponding card in discard stack
 		
-		DiscardStack.getInstance().push( CardFactory.createCard( CardType.Accident ) );
+		DiscardStack.getInstance().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		assertNull( protector.chooseStackToDraw() );
 		DiscardStack.getInstance().pop();
 		
 		// -- > Case 3 : Not started and initial GoRoll available in discardStack
 		
-		DiscardStack.getInstance().push( CardFactory.createCard( CardType.GoRoll ) );
+		DiscardStack.getInstance().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 		assertNotNull( protector.chooseStackToDraw() );
 		assertTrue( protector.chooseStackToDraw().peek() instanceof RemedyCard );
 		assertEquals( protector.chooseStackToDraw().peek().getFamily(), CardFamily.GoStop );
@@ -45,8 +45,8 @@ public class ProtectorTest {
 		
 		// -- > Case 4 : Player is attacked and available Remedy
 		
-		protector.player.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
-		DiscardStack.getInstance().push( CardFactory.createCard( CardType.Repairs) );
+		protector.player.getBattleStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
+		DiscardStack.getInstance().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		assertNotNull( protector.chooseStackToDraw() );
 		assertTrue( protector.chooseStackToDraw().peek() instanceof RemedyCard );
 		assertEquals( protector.chooseStackToDraw().peek().getFamily(), CardFamily.StateOfCar );
@@ -55,8 +55,8 @@ public class ProtectorTest {
 		
 		// -- > Case 5 : Player is slowed and available Remedy
 		
-		protector.player.getDistanceStack().push( CardFactory.createCard( CardType.SpeedLimit ) );
-		DiscardStack.getInstance().push( CardFactory.createCard( CardType.EndOfLimit) );
+		protector.player.getDistanceStack().push( CardFactory.createHazard( CardFamily.Speed ) );
+		DiscardStack.getInstance().push( CardFactory.createRemedy( CardFamily.Speed ));
 		assertNotNull( protector.chooseStackToDraw() );
 		assertTrue( protector.chooseStackToDraw().peek() instanceof RemedyCard );
 		assertEquals( protector.chooseStackToDraw().peek().getFamily(), CardFamily.Speed );
@@ -69,10 +69,10 @@ public class ProtectorTest {
 
 		// -- > Setting context : Initializing hand
 		
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.Distance100 ) );
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		protector.player.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
+		protector.player.getHandStack().push( CardFactory.createDistance( 100 ) );
+		protector.player.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ));
+		protector.player.getHandStack().push( CardFactory.createRemedy( CardFamily.GoStop ));
 		
 		// -- > Case 1 : Not attacked/slowed
 		
@@ -80,14 +80,14 @@ public class ProtectorTest {
 		
 		// -- > Case 2 : Safety in hand
 
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		protector.player.getHandStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
 		assertNotNull ( protector.chooseCardToPlay() );
 		assertTrue( protector.chooseCardToPlay() instanceof SafetyCard );
 		assertEquals( protector.chooseCardToPlay().getFamily() , CardFamily.StateOfCar );
 
 		// -- > Case 3 : Attacked and safety
 		
-		protector.player.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
+		protector.player.getBattleStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		assertNotNull ( protector.chooseCardToPlay() );
 		assertTrue( protector.chooseCardToPlay() instanceof SafetyCard );
 		assertEquals( protector.chooseCardToPlay().getFamily() , CardFamily.StateOfCar );
@@ -95,8 +95,8 @@ public class ProtectorTest {
 		
 		// -- > Case 4 : Slowed and safety
 		
-		protector.player.getDistanceStack().push( CardFactory.createCard( CardType.SpeedLimit ) );
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.RightOfWay ) );
+		protector.player.getDistanceStack().push( CardFactory.createHazard( CardFamily.Speed ));
+		protector.player.getHandStack().push( CardFactory.createSafety( CardFamily.Speed ));
 		assertNotNull ( protector.chooseCardToPlay() );
 		assertTrue( protector.chooseCardToPlay() instanceof SafetyCard );
 		assertEquals( protector.chooseCardToPlay().getFamily(), CardFamily.GoStop );
@@ -109,10 +109,10 @@ public class ProtectorTest {
 		
 		// -- > Setting context : Initializing hand
 		
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.Distance100 ) );
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		protector.player.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
+		protector.player.getHandStack().push( CardFactory.createDistance( 100 ) );
+		protector.player.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
+		protector.player.getHandStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 		
 		// -- > Case 1 : Nothing to discard
 		
@@ -120,14 +120,15 @@ public class ProtectorTest {
 		
 		// -- > Case 2 : Duplicate remedies
 		
-		protector.player.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
+
+		protector.player.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
 		assertNotNull( protector.chooseCardToDiscard() );
 		assertTrue( protector.chooseCardToDiscard() instanceof RemedyCard );
 		assertEquals( protector.chooseCardToDiscard().getFamily(), CardFamily.StateOfCar );
 	
 		// -- > Case 3 : Duplicate remedy/played safety
 		
-		protector.player.getSafetyStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		protector.player.getSafetyStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
 		assertNotNull( protector.chooseCardToDiscard() );
 		assertTrue( protector.chooseCardToDiscard() instanceof RemedyCard );
 		assertEquals( protector.chooseCardToDiscard().getFamily(), CardFamily.StateOfCar );

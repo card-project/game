@@ -14,7 +14,7 @@ public class HazardCardTest {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private HazardCard c = (HazardCard) CardFactory.createCard( CardType.Accident );
+	private HazardCard c = (HazardCard) CardFactory.createHazard( CardFamily.StateOfCar );
 	
 	// ------------ METHODS ------------ //
 	
@@ -25,15 +25,14 @@ public class HazardCardTest {
 
 		assertFalse( c.isPlayableOn( p ) );
 		
-		
 		// -- > Case 2 : Player has started
 
-		p.getBattleStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		p.getBattleStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 		assertTrue( c.isPlayableOn( p ) );
 		
 		// -- > Case 3 : Player is protected
 		
-		p.getSafetyStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		p.getSafetyStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
 		assertFalse( c.isPlayableOn( p ) );
 		p.getSafetyStack().pop();
 		
@@ -43,9 +42,9 @@ public class HazardCardTest {
 		
 		// -- > Case 5 : Player is slowed
 		
-		p.getDistanceStack().push( CardFactory.createCard( CardType.SpeedLimit ) );
+		p.getDistanceStack().push( CardFactory.createHazard( CardFamily.Speed ) );
 		
-		c = (HazardCard) CardFactory.createCard( CardType.SpeedLimit );
+		c = CardFactory.createHazard( CardFamily.Speed );
 		
 		assertFalse( c.isPlayableOn( p ) );
 		p.getDistanceStack().pop();
@@ -56,9 +55,9 @@ public class HazardCardTest {
 		
 		// -- > Case 7 : Player is attacked 
 		
-		p.getBattleStack().push( CardFactory.createCard( CardType.FlatTire ) );
+		p.getBattleStack().push( CardFactory.createHazard( CardFamily.Tire ) );
 
-		c = (HazardCard) CardFactory.createCard( CardType.Accident );
+		c = CardFactory.createHazard( CardFamily.StateOfCar );
 
 		assertFalse( c.isPlayableOn( p ) );
 		p.getBattleStack().pop();
@@ -74,9 +73,9 @@ public class HazardCardTest {
 		Throwable caught = null;
 		
 		Player opponent = new HumanPlayer();
-		opponent.getHandStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		opponent.getHandStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
 		
-		HazardCard hazard = (HazardCard) CardFactory.createCard( CardType.Accident );
+		HazardCard hazard = CardFactory.createHazard( CardFamily.StateOfCar );
 		try {
 			hazard.playOn( p, opponent );
 		} catch ( AvailableCoupFourreException e ) {

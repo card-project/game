@@ -12,7 +12,7 @@ public class SafetyCardTest {
 	
 	// ------------ ATTRIBUTES ------------ //
 	
-	SafetyCard c = (SafetyCard) CardFactory.createCard( CardType.DrivingAce );
+	SafetyCard c = CardFactory.createSafety( CardFamily.StateOfCar );
 	
 	// ------------ METHODS ------------ //
 	

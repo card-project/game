@@ -12,7 +12,7 @@ public class RemedyCardTest {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private RemedyCard c = (RemedyCard) CardFactory.createCard( CardType.GoRoll );
+	private RemedyCard c = CardFactory.createRemedy( CardFamily.GoStop );
 	
 	// ------------ METHODS ------------ //
 	
@@ -23,21 +23,21 @@ public class RemedyCardTest {
 		
 		assertTrue( c.isPlayableOn( p ) );
 		
-		c = (RemedyCard) CardFactory.createCard( CardType.Repairs );
+		c = CardFactory.createRemedy( CardFamily.StateOfCar );
 		
 		assertFalse( c.isPlayableOn( p ) );
 
 		// -- > Case 2 : Player is not slowed
 		
-		c = (RemedyCard) CardFactory.createCard( CardType.EndOfLimit );
+		c = CardFactory.createRemedy( CardFamily.Speed );
 		
 		assertFalse( c.isPlayableOn( p ) );
 
 		// -- > Case 3 : Player is slowed
 		
-		p.getDistanceStack().push( CardFactory.createCard( CardType.SpeedLimit ) );
+		p.getDistanceStack().push( CardFactory.createHazard( CardFamily.Speed ) );
 		
-		c = (RemedyCard) CardFactory.createCard( CardType.EndOfLimit );
+		c = CardFactory.createRemedy( CardFamily.Speed );
 		
 		assertTrue( c.isPlayableOn( p ) );
 		
@@ -45,15 +45,15 @@ public class RemedyCardTest {
 		
 		// -- > Case 4 : Player is not attacked
 		
-		c = (RemedyCard) CardFactory.createCard( CardType.Repairs );
+		c = CardFactory.createRemedy( CardFamily.StateOfCar );
 		
 		assertFalse( c.isPlayableOn( p ) );
 		
 		// -- > Case 5 : Player is attacked
 		
-		p.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
+		p.getBattleStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		
-		c = (RemedyCard) CardFactory.createCard( CardType.Repairs );
+		c = CardFactory.createRemedy( CardFamily.StateOfCar );
 		
 		assertTrue( c.isPlayableOn( p ) );
 		
@@ -61,21 +61,18 @@ public class RemedyCardTest {
 		
 		// -- > Case 6 : Player is attacked and wrong remedy
 		
-		p.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
+		p.getBattleStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		
-		c = (RemedyCard) CardFactory.createCard( CardType.SpareTire );
+		c = CardFactory.createRemedy( CardFamily.Tire );
 		
 		assertFalse( c.isPlayableOn( p ) );
-		
-		
-		
 		
 	}
 
 	@Test public void testPlayOn() throws IllegalCardTypeException {
 		Player p = new HumanPlayer();
-		RemedyCard speedRemedy = ( RemedyCard ) CardFactory.createCard( CardType.EndOfLimit );
-		HazardCard speedHazard = ( HazardCard ) CardFactory.createCard( CardType.SpeedLimit );
+		RemedyCard speedRemedy = CardFactory.createRemedy( CardFamily.Speed );
+		HazardCard speedHazard = CardFactory.createHazard( CardFamily.Speed );
 		p.getHandStack().push( speedRemedy );
 		p.getDistanceStack().push( speedHazard );
 		

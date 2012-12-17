@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import models.cards.CardFactory;
 import models.cards.CardFamily;
-import models.cards.CardType;
 import models.cards.HazardCard;
 import models.exceptions.IllegalCardTypeException;
 import models.players.AIPlayer;
@@ -41,11 +40,11 @@ public class RoadhogTest {
 		
 		assertNull( roadhog.chooseStackToDraw() );
 		
-		DiscardStack.getInstance().push( CardFactory.createCard( CardType.Repairs ) );
+		DiscardStack.getInstance().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
 		
 		assertNull( roadhog.chooseStackToDraw() );
 		
-		DiscardStack.getInstance().push( CardFactory.createCard( CardType.Accident ) );
+		DiscardStack.getInstance().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		
 		assertNotNull( roadhog.chooseStackToDraw() );
 	}
@@ -56,12 +55,12 @@ public class RoadhogTest {
 		
 		assertNull( roadhog.chooseCardToPlay() );
 		
-		opponent.getBattleStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		opponent.getBattleStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 
-		roadhog.player.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
-		roadhog.player.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
-		roadhog.player.getHandStack().push( CardFactory.createCard( CardType.Distance100 ) );
-		roadhog.player.getHandStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		roadhog.player.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
+		roadhog.player.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
+		roadhog.player.getHandStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
+		roadhog.player.getHandStack().push( CardFactory.createDistance( 100 ) );
 		
 		// -- > Case 2 : Opponent has started
 		
@@ -71,18 +70,18 @@ public class RoadhogTest {
 		
 		// -- > Case 3 : Opponent is protected
 		
-		opponent.getSafetyStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		opponent.getSafetyStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
 		assertNull( roadhog.chooseCardToPlay() );
 		opponent.getSafetyStack().pop();
 		
 		// -- > Case 4 : Opponent is already attacked
 		
-		opponent.getBattleStack().push( CardFactory.createCard( CardType.FlatTire ) );
+		opponent.getBattleStack().push( CardFactory.createHazard( CardFamily.Tire ) );
 		assertNull( roadhog.chooseCardToPlay() );
 
 		// -- > Case 5 : Opponent is attacked but not slowed
 		
-		roadhog.player.getHandStack().push( CardFactory.createCard( CardType.SpeedLimit ) );
+		roadhog.player.getHandStack().push( CardFactory.createHazard( CardFamily.Speed ) );
 
 		assertNotNull( roadhog.chooseCardToPlay() );
 		assertTrue( roadhog.chooseCardToPlay() instanceof HazardCard );
@@ -98,14 +97,14 @@ public class RoadhogTest {
 
 	@Test public void testChooseCardToDiscard() throws IllegalCardTypeException {
 
-		roadhog.player.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
-		roadhog.player.getHandStack().push( CardFactory.createCard( CardType.Repairs ) );
-		roadhog.player.getHandStack().push( CardFactory.createCard( CardType.Distance100 ) );
-		roadhog.player.getHandStack().push( CardFactory.createCard( CardType.DrivingAce ) );
+		roadhog.player.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
+		roadhog.player.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
+		roadhog.player.getHandStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
+		roadhog.player.getHandStack().push( CardFactory.createDistance( 100 ) );
 		
 		assertNull( roadhog.chooseCardToDiscard() );
 		
-		roadhog.player.getHandStack().push( CardFactory.createCard( CardType.Accident ) );
+		roadhog.player.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		
 		assertNotNull( roadhog.chooseCardToDiscard() );
 		assertTrue( roadhog.chooseCardToDiscard() instanceof HazardCard );

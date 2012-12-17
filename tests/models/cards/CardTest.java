@@ -10,7 +10,7 @@ public class CardTest {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private Card c = CardFactory.createCard( CardType.Accident );
+	private Card c = CardFactory.createSafety( CardFamily.StateOfCar );
 	
 	// ------------ METHODS ------------ //
 	

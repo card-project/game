@@ -18,7 +18,7 @@ public class DistanceCardTest {
 	
 	// ------------ ATTRIBUTES ------------ //
 	
-	private DistanceCard c = (DistanceCard) CardFactory.createCard( CardType.Distance25 );
+	private DistanceCard c = (DistanceCard) CardFactory.createDistance( 25 );
 	
 	// ------------ METHODS ------------ //
 	
@@ -28,8 +28,7 @@ public class DistanceCardTest {
 	
 	@Test public void testSetRange() {
 		assertNotEquals( c.getRange(), 50 );
-		c.setRange( 50 );
-		assertEquals( c.getRange(), 50 );
+		assertEquals( c.getRange(), 25 );
 	}
 	
 	@Test public void testIsPlayableOn() throws IllegalCardTypeException {
@@ -41,7 +40,7 @@ public class DistanceCardTest {
 		
 		// -- > Setting context : Add initial GoRoll
 		
-		p.getBattleStack().push( CardFactory.createCard( CardType.GoRoll ) );
+		p.getBattleStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 		
 		// -- > Case 2 : Player has started
 		
@@ -49,7 +48,7 @@ public class DistanceCardTest {
 		
 		// -- > Setting context : Attacked player
 		
-		p.getBattleStack().push( CardFactory.createCard( CardType.Accident ) );
+		p.getBattleStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		
 		// -- > Case 3 : Attacked player
 		
@@ -58,7 +57,7 @@ public class DistanceCardTest {
 		// -- > Setting context : Slowed player
 		
 		p.getBattleStack().pop();
-		p.getDistanceStack().push( CardFactory.createCard( CardType.SpeedLimit ) );
+		p.getDistanceStack().push( CardFactory.createHazard( CardFamily.Speed ) );
 		
 		// -- > Case 4 : Slowed player
 		
@@ -75,7 +74,7 @@ public class DistanceCardTest {
 		// -- > Setting context : Maximum 200
 
 		c.setRange( 200 );
-		p.getDistanceStack().push( CardFactory.createCard( CardType.Distance200 ) );
+		p.getDistanceStack().push( CardFactory.createDistance( 200 ) );
 			
 		// -- > Case 5 : Maximum 200 not reached
 	
@@ -83,7 +82,7 @@ public class DistanceCardTest {
 		
 		// -- > Setting context : Maximum 200
 
-		p.getDistanceStack().push( CardFactory.createCard( CardType.Distance200 ) );
+		p.getDistanceStack().push( CardFactory.createDistance( 200 ) );
 			
 		// -- > Case 5 : Maximum 200 not reached
 	

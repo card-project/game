@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import models.cards.Card;
 import models.cards.CardFactory;
+import models.cards.CardFamily;
 import models.cards.CardType;
 import models.exceptions.IllegalCardTypeException;
 
@@ -22,7 +23,7 @@ public class PlayerStackTest {
 	public void testExists() {
 		CardType reference = CardType.Accident;
 		try {
-			playerStack.push( CardFactory.createCard( reference ) );
+			playerStack.push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		} catch ( IllegalCardTypeException e ) {
 			e.printStackTrace();
 		}
@@ -33,7 +34,7 @@ public class PlayerStackTest {
 	@Test
 	public void testShiftTo() {
 		BattleStack destinationStack = new BattleStack();
-		Card chosenCard = CardFactory.createCard( CardType.Accident );
+		Card chosenCard = CardFactory.createHazard( CardFamily.StateOfCar );
 
 		assertNull( destinationStack.peek() );
 
