@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import models.cards.CardFactory;
 import models.cards.CardFamily;
-import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.exceptions.IllegalCardTypeException;
 
@@ -61,17 +60,6 @@ public class DistanceStackTest {
 
 		this.distanceStack.getCards().add( CardFactory.createDistance( 200 ) );
 		assertTrue( this.distanceStack.maxNumberOfDistance200IsReached() );
-	}
-
-	@Test
-	public void testIsSlowed() {
-		try {
-			this.distanceStack.push( CardFactory.createHazard( CardFamily.Speed ) );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
-
-		assertTrue( this.distanceStack.isSlowed() );
 	}
 
 	@Test
