@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import models.cards.Card;
 import models.cards.CardFamily;
-import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
@@ -19,8 +18,9 @@ import models.stacks.player.HandStack;
 import models.stacks.player.SafetyStack;
 
 /**
- * @version 1.2.4
  * 
+ * 
+ * @version 1.2.4
  * @author Simon RENOULT
  */
 public abstract class Player {

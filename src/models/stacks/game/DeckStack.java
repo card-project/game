@@ -2,6 +2,7 @@ package models.stacks.game;
 
 import java.util.Collections;
 
+import models.Game;
 import models.cards.Card;
 import models.cards.CardFactory;
 import models.cards.CardFamily;
@@ -10,9 +11,11 @@ import models.cards.HazardCard;
 import models.cards.RemedyCard;
 
 /**
+ * Structure initially containing the whole {@link Game} {@link Card} objects.
+ * Use a Singleton design pattern to force the class uniqueness. 
+ * 
  * @author Simon RENOULT
  * @version 1.2.1
- *
  */
 public class DeckStack extends GameStack {
 	

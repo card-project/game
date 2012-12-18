@@ -4,9 +4,13 @@ import models.cards.Card;
 import models.cards.SafetyCard;
 import models.exceptions.IllegalCardTypeException;
 
+/**
+ * Structure containing exclusively {@link SafetyCard}.
+ * 
+ * @author Simon RENOULT
+ * @version 1.0
+ */
 public class SafetyStack extends PlayerStack {
-
-	// ------------ ATTRIBUTES ------------ //
 
 	// ------------ METHODS ------------ //
 

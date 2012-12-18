@@ -1,5 +1,6 @@
 package models.cards;
 
+import models.Game;
 import models.exceptions.IllegalCardTypeException;
 import models.players.Player;
 
@@ -14,13 +15,14 @@ public class DistanceCard extends Card {
 	
 	// ------------ CONSTANTS ------------ //
 	
+	// Number of distance card per range value.
 	public static final int MAX_25 = 6;
 	public static final int MAX_50 = 6;
 	public static final int MAX_75 = 6;
 	public static final int MAX_100 = 9;
 	public static final int MAX_200 = 3;
 	
-	private static final CardFamily cf = CardFamily.Speed;
+	private static final CardFamily distanceFamily = CardFamily.Speed;
 	
 	// ------------ ATTRIBUTES ------------ //
 	
@@ -28,8 +30,13 @@ public class DistanceCard extends Card {
 
 	// ------------ CONSTRUCTORS ------------ //
 	
+	/**
+	 * Build a new {@link DistanceCard} object depending on its {@link CardType} parameter.
+	 * 
+	 * @param type {@link CardType} setting the {@link DistanceCard} range value.
+	 */
 	protected DistanceCard( CardType type ) {
-		super( cf, type );
+		super( distanceFamily, type );
 		try {
 			setRange();
 		} catch ( IllegalCardTypeException e ) {
@@ -39,7 +46,14 @@ public class DistanceCard extends Card {
 	
 	// ------------ METHODS ------------ //
 	
-	public boolean isPlayableOn ( Player p, int distanceGoal ) {
+	/**
+	 * Whether the current {@link DistanceCard} is playable on the chosen target.
+	 * 
+	 * @param p {@link Player} chosen as a target.
+	 * @param distanceGoal {@link Game} distance goal.
+	 * @return Whether the current {@link DistanceCard} is playable on the chosen target.
+	 */
+	public boolean isPlayableOn ( Player p, Integer distanceGoal ) {
 		if ( ! p.hasStarted() ) {
 			return false;
 		} else {
@@ -56,6 +70,31 @@ public class DistanceCard extends Card {
 		
 		return true;
 	}
+	
+	/**
+	 * Play the current {@link DistanceCard} on the chosen {@link Player} and take it
+	 * off from his hand. Determine also whether this move implies the player to replay.
+	 * 
+	 * @param p {@link Player} who plays the {@link DistanceCard}.
+	 * @return Whether the {@link Player} replay after this {@link Card} has been played. 
+	 */
+	public boolean playOn( Object... args ) {
+		Player p = null;
+		for ( Object o : args ) {
+			if ( o instanceof Player ) {
+				p = ( Player ) o;
+			} else {
+				try {
+					throw new IllegalAccessException();
+				} catch ( IllegalAccessException e ) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return this.playOn( p );
+	};
+	
 	
 	public boolean playOn( Player p ) {
 		try {
@@ -80,6 +119,11 @@ public class DistanceCard extends Card {
 	
 	// ------------ SETTERS ------------ //
 	
+	/**
+	 * Define the correct range value depending on its {@link CardType} attribute.
+	 * 
+	 * @throws IllegalCardTypeException
+	 */
 	private void setRange() throws IllegalCardTypeException {
 		switch ( super.type ) {
 		case Distance25:
@@ -109,5 +153,4 @@ public class DistanceCard extends Card {
 			this.range = range;
 		}
 	}
-	
 }

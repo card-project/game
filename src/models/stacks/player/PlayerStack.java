@@ -5,8 +5,16 @@ import java.util.LinkedList;
 import models.cards.Card;
 import models.cards.CardType;
 import models.exceptions.IllegalCardTypeException;
+import models.players.Player;
 import models.stacks.CardsStack;
 
+/**
+ * Structure containing {@link Card} objects belonging to a {@link Player}.
+ * This {@link Player} knows the whole content of the {@link PlayerStack}.
+ * 
+ * @author Simon RENOULT
+ * @version 1.0
+ */
 public abstract class PlayerStack extends CardsStack {
 
 	// ------------ ATTRIBUTES ------------ //
@@ -21,6 +29,12 @@ public abstract class PlayerStack extends CardsStack {
 
 	// ------------ METHODS ------------ //
 
+	/**
+	 * Check whether a {@link Card} having the {@link CardType} exists 
+	 * in the current {@link PlayerStack}.
+	 * @param ct {@link CardType} to search.
+	 * @return Whether a {@link Card} having this {@link CardType} exists.
+	 */
 	public boolean exists( CardType ct ) {
 		for ( Card c : this.cards ) {
 			if ( c.getType() == ct ) {
@@ -38,6 +52,13 @@ public abstract class PlayerStack extends CardsStack {
 		this.cards.remove( item );
 	}
 	
+	/**
+	 * Shift a {@link Card} from the current {@link PlayerStack} to
+	 * the destination {@link CardsStack}.
+	 * @param destination {@link CardsStack} to shift to.
+	 * @param c {@link Card} to shift.
+	 * @throws IllegalCardTypeException Whether the move is not authorized.
+	 */
 	public void shiftTo( CardsStack destination, Card c ) throws IllegalCardTypeException {
 		destination.push( c );
 		this.cards.remove( c );

@@ -4,10 +4,14 @@ import models.cards.Card;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.exceptions.IllegalCardTypeException;
-import models.exceptions.moveExceptions.MaxNumberOfDistance200IsReached;
+import models.exceptions.moveExceptions.MaxNumberOfDistance200IsReachedException;
+import models.players.Player;
 import models.stacks.game.DiscardStack;
 
 /**
+ * Structure containing {@link Card} objects and belonging
+ * to a {@link Player}.
+ * 
  * @author Simon RENOULT
  * @version 1.0.1
  */
@@ -30,7 +34,7 @@ public class DistanceStack extends PlayerStack {
 	public void push( Card item ) throws IllegalCardTypeException {
 		if ( item instanceof DistanceCard ) {
 			if ( ( ( DistanceCard ) item ).getRange() == 200 && maxNumberOfDistance200IsReached() ) {
-				throw new MaxNumberOfDistance200IsReached();
+				throw new MaxNumberOfDistance200IsReachedException();
 			}
 		}
 
@@ -39,8 +43,7 @@ public class DistanceStack extends PlayerStack {
 	
 	/**
 	 * Get the amount of driven kilometers.
-	 * 
-	 * @return the amount of driven kilometers.
+	 * @return The amount of driven kilometers.
 	 */
 	public int getTraveledDistance() {
 		int currentDistance = 0;
@@ -55,8 +58,7 @@ public class DistanceStack extends PlayerStack {
 	
 	/**
 	 * Check whether the max number of Distance 200 is reached.
-	 * 
-	 * @return <em>True</em> if the limit is reached. <em>False</em> instead.
+	 * @return Whether the maximum distance 200 is reached.
 	 */
 	public Boolean maxNumberOfDistance200IsReached() {
 		int distances200Counter = 0;
@@ -71,15 +73,21 @@ public class DistanceStack extends PlayerStack {
 		return distances200Counter == MAX_DISTANCE200;
 	}
 
-	public boolean isSlowed() {
-		for ( Card c : super.cards ) {
-			if ( c.isSpeedLimit() ) {
-				return true;
+	/**
+	 * Discard every {@link HazardCard} existing in the current {@link DistanceStack}.
+	 */
+	public void discardHazards() {
+		for ( int i = 0; i < super.cards.size() ; i++ ) {
+			if ( super.cards.get( i ) instanceof HazardCard ) {
+				try {
+					shiftTo( DiscardStack.getInstance(), super.cards.get( i ) );
+				} catch ( IllegalCardTypeException e ) {
+					e.printStackTrace();
+				}
 			}
 		}
-		return false;
 	}
-
+	
 	public void increaseBy100() {
 		BONUS_100_CPT++;
 	}
@@ -99,18 +107,6 @@ public class DistanceStack extends PlayerStack {
 	public void resetBonuses() {
 		BONUS_100_CPT = 0;
 		BONUS_300_CPT = 0;
-	}
-	
-	public void discardHazards() {
-		for ( int i = 0; i < super.cards.size() ; i++ ) {
-			if ( super.cards.get( i ) instanceof HazardCard ) {
-				try {
-					shiftTo( DiscardStack.getInstance(), super.cards.get( i ) );
-				} catch ( IllegalCardTypeException e ) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 	
 }

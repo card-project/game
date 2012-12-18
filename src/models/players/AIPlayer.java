@@ -9,10 +9,9 @@ import models.cards.RemedyCard;
 import models.cards.SafetyCard;
 import models.exceptions.moveExceptions.AvailableCoupFourreException;
 import models.players.strategies.Brain;
-import models.players.strategies.Trapper;
 
 /**
- * @version 0.1.1
+ * @version 1.1.1
  * 
  * Virtual player.
  * 
@@ -35,12 +34,20 @@ public class AIPlayer extends Player {
 
 	// ------------ METHODS ------------ //
 
+	/**
+	 * Draw a new {@link Card} on the stack chosen by its {@link Brain} attribute.
+	 * @return The drawn {@link Card}.
+	 */
 	public Card draw() {
 		return super.draw( brain.chooseStackToDraw() );
 	}
 	
-	// TODO END ME AND YOU WILL BE HAPPY !!
-	// FIXME
+	/**
+	 * Play the {@link Card} depending on its class. The choice is realized
+	 * by the {@link Brain} attribute. Return whether the played card
+	 * implies to replay.
+	 * @return Return whether the played card implies to replay.
+	 */
 	public boolean play() {
 		Card chosenCard = brain.chooseCardToPlay();
 		boolean replay = false;
@@ -62,7 +69,11 @@ public class AIPlayer extends Player {
 		
 		return replay;
 	}
-	
+
+	/**
+	 * Discard the {@link Card} chosen by the {@link Brain} attribute. 
+	 * @return The drawn {@link Card}.
+	 */	
 	public Card discard() {
 		Card chosenCard = brain.chooseCardToDiscard();
 		super.discard( chosenCard );

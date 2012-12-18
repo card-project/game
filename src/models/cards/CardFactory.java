@@ -9,6 +9,12 @@ package models.cards;
  */
 public abstract class CardFactory {
 
+	/**
+	 * Return a new {@link HazardCard}. Its family depends on the family argument.
+	 * 
+	 * @param cf {@link CardFamily} Chosen hazard family.
+	 * @return A new {@link HazardCard} object.
+	 */
 	public static HazardCard createHazard( CardFamily cf ) {
 		switch ( cf ) {
 		case Gas: 
@@ -26,6 +32,12 @@ public abstract class CardFactory {
 		return null;
 	}
 
+	/**
+	 * Return a new {@link RemedyCard}. Its family depends on the family argument.
+	 * 
+	 * @param cf {@link CardFamily} Chosen hazard family.
+	 * @return A new {@link RemedyCard} object.
+	 */
 	public static RemedyCard createRemedy( CardFamily cf ) {
 		switch ( cf ) {
 		case Gas: 
@@ -43,6 +55,12 @@ public abstract class CardFactory {
 		return null;
 	}
 
+	/**
+	 * Return a new {@link DistanceCard}. Its family depends on the family argument.
+	 * 
+	 * @param cf {@link CardFamily} Chosen hazard family.
+	 * @return A new {@link DistanceCard} object.
+	 */
 	public static DistanceCard createDistance( int value ) {
 		switch ( value ) {
 		case 25: 
@@ -60,6 +78,12 @@ public abstract class CardFactory {
 		return null;
 	}
 
+	/**
+	 * Return a new {@link SafetyCard}. Its family depends on the family argument.
+	 * 
+	 * @param cf {@link CardFamily} Chosen hazard family.
+	 * @return A new {@link SafetyCard} object.
+	 */
 	public static SafetyCard createSafety( CardFamily cf ) {
 		switch ( cf ) {
 		case Gas: 

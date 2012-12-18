@@ -3,7 +3,6 @@ package models.players.strategies;
 import models.cards.Card;
 import models.cards.DistanceCard;
 import models.players.AIPlayer;
-import models.stacks.game.DeckStack;
 import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 

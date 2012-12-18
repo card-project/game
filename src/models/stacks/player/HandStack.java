@@ -2,7 +2,6 @@ package models.stacks.player;
 
 import models.cards.Card;
 import models.cards.CardFamily;
-import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;

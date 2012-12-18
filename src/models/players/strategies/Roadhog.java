@@ -12,16 +12,15 @@ import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 
 /**
- * @version 0.1
- * 
  * {@link AIPlayer} strategy.
  * 
  * Draw a hazard as soon as possible.
  * Play a hazard as soon as possible.
  * Discard a duplicate hazard.
  * 
- * @author Adrien Saunier
+ * @author Adrien SAUNIER
  * @author Simon RENOULT
+ * @version 0.1
  */
 public class Roadhog implements Strategy {
 

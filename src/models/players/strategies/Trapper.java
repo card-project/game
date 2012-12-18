@@ -5,14 +5,13 @@ import models.cards.CardFamily;
 import models.players.AIPlayer;
 
 /**
- * @version 0.1
- * 
  * {@link AIPlayer} strategy.
  * 
  * Keep his safety for a tricky move (coup fourré).
  * 
  * @author Adrien SAUNIER
  * @author Simon RENOULT
+ * @version 0.1
  */
 public class Trapper extends Protector {
 

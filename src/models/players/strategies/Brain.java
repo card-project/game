@@ -21,14 +21,14 @@ public class Brain implements Strategy {
 	// ------------ CONSTRUCTORS ------------ //
 	
 	/**
-	 * Create a new brain with different strategies organized.
+	 * Create a new brain with different organized strategies.
 	 * Their priority depends on their list index.
 	 * 
-	 * @param p
-	 * @param opponents
+	 * @param owner {@link Player} owning the current {@link Brain}.
+	 * @param opponents {@link ArrayList} of {@link Player} defining the other players.
 	 */
-	public Brain( AIPlayer p, ArrayList<Player> opponents ) {
-		this.player = p;
+	public Brain( AIPlayer owner, ArrayList<Player> opponents ) {
+		this.player = owner;
 		initStrategies( opponents );
 	}
 	
@@ -71,12 +71,10 @@ public class Brain implements Strategy {
 	}
 
 	@Override
-	// FIXME
 	public Card chooseCardToPlay() {
 		Card chosenCard = null;
 		
 		if ( this.player.canPlay( this.player.getOpponents(), this.gameDistanceGoal ) ) {
-			System.out.println( "CAN PLAY" );
 			for( Strategy s : this.mind ) {
 				if ( chosenCard == null ) {
 					chosenCard = s.chooseCardToPlay();

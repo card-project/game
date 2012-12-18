@@ -9,8 +9,6 @@ import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 
 /**
- * @version 0.1
- * 
  * AI player strategy.
  * 
  * Draw a safety/remedy as soon as possible.
@@ -19,6 +17,7 @@ import models.stacks.game.GameStack;
  * 
  * @author Adrien SAUNIER
  * @author Simon RENOULT
+ * @version 0.1
  */
 public class Protector implements Strategy {
 

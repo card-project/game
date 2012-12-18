@@ -22,6 +22,13 @@ public class SafetyCard extends Card {
 		return true;
 	}
 	
+	/**
+	 * Play the current {@link SafetyCard} on the chosen {@link Player} and take it
+	 * off from his hand. Determine also whether this move implies the player to replay.
+	 * 
+	 * @param p {@link Player} who plays the {@link SafetyCard}.
+	 * @return Whether the {@link Player} replay after this {@link Card} has been played. 
+	 */
 	public boolean playOn( Player p, int distanceGoal ) {
 		
 		// Move the safety to the right stack and remove it from the player's hand

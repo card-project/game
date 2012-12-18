@@ -1,5 +1,6 @@
 package models.cards;
 
+import models.Game;
 import models.exceptions.IllegalCardTypeException;
 import models.players.Player;
 import models.stacks.player.BattleStack;
@@ -28,7 +29,14 @@ public class RemedyCard extends Card {
 	}
 	
 	// ------------ METHODS ------------ //
-	
+
+	/**
+	 * Whether the current {@link HazardCard} is playable on the chosen opponent.
+	 * 
+	 * @param p {@link Player} chosen as a target.
+	 * @param distanceGoal {@link Game} distance goal.
+	 * @return Whether the current {@link DistanceCard} is playable on the chosen target.
+	 */
 	public boolean isPlayableOn ( Player p ) {
 		if ( ! p.hasStarted() && this.getFamily() == CardFamily.GoStop ) {
 			return true;
@@ -44,7 +52,14 @@ public class RemedyCard extends Card {
 		
 		return true;
 	}
-
+	
+	/**
+	 * Play the current {@link RemedyCard} on the chosen {@link Player} and take it
+	 * off from his hand. Determine also whether this move implies the player to replay.
+	 * 
+	 * @param p {@link Player} who plays the {@link RemedyCard}.
+	 * @return Whether the {@link Player} replay after this {@link Card} has been played. 
+	 */
 	public boolean playOn( Player p ) {
 		if ( this.getFamily() == CardFamily.Speed ) {
 			p.getDistanceStack().discardHazards();
