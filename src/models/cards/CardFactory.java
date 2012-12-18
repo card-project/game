@@ -1,14 +1,13 @@
 package models.cards;
 
 /**
- * Card class factory.
- * 
  * Allow lighter/softer dependencies between classes.
+ * Create a new card object depending on the parameter passed.
  * 
  * @author Simon RENOULT
- * @version 1.2
+ * @version 1.2.1
  */
-public class CardFactory {
+public abstract class CardFactory {
 
 	public static HazardCard createHazard( CardFamily cf ) {
 		switch ( cf ) {
