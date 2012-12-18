@@ -1,9 +1,7 @@
 package models.stacks.player;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import models.cards.Card;
 import models.cards.CardFactory;
 import models.cards.CardFamily;
 import models.cards.CardType;
@@ -12,8 +10,6 @@ import models.stacks.game.DiscardStack;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.runners.statements.Fail;
-import org.junit.runner.notification.Failure;
 
 public class BattleStackTest {
 

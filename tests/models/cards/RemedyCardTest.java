@@ -1,6 +1,7 @@
 package models.cards;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import models.exceptions.IllegalCardTypeException;
 import models.players.HumanPlayer;
 import models.players.Player;
