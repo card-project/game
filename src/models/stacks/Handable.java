@@ -4,7 +4,7 @@ import models.cards.Card;
 import models.exceptions.IllegalCardTypeException;
 
 /**
- * Allow a stack to be handle through this interface methods.
+ * Allow a stack to be handled through this interface methods.
  * 
  * @author Simon RENOULT
  * @version 1.0
