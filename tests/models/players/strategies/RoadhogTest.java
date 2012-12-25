@@ -57,10 +57,10 @@ public class RoadhogTest {
 		
 		opponent.getBattleStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 
-		roadhog.player.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
-		roadhog.player.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
-		roadhog.player.getHandStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
-		roadhog.player.getHandStack().push( CardFactory.createDistance( 100 ) );
+		roadhog.owner.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
+		roadhog.owner.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
+		roadhog.owner.getHandStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
+		roadhog.owner.getHandStack().push( CardFactory.createDistance( 100 ) );
 		
 		// -- > Case 2 : Opponent has started
 		
@@ -81,7 +81,7 @@ public class RoadhogTest {
 
 		// -- > Case 5 : Opponent is attacked but not slowed
 		
-		roadhog.player.getHandStack().push( CardFactory.createHazard( CardFamily.Speed ) );
+		roadhog.owner.getHandStack().push( CardFactory.createHazard( CardFamily.Speed ) );
 
 		assertNotNull( roadhog.chooseCardToPlay() );
 		assertTrue( roadhog.chooseCardToPlay() instanceof HazardCard );
@@ -97,14 +97,14 @@ public class RoadhogTest {
 
 	@Test public void testChooseCardToDiscard() throws IllegalCardTypeException {
 
-		roadhog.player.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
-		roadhog.player.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
-		roadhog.player.getHandStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
-		roadhog.player.getHandStack().push( CardFactory.createDistance( 100 ) );
+		roadhog.owner.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
+		roadhog.owner.getHandStack().push( CardFactory.createRemedy( CardFamily.StateOfCar ) );
+		roadhog.owner.getHandStack().push( CardFactory.createSafety( CardFamily.StateOfCar ) );
+		roadhog.owner.getHandStack().push( CardFactory.createDistance( 100 ) );
 		
 		assertNull( roadhog.chooseCardToDiscard() );
 		
-		roadhog.player.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
+		roadhog.owner.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		
 		assertNotNull( roadhog.chooseCardToDiscard() );
 		assertTrue( roadhog.chooseCardToDiscard() instanceof HazardCard );

@@ -1,10 +1,13 @@
 package models.players.strategies;
 
+import java.util.ArrayList;
+
 import models.cards.Card;
 import models.cards.CardFamily;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
 import models.players.AIPlayer;
+import models.players.Player;
 import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 
@@ -13,22 +16,23 @@ import models.stacks.game.GameStack;
  * 
  * Draw a safety/remedy as soon as possible.
  * Play a safety/remedy as soon as possible.
- * Discard hazards.
+ * Discard duplicate remedy and hazard.
  * 
  * @author Adrien SAUNIER
  * @author Simon RENOULT
  * @version 0.1
  */
-public class Protector implements Strategy {
+public class Protector extends Behavior {
 
-	// ------------ ATTRIBUTES ------------ //
+	// -------------- ATTRIBUTES -------------- //
 	
-	protected AIPlayer player = null;
+	private ArrayList<Player> opponents;
 	
 	// ------------ CONSTRUCTORS ------------ //
-	
-	public Protector(AIPlayer p) {
-		this.player = p;
+
+	public Protector( AIPlayer owner, ArrayList<Player> opponents ) {
+		super( owner );
+		this.opponents = opponents;
 	}
 	
 	// ------------ METHODS ------------ //
@@ -49,17 +53,17 @@ public class Protector implements Strategy {
 			Card discardedCard = DiscardStack.getInstance().peek();
 			
 			if ( discardedCard != null ) {
-				if ( ! this.player.hasStarted() && discardedCard.isGoRoll() ) {
+				if ( ! owner.hasStarted() && discardedCard.isGoRoll() ) {
 					chosenStack = DiscardStack.getInstance();
-				} else if ( this.player.isAttacked() ) {
-					if ( discardedCard.counteract( this.player.getBattleStack().peek().getFamily() ) ) {
+				} else if ( owner.isAttacked() ) {
+					if ( discardedCard.counteract( owner.getBattleStack().peek().getFamily() ) ) {
 						chosenStack = DiscardStack.getInstance();
 					}
-				} else if ( this.player.isSlowed() ) {
+				} else if ( owner.isSlowed() ) {
 					if ( discardedCard.counteract( CardFamily.Speed ) ) {
 						chosenStack = DiscardStack.getInstance();
 					}
-				} else if ( discardedCard instanceof RemedyCard ) {
+				} else if ( owner.hasStarted() && discardedCard instanceof RemedyCard ) {
 					chosenStack = DiscardStack.getInstance();
 				}
 			}
@@ -79,17 +83,19 @@ public class Protector implements Strategy {
 	public Card chooseCardToPlay() {
 		Card chosenCard = null;
 		
-		if ( this.player.isAttacked() ) {
-			CardFamily attackingFamily = player.getBattleStack().peek().getFamily();
-			if ( ( chosenCard = this.player.getHandStack().getSafetyOf( attackingFamily ) ) == null ) {
-				chosenCard = this.player.getHandStack().getRemedyOf( attackingFamily );
+		if ( owner.isAttacked() ) {
+			CardFamily attackingFamily = owner.getBattleStack().peek().getFamily();
+			if ( ( chosenCard = owner.getHandStack().getSafetyOf( attackingFamily ) ) == null ) {
+				chosenCard = owner.getHandStack().getRemedyOf( attackingFamily );
 			}
-		} else if ( this.player.isSlowed() ) {
-			if ( ( chosenCard = this.player.getHandStack().getSafetyOf( CardFamily.Speed ) ) == null ) {
-				chosenCard = this.player.getHandStack().getRemedyOf( CardFamily.Speed );
+		} else if ( owner.isSlowed() ) {
+			if ( ( chosenCard = owner.getHandStack().getSafetyOf( CardFamily.Speed ) ) == null ) {
+				chosenCard = owner.getHandStack().getRemedyOf( CardFamily.Speed );
 			}
-		} else {
-			for ( Card c : this.player.getHandStack().getCards() ) {
+		} 
+		
+		if ( chosenCard == null ) {
+			for ( Card c : owner.getHandStack() ) {
 				if ( c instanceof SafetyCard ) {
 					chosenCard = c;
 				}
@@ -103,6 +109,8 @@ public class Protector implements Strategy {
 	 * Priorities :
 	 * 1 : Remedy having the same family than a played safety.
 	 * 2 : Duplicate remedy.
+	 * 3 : 1st remedy in player's hand (~Random).
+	 * Finally check whether the discarded helps an opponent.
 	 * 
 	 * @return The chosen {@link Card} to discard.
 	 */
@@ -110,12 +118,25 @@ public class Protector implements Strategy {
 	public Card chooseCardToDiscard() {
 		Card cardToDiscard = null;
 		
-		for ( Card handCard: this.player.getHandStack().getCards() ) {
-			if ( handCard instanceof RemedyCard ) {
-				for ( Card safety : this.player.getSafetyStack().getCards() ) {
-					for ( CardFamily cf : safety.getFamilies() ) {
-						if ( handCard.getFamily() == cf ) {
-							cardToDiscard = handCard;
+		if ( cardToDiscard == null ) {
+			for ( Card safety : owner.getSafetyStack() ) {
+				for ( CardFamily safetyFamily : safety.getFamilies() ) {
+					if ( cardToDiscard == null ) {
+						cardToDiscard = owner.getHandStack().getRemedyOf( safetyFamily );
+					}
+				}
+			}
+		}
+		
+		if ( cardToDiscard == null ) {
+			Card testingCard = null;
+			for( Card handCard : owner.getHandStack() ) {
+				if ( handCard instanceof RemedyCard ) {
+					if ( testingCard == null ) {
+						testingCard = handCard;
+					} else {
+						if ( testingCard.getFamily() == handCard.getFamily() ) {
+							cardToDiscard = testingCard;
 						}
 					}
 				}
@@ -123,16 +144,17 @@ public class Protector implements Strategy {
 		}
 		
 		if ( cardToDiscard == null ) {
-			Card tmp = null;
-			for( Card handCard : this.player.getHandStack().getCards() ) {
-				if ( handCard instanceof RemedyCard ) {
-					if ( tmp == null ) {
-						tmp = handCard;
-					} else {
-						if ( tmp.getFamily() == handCard.getFamily() ) {
-							cardToDiscard = handCard;
-						}
-					}
+			for ( Card handCard : owner.getHandStack() ) {
+				if ( handCard instanceof RemedyCard && cardToDiscard == null ) {
+					cardToDiscard = handCard;
+				}
+			}
+		}
+		
+		if ( cardToDiscard != null ) {
+			for ( Player opp : opponents ) {
+				if ( cardToDiscard.getFamily() == opp.getBattleStack().getRemedyFamily() ) {
+					cardToDiscard = null;
 				}
 			}
 		}

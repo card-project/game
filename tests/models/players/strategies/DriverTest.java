@@ -17,7 +17,7 @@ public class DriverTest {
 
 	// ------------ ATTRIBUTES ------------ //
 	
-	private Driver driver = new Driver( new AIPlayer() );
+	private Driver driver = new Driver( new AIPlayer(), 700 );
 	
 	// ------------ METHODS ------------ //
 	
@@ -38,9 +38,9 @@ public class DriverTest {
 		
 		// -- > Setting context : Initiate player's hand
 		
-		driver.getPlayer().getHandStack().push( CardFactory.createDistance( 25 ) );
-		driver.getPlayer().getHandStack().push( CardFactory.createDistance( 50 ) );
-		driver.getPlayer().getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
+		driver.owner.getHandStack().push( CardFactory.createDistance( 25 ) );
+		driver.owner.getHandStack().push( CardFactory.createDistance( 50 ) );
+		driver.owner.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 		
 		// -- > Case 1 : Nothing to play (need initial GoRoll)
 		
@@ -48,24 +48,24 @@ public class DriverTest {
 		
 		// -- > Case 2 : GoRoll in hand and player has not started
 		
-		driver.getPlayer().getHandStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
+		driver.owner.getHandStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 		assertTrue( driver.chooseCardToPlay().getFamily() == CardFamily.GoStop );
 		assertTrue( driver.chooseCardToPlay() instanceof RemedyCard );
 		
 		// -- > Case 3 : Distance in hand and play has started
 		
-		driver.getPlayer().getBattleStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
-		assertEquals( ( ( DistanceCard ) driver.chooseCardToPlay() ).getRange(), 100 ); 
+		driver.owner.getBattleStack().push( CardFactory.createRemedy( CardFamily.GoStop ) );
 		assertTrue( driver.chooseCardToPlay() instanceof DistanceCard );
+		assertEquals( ( ( DistanceCard ) driver.chooseCardToPlay() ).getRange(), 50 );
 	}
 	
 	@Test public void testChooseCardToDiscard() throws IllegalCardTypeException {
 		
 		// -- > Setting context : Initiate player's hand
 	
-		driver.getPlayer().getHandStack().push( CardFactory.createDistance( 100 ) );
-		driver.getPlayer().getHandStack().push( CardFactory.createDistance( 50 ) );
-		driver.getPlayer().getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
+		driver.owner.getHandStack().push( CardFactory.createDistance( 100 ) );
+		driver.owner.getHandStack().push( CardFactory.createDistance( 50 ) );
+		driver.owner.getHandStack().push( CardFactory.createHazard( CardFamily.StateOfCar ) );
 
 		// -- > Case 1
 		

@@ -3,6 +3,7 @@ package models.players.strategies;
 import java.util.ArrayList;
 
 import models.players.AIPlayer;
+import models.players.Brain;
 import models.players.HumanPlayer;
 import models.players.Player;
 
@@ -23,7 +24,7 @@ public class BrainTest {
 		opponent = new HumanPlayer();
 		opponents.add( opponent );
 		
-		b = new Brain( new AIPlayer(), opponents );
+		b = new Brain( new AIPlayer(), opponents, 700 );
 	}
 	
 }

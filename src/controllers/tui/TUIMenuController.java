@@ -52,6 +52,7 @@ public class TUIMenuController {
 		this.defineDistanceGoal();
 		this.defineHumanPlayersAlias();
 		this.defineAIPlayersAlias();
+		this.initiateAIPlayers();
 	}
 
 	private void defineGlobalPlayersNumber() {
@@ -76,7 +77,6 @@ public class TUIMenuController {
 					tui.warn( "Please enter a number between 2 and 6." );
 					userChoiceIsCorrect = false; 
 				}
-				
 			}
 			
 		} while ( ! userChoiceIsCorrect );
@@ -155,5 +155,9 @@ public class TUIMenuController {
 	
 	private void defineAIPlayersAlias() {
 		currentGame.setAIPlayersAlias();
-	}	
+	}
+	
+	private void initiateAIPlayers() {
+		currentGame.initiateAIPlayers();
+	}
 }

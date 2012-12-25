@@ -26,8 +26,6 @@ public class AIPlayerTest {
 		opponent = new HumanPlayer();
 		
 		this.opponents.add( opponent );
-		p.setOpponents( opponents );
-		p.setDistanceGoal( DISTANCE_GOAL );
 	}
 	
 	@Test public void testDraw() {

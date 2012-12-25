@@ -29,6 +29,10 @@ public abstract class PlayerStack extends CardsStack {
 
 	// ------------ METHODS ------------ //
 
+	public java.util.Iterator<Card> iterator() {
+		return cards.iterator();
+	}
+	
 	/**
 	 * Check whether a {@link Card} having the {@link CardType} exists 
 	 * in the current {@link PlayerStack}.
@@ -94,10 +98,10 @@ public abstract class PlayerStack extends CardsStack {
 		return this.cards.toString();
 	}
 
-	// ------------ GETTERS ------------ //
-
-	public LinkedList<Card> getCards() {
-		return this.cards;
+	public void removeAll() {
+		this.cards.clear();
 	}
+
+	// ------------ GETTERS ------------ //
 
 }

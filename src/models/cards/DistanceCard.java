@@ -61,7 +61,7 @@ public class DistanceCard extends Card {
 				return false;
 			} else if ( p.isSlowed() && this.getRange() > 50 ) {
 				return false;
-			} else if ( this.getRange() + p.getTravelledDistance() > distanceGoal ) {
+			} else if ( this.getRange() + p.getTraveledDistance() > distanceGoal ) {
 				return false;
 			} else if ( this.getRange() == 200 && p.getDistanceStack().maxNumberOfDistance200IsReached() ) {
 				return false;
@@ -109,6 +109,10 @@ public class DistanceCard extends Card {
 	@Override
 	public String toString() {
 		return String.valueOf( this.range );
+	}
+	
+	public boolean isAllowedOnSpeedLimit() {
+		return this.range <= 50;
 	}
 	
 	// ------------ GETTERS ------------ //

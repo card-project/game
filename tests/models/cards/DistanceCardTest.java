@@ -96,6 +96,6 @@ public class DistanceCardTest {
 		assertFalse( c.playOn( p ) );
 		assertFalse( p.getHandStack().exists( CardType.Distance25 ) );
 		assertTrue( p.getDistanceStack().exists( CardType.Distance25 ) );
-		assertTrue( p.getDistanceStack().getTraveledDistance() == 25 );
+		assertTrue( p.getTraveledDistance() == 25 );
 	}
 }

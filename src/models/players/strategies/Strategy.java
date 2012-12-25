@@ -2,6 +2,7 @@ package models.players.strategies;
 
 import models.cards.Card;
 import models.players.AIPlayer;
+import models.players.Brain;
 import models.stacks.game.GameStack;
 import models.stacks.player.HandStack;
 

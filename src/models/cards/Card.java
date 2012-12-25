@@ -26,7 +26,7 @@ public abstract class Card {
 	/**
 	 * Create a new Card object.
 	 * 
-	 * Set its initial family and itt cartType (exclusively used to get the card name). 
+	 * Set its initial family and its cartType (exclusively used to get the card name). 
 	 * 
 	 * @param initialFamily Initial card family.
 	 * @param cardType Type of the created card.
@@ -36,6 +36,18 @@ public abstract class Card {
 		this.addFamily( initialFamily );
 		
 		this.type = cardType;
+	}
+
+	protected Card( CardType cardType ) {
+		this.type = cardType;
+		this.families = new ArrayList<CardFamily>();
+		this.setFamilies();
+	}
+	
+	protected Card( CardFamily initialFamily ) {
+		this.families = new ArrayList<CardFamily>();
+		this.addFamily( initialFamily );
+		this.setType();
 	}
 	
 	// ------------ METHODS ------------ //
@@ -107,7 +119,6 @@ public abstract class Card {
 	 * 
 	 * @param hazardFamily Family card to test.
 	 * @return Whether the current Card counteract the parameter's family.
-	 * @throws IllegalAccessError Whether the card type is not allowed for this method. 
 	 */
 	public boolean counteract( CardFamily hazardFamily ) {
 		if ( this instanceof RemedyCard || this instanceof SafetyCard ) {
@@ -116,11 +127,32 @@ public abstract class Card {
 					return true;
 				}
 			}
-		} else {
-			throw new IllegalAccessError();
 		}
-		
+
 		return false;
+	}
+	
+	// -------------- SETTERS -------------- //
+	
+	private void setFamilies() {
+		if ( this.type == null ) {
+			throw new IllegalAccessError();
+		} else {
+			this.families = type.getFamilies();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void setType() {
+		if ( this.families == null ) {
+			throw new IllegalAccessError();
+		} else {
+			if ( this instanceof DistanceCard ) {
+				this.type = families.get( 0 ).getType( ( Class<DistanceCard> ) this.getClass(), ( ( DistanceCard ) this ).getRange() );
+			} else {
+				this.type = families.get( 0 ).getType( ( Class<Card> ) this.getClass() );
+			}
+		}
 	}
 	
 	// ------------ GETTERS ------------ //

@@ -1,5 +1,7 @@
 package models.stacks;
 
-public abstract class CardsStack implements Handable {
+import models.cards.Card;
+
+public abstract class CardsStack implements Handable, Iterable<Card> {
 
 }

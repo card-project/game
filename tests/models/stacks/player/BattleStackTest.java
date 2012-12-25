@@ -21,7 +21,7 @@ public class BattleStackTest {
 
 	@Before
 	public void initialize() {
-		this.battleStack.getCards().clear();
+		this.battleStack.removeAll();
 	}
 
 	@Test public void testPush() {
@@ -29,7 +29,7 @@ public class BattleStackTest {
 	}
 
 	@Test public void testRemoveAll() {
-		assertTrue( this.battleStack.getCards().isEmpty() );
+		assertTrue( this.battleStack.isEmpty() );
 
 		try {
 			this.battleStack.push( CardFactory.createHazard( CardFamily.StateOfCar ) );
@@ -37,17 +37,17 @@ public class BattleStackTest {
 			e.printStackTrace();
 		}
 
-		assertFalse( this.battleStack.getCards().isEmpty() );
+		assertFalse( this.battleStack.isEmpty() );
 
 		this.battleStack.removeAll();
 
-		assertTrue( this.battleStack.getCards().isEmpty() );
+		assertTrue( this.battleStack.isEmpty() );
 	}
 	
 	
 	@Test
 	public void testRemoveHazards() {
-		assertTrue( this.battleStack.getCards().isEmpty() );
+		assertTrue( this.battleStack.isEmpty() );
 
 		try {
 			this.battleStack.push( CardFactory.createRemedy( CardFamily.GoStop ) );

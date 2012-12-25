@@ -2,7 +2,6 @@ package models;
 
 import java.util.ArrayList;
 
-import models.cards.CardFamily;
 import models.cards.HazardCard;
 import models.exceptions.AliasAlreadyChosenException;
 import models.exceptions.IllegalDistanceException;
@@ -58,7 +57,6 @@ public class Game {
 				p.draw( this.deckStack );
 			}
 		}
-		
 	}
 	
 	public String toString() {
@@ -91,12 +89,6 @@ public class Game {
 			for ( int i = 0; i < this.players.length; i++ ) {
 				this.players[i] = ( i < humanPlayersNumber ) ? new HumanPlayer() : new AIPlayer();
 			}
-			
-			for( Player p : this.players ) {
-				if ( p instanceof AIPlayer ) {
-					( (AIPlayer) p ).setOpponents( getOpponents( p ) );
-				}
-			}
 		}
 	}	
 	
@@ -105,13 +97,6 @@ public class Game {
 			throw new IllegalDistanceException();
 		} else {
 			this.goal = distanceGoal;
-			
-			for( Player p : this.players ) {
-				if ( p instanceof AIPlayer ) {
-					( (AIPlayer) p ).setDistanceGoal( this.goal );
-				}
-			}
-			
 		}
 	}
 
@@ -145,6 +130,12 @@ public class Game {
 		}
 	}
 	
+	public void initiateAIPlayers() {
+		for ( AIPlayer ai : this.getAIPlayers() ) {
+			ai.makeMeClever( this.getOpponents( ai ), this.goal );
+		}
+	}
+	
 	// ------------ GETTERS------------ // 
 
 	public ArrayList<Player> getOpponents( Player ignoredPlayer ) {
@@ -162,15 +153,8 @@ public class Game {
 		ArrayList<Player> opponents = getOpponents( ignoredPlayer );
 		
 		for ( int i = 0; i < opponents.size(); i++ ) {
-			Player p = opponents.get( i );
-			if ( ! p.hasStarted() ) {
-				opponents.remove( p );
-			} else if ( c.getFamily() == CardFamily.Speed && p.isSlowed() ) {
-				opponents.remove( p );
-			} else if ( p.isAttacked() ) {
-				opponents.remove( p );
-			} else if ( p.isProtectedFrom( c ) ) {
-				opponents.remove( p );
+			if ( ! c.isPlayableOn( opponents.get( i ) ) ) {
+				opponents.remove( i );
 			}
 		}
 		

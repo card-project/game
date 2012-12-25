@@ -18,12 +18,12 @@ public class GameStackTest {
 
 	@Test
 	public void testShiftTo() {
-		Card topCard = this.deckStack.getCards().peek();
+		Card topCard = this.deckStack.peek();
 		HandStack destinationStack = new HandStack();
 
 		this.deckStack.shiftTopCardTo( destinationStack );
 
-		assertTrue( topCard != this.deckStack.getCards().peek() );
-		assertTrue( topCard == destinationStack.getCards().peek() );
+		assertTrue( topCard != this.deckStack.peek() );
+		assertTrue( topCard == destinationStack.peek() );
 	}
 }

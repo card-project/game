@@ -3,6 +3,7 @@ package models.stacks.player;
 import models.cards.Card;
 import models.cards.CardFamily;
 import models.cards.DistanceCard;
+import models.cards.HazardCard;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
 import models.exceptions.IllegalCardTypeException;
@@ -39,17 +40,27 @@ public class HandStack extends PlayerStack {
 		return false;
 	}
 	
-	public DistanceCard chooseMaxDistance() {
+	public DistanceCard chooseMaxDistance( boolean speedIsLimited ) {
 		DistanceCard chosenCard = null;
 		
-		for( Card handCard : this.getCards() ) {
+		for( Card handCard : this ) {
 			if ( handCard instanceof DistanceCard ) {
 				DistanceCard currentDistanceCard = (DistanceCard) handCard;
 				
-				if ( chosenCard == null ) {
-					chosenCard = currentDistanceCard;
-				} else if ( currentDistanceCard.getRange() > ( ( DistanceCard ) chosenCard ).getRange() ) {
-					chosenCard = currentDistanceCard;
+				if ( speedIsLimited ) {
+					if ( currentDistanceCard.isAllowedOnSpeedLimit() ) {
+						if ( chosenCard == null ) {
+							chosenCard = currentDistanceCard;
+						} else if ( currentDistanceCard.getRange() > ( ( DistanceCard ) chosenCard ).getRange() ) {
+							chosenCard = currentDistanceCard;
+						}
+					}
+				} else {
+					if ( chosenCard == null ) {
+						chosenCard = currentDistanceCard;
+					} else if ( currentDistanceCard.getRange() > ( ( DistanceCard ) chosenCard ).getRange() ) {
+						chosenCard = currentDistanceCard;
+					}
 				}
 			}
 		}
@@ -127,6 +138,46 @@ public class HandStack extends PlayerStack {
 			}
 		}
 
+		return false;
+	}
+
+	public boolean containsHazard() {
+		for ( Card c : this.cards ) {
+			if ( c instanceof HazardCard ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean containsSafety() {
+		for ( Card c : this.cards ) {
+			if ( c instanceof SafetyCard ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean containsRemedy() {
+		for ( Card c : this.cards ) {
+			if ( c instanceof RemedyCard ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean containsDistance() {
+		for ( Card c : this.cards ) {
+			if ( c instanceof DistanceCard ) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 }

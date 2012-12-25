@@ -94,7 +94,7 @@ public class TUIGameController {
 			
 			this.discardCard( currentPlayer );
 
-			gameIsOver = currentPlayer.getDistanceStack().getTraveledDistance() == currentGame.getGoal();
+			gameIsOver = currentPlayer.getTraveledDistance() == currentGame.getGoal();
 			
 			if ( ! gameIsOver && ! replay ) {
 				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getPlayers().length - 1 ) ? 0 : currentPlayerIndex ;
@@ -107,7 +107,7 @@ public class TUIGameController {
 	}
 	
 	private void showTitle( Player p ) {
-		int distance = p.getDistanceStack().getTraveledDistance();
+		int distance = p.getTraveledDistance();
 		
 		String status =  p.hasStarted() ? "Started" : "Not started";
 		status += "/" + ( p.isSlowed() ? "Slowed" : "Not slowed" );

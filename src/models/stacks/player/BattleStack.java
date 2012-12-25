@@ -1,6 +1,7 @@
 package models.stacks.player;
 
 import models.cards.Card;
+import models.cards.CardFamily;
 import models.cards.HazardCard;
 import models.exceptions.IllegalCardTypeException;
 import models.players.Player;
@@ -47,9 +48,16 @@ public class BattleStack extends PlayerStack {
 			}
 		}
 	}
-
-	public void removeAll() {
-		this.cards.clear();
+	
+	public CardFamily getRemedyFamily() {
+		CardFamily cureFamily = null;
+		for ( Card c : this ) {
+			if ( c instanceof HazardCard ) {
+				cureFamily = c.getFamily();
+			}
+		}
+		
+		return cureFamily;
 	}
 
 	// ------------ GETTERS ------------ //

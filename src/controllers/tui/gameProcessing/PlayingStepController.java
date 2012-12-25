@@ -62,7 +62,7 @@ public class PlayingStepController extends StepController {
 		
 		tui.inform( "Battle stack : " + currentPlayer.getBattleStack().toString() + '\n' );
 		tui.inform( "Safety stack : " + currentPlayer.getSafetyStack() + '\n' );
-		tui.inform( "Distance stack : " + currentPlayer.getDistanceStack().getTraveledDistance() + '\n' );
+		tui.inform( "Distance stack : " + currentPlayer.getTraveledDistance() + '\n' );
 		
 		return replay;
 	}
@@ -151,21 +151,21 @@ public class PlayingStepController extends StepController {
 	}
 	
 	/**
-	 * @param p The current {@link Player} (in order to determine who are the opponents).
+	 * @param currentPlayer The current {@link Player} (in order to determine who are the opponents).
 	 * @return The targeted {@link Player}.
 	 */
-	private Player chooseTarget( Player p, HazardCard c ) {
+	private Player chooseTarget( Player currentPlayer, HazardCard c ) {
 
 		boolean userChoiceIsCorrect = true;
 		int opponentIndex = 0;
-		ArrayList<Player> opponents = this.currentGame.getAttackableOpponents( p, c );
+		ArrayList<Player> opponents = this.currentGame.getAttackableOpponents( currentPlayer, c );
 		
 		do {
 			
 			userChoiceIsCorrect = true;
 			
 			try {
-				opponentIndex = tui.askTargetingOpponent( this.getOpponentsAlias( opponents ) );
+				opponentIndex = tui.askTargetingOpponent( this.getAliases( opponents ) );
 			} catch ( NumberFormatException e ) {
 				tui.warn( "Please enter a number." );
 				userChoiceIsCorrect = false;
@@ -181,7 +181,7 @@ public class PlayingStepController extends StepController {
 		return opponents.get( opponentIndex - 1 );
 	}
 	
-	private String getOpponentsAlias( ArrayList<Player> opponents ) {
+	private String getAliases( ArrayList<Player> opponents ) {
 		String playerList = "| ";
 		for ( int i = 0; i < opponents.size() ; i++, playerList += " | " ) {
 			playerList += (i+1) + " : " + opponents.get( i ).getAlias();

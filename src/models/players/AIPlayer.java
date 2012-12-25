@@ -8,7 +8,6 @@ import models.cards.HazardCard;
 import models.cards.RemedyCard;
 import models.cards.SafetyCard;
 import models.exceptions.moveExceptions.AvailableCoupFourreException;
-import models.players.strategies.Brain;
 
 /**
  * @version 1.1.1
@@ -23,8 +22,6 @@ public class AIPlayer extends Player {
 	// ------------ ATTRIBUTES ------------ //
 
 	private Brain brain;
-	private ArrayList<Player> opponents;
-	private Integer distanceGoal;
 	
 	// ------------ CONSTRUCTORS ------------ //
 
@@ -57,7 +54,7 @@ public class AIPlayer extends Player {
 		} else if ( chosenCard instanceof RemedyCard ) {
 			replay = ( ( RemedyCard ) chosenCard ).playOn( this );
 		} else if ( chosenCard instanceof SafetyCard ) {
-			replay = ( ( SafetyCard ) chosenCard ).playOn( this, this.distanceGoal );
+			replay = ( ( SafetyCard ) chosenCard ).playOn( this, this.brain.getDistanceGoal() );
 		} else if ( chosenCard instanceof HazardCard ) {
 			Player target = brain.chooseTargetToAttack(); 
 			try {
@@ -88,27 +85,13 @@ public class AIPlayer extends Player {
 	
 	// ------------ GETTERS ------------ //
 	
-	public ArrayList<Player> getOpponents() {
-		return opponents;
-	}
-	
 	public Brain getBrain() {
 		return brain;
 	}
 	
 	// ------------ SETTERS ------------ //
-	
-	public void setOpponents( ArrayList<Player> opponents ) {
-		this.opponents = opponents;
-		setBrain( new Brain( this, opponents ) );
-	}
 
-	public void setBrain( Brain brain ) {
-		this.brain = brain;
-	}
-
-	public void setDistanceGoal( Integer goal ) {
-		this.distanceGoal = goal;
-		this.brain.setDistanceGoal( this.distanceGoal );
+	public void makeMeClever( ArrayList<Player> opponents, int distanceGoal ) {
+		this.brain = new Brain( this, opponents, distanceGoal );
 	}
 }

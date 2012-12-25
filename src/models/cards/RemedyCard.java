@@ -31,26 +31,32 @@ public class RemedyCard extends Card {
 	// ------------ METHODS ------------ //
 
 	/**
-	 * Whether the current {@link HazardCard} is playable on the chosen opponent.
+	 * Whether the current {@link HazardCard} is playable on the chosen {@link Player}.
 	 * 
 	 * @param p {@link Player} chosen as a target.
 	 * @param distanceGoal {@link Game} distance goal.
 	 * @return Whether the current {@link DistanceCard} is playable on the chosen target.
 	 */
 	public boolean isPlayableOn ( Player p ) {
-		if ( ! p.hasStarted() && this.getFamily() == CardFamily.GoStop ) {
-			return true;
-		} else if ( ! p.isSlowed() && this.getFamily() == CardFamily.Speed ) {
-			return false;
-		} else if ( ! p.isAttacked() && this.getFamily() != CardFamily.Speed ) {
-			return false;
-		} else if ( p.isAttacked() ) {
-			if ( this.getFamily() != p.getBattleStack().peek().getFamily() ) {
-				return false;
+		if ( ! p.hasStarted() ) {
+			if ( this.isGoRoll() ) {
+				return true;
 			}
 		}
 		
-		return true;
+		if ( p.isAttacked() ) {
+			if ( this.counteract( p.getBattleStack().peek().getFamily() ) ) {
+				return true;
+			}
+		}
+		
+		if ( p.isSlowed() ) {
+			if ( this.counteract( CardFamily.Speed ) ) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**

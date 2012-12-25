@@ -39,7 +39,7 @@ public class SafetyCard extends Card {
 		}
 		
 		// As the card is a safety, increase the traveled distance by 100
-		if ( p.getDistanceStack().getTraveledDistance() + DistanceStack.BONUS_100 < distanceGoal ) {
+		if ( p.getTraveledDistance() + DistanceStack.BONUS_100 < distanceGoal ) {
 			p.getDistanceStack().increaseBy100();
 		}
 		
@@ -69,7 +69,7 @@ public class SafetyCard extends Card {
 		}
 
 		// As the card is a safety, increase the traveled distance by 100
-		if ( coupFourreInitiator.getDistanceStack().getTraveledDistance() + DistanceStack.BONUS_100 < distanceGoal ) {
+		if ( coupFourreInitiator.getTraveledDistance() + DistanceStack.BONUS_100 < distanceGoal ) {
 			coupFourreInitiator.getDistanceStack().increaseBy300();
 		}
 		

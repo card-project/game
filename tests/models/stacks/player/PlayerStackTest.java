@@ -19,8 +19,7 @@ public class PlayerStackTest {
 
 	// ------------ METHODS ------------ //
 
-	@Test
-	public void testExists() {
+	@Test public void testExists() {
 		CardType reference = CardType.Accident;
 		try {
 			playerStack.push( CardFactory.createHazard( CardFamily.StateOfCar ) );
@@ -31,8 +30,7 @@ public class PlayerStackTest {
 		assertTrue( playerStack.exists( reference ) );
 	}
 
-	@Test
-	public void testShiftTo() {
+	@Test public void testShiftTo() {
 		BattleStack destinationStack = new BattleStack();
 		Card chosenCard = CardFactory.createHazard( CardFamily.StateOfCar );
 

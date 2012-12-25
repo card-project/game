@@ -1,8 +1,11 @@
 package models.players.strategies;
 
+import java.util.ArrayList;
+
 import models.cards.Card;
 import models.cards.CardFamily;
 import models.players.AIPlayer;
+import models.players.Player;
 
 /**
  * {@link AIPlayer} strategy.
@@ -17,8 +20,8 @@ public class Trapper extends Protector {
 
 	// ------------ CONSTRUCTORS ------------ //
 	
-	public Trapper( AIPlayer player ) {
-		super( player );
+	public Trapper( AIPlayer player, ArrayList<Player> opponents ) {
+		super( player, opponents );
 	}
 	
 	// ------------ METHODS ------------ //
@@ -27,11 +30,11 @@ public class Trapper extends Protector {
 	public Card chooseCardToPlay() {
 		Card chosenCard = null;
 		
-		if ( this.player.isAttacked() ) {
-			CardFamily attackingFamily = player.getBattleStack().peek().getFamily();
-			chosenCard = this.player.getHandStack().getRemedyOf( attackingFamily );
-		} else if ( this.player.isSlowed() ) {
-			chosenCard = this.player.getHandStack().getRemedyOf( CardFamily.Speed );
+		if ( owner.isAttacked() ) {
+			CardFamily attackingFamily = owner.getBattleStack().peek().getFamily();
+			chosenCard = owner.getHandStack().getRemedyOf( attackingFamily );
+		} else if ( owner.isSlowed() ) {
+			chosenCard = owner.getHandStack().getRemedyOf( CardFamily.Speed );
 		} 
 		
 		return chosenCard;

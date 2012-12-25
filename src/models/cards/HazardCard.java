@@ -28,6 +28,7 @@ public class HazardCard extends Card {
 		super( initialFamily, cardType );
 	}
 	
+	
 	// ------------ METHODS ------------ //
 
 	/**

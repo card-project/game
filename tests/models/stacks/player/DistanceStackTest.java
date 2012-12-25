@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import models.cards.CardFactory;
-import models.cards.CardFamily;
 import models.cards.DistanceCard;
 import models.exceptions.IllegalCardTypeException;
 
@@ -20,7 +19,7 @@ public class DistanceStackTest {
 	// ------------ METHODS ------------ //
 
 	@Before public void initialize() {
-		this.distanceStack.getCards().clear();
+		this.distanceStack.removeAll();
 		this.distanceStack.resetBonuses();
 	}
 
@@ -52,13 +51,13 @@ public class DistanceStackTest {
 	}
 
 	@Test
-	public void testMaxNumberOfDistance200IsReached() {
+	public void testMaxNumberOfDistance200IsReached() throws IllegalCardTypeException {
 		assertFalse( this.distanceStack.maxNumberOfDistance200IsReached() );
 
-		this.distanceStack.getCards().add( CardFactory.createDistance( 200 ) );
+		this.distanceStack.push( CardFactory.createDistance( 200 ) );
 		assertFalse( this.distanceStack.maxNumberOfDistance200IsReached() );
 
-		this.distanceStack.getCards().add( CardFactory.createDistance( 200 ) );
+		this.distanceStack.push( CardFactory.createDistance( 200 ) );
 		assertTrue( this.distanceStack.maxNumberOfDistance200IsReached() );
 	}
 

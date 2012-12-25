@@ -1,5 +1,6 @@
 package models.stacks.game;
 
+import java.util.Iterator;
 import java.util.Stack;
 
 import models.Game;
@@ -27,6 +28,11 @@ public abstract class GameStack extends CardsStack {
 	}
 	
 	// ------------ METHODS ------------ //
+
+	@Override
+	public Iterator<Card> iterator() {
+		return cards.iterator();
+	}
 	
 	/**
 	 * Determine whether the selected {@link CardType} exists. 
@@ -85,11 +91,5 @@ public abstract class GameStack extends CardsStack {
 	@Override
 	public String toString() {
 		return this.cards.toString();
-	}
-
-	// ------------ GETTERS ------------ //
-
-	public Stack<Card> getCards() {
-		return cards;
 	}
 }

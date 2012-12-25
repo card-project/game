@@ -1,7 +1,9 @@
 package models.players.strategies;
 
 import models.cards.Card;
+import models.cards.CardFamily;
 import models.cards.DistanceCard;
+import models.cards.SafetyCard;
 import models.players.AIPlayer;
 import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
@@ -18,19 +20,21 @@ import models.stacks.game.GameStack;
  * @author Adrien SAUNIER
  * @author Simon RENOULT
  */
-public class Driver implements Strategy {
+public class Driver extends Behavior {
 
 	// ------------ ATTRIBUTES ------------ //
 
-	private AIPlayer player;
-
+	private int goal;
+	
 	// ------------ CONSTRUCTORS ------------ //
 
 	/**
 	 * @param player
+	 * @param gameDistanceGoal 
 	 */
-	public Driver( AIPlayer player ) {
-		this.player = player;
+	public Driver( AIPlayer player, int distanceGoal ) {
+		super( player );
+		this.goal = distanceGoal;
 	}
 
 	// ------------ METHODS ------------ //
@@ -43,27 +47,55 @@ public class Driver implements Strategy {
 	 */
 	@Override
 	public GameStack chooseStackToDraw() {
-		if ( ! DiscardStack.getInstance().isEmpty() ) {
-			if ( DiscardStack.getInstance().peek() instanceof DistanceCard ) {
-				return DiscardStack.getInstance();
+		GameStack chosenStack = null;
+		Card discardedCard = DiscardStack.getInstance().peek(); 
+		
+		if ( discardedCard != null ) {
+			if ( discardedCard instanceof DistanceCard ) {
+				if ( ( ( DistanceCard ) discardedCard ).isPlayableOn( owner, goal ) ) {
+					chosenStack = DiscardStack.getInstance();
+				}
+			} else if ( ! owner.hasStarted() && discardedCard.isGoRoll() ) {
+				chosenStack = DiscardStack.getInstance();
 			}
 		}
 		
-		return null;
+		return chosenStack;
 	}
 
 	/**
 	 * Priorities :
 	 * 1 - GoRoll if player has no started yet.
-	 * 3 - Maximum available distance.
+	 * 2 - Safety
+	 * 3 - EndOfLimit if more than 500 distance exists.
+	 * 4 - Maximum available distance.
 	 * 
 	 * @see models.players.strategies.Strategy#chooseCardToPlay()
 	 */
 	@Override
 	public Card chooseCardToPlay() {
-		return ( ! this.player.hasStarted() ) 
-			? this.player.getHandStack().chooseGoRoll()
-			: this.player.getHandStack().chooseMaxDistance();
+		Card chosenCard = null;
+		
+		if ( ! owner.hasStarted() ) {
+			chosenCard = owner.getHandStack().chooseGoRoll();
+		} else if ( ! owner.isAttacked() && owner.getHandStack().containsDistance() ) {
+			for ( Card handCard : owner.getHandStack() ) {
+				if ( chosenCard == null ) {
+					if ( handCard instanceof SafetyCard ) {
+						chosenCard = handCard;
+					} else if ( handCard instanceof DistanceCard ) {
+						if ( owner.isSlowed() && owner.getHandStack().hasRemedyFor( CardFamily.Speed ) 
+							&& owner.getHandStack().chooseMaxDistance( false ).getRange() >= 75 ) {
+							owner.getHandStack().getRemedyOf( CardFamily.Speed );
+						} else {
+							chosenCard = owner.getHandStack().chooseMaxDistance( owner.isSlowed() );
+						}
+					}
+				}
+			}
+		}
+		
+		return chosenCard;
 	}
 	
 	/**
@@ -73,12 +105,7 @@ public class Driver implements Strategy {
 	 */
 	@Override
 	public Card chooseCardToDiscard() {
-		return this.player.getHandStack().chooseMinDistance();
+		return owner.getHandStack().chooseMinDistance();
 	}
 	
-	// ------------ GETTERS ------------ //
-
-	public AIPlayer getPlayer() {
-		return player;
-	}
 }

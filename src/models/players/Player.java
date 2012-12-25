@@ -75,7 +75,7 @@ public abstract class Player {
 		
 		boolean canPlay = false;
 		
-		for( Card handCard : handStack.getCards() ) {
+		for( Card handCard : handStack ) {
 			if ( ! canPlay ) {
 				if ( handCard instanceof DistanceCard ) {
 					canPlay = ( ( DistanceCard ) handCard ).isPlayableOn( this, distanceGoal );
@@ -97,7 +97,7 @@ public abstract class Player {
 	}
 
 	public boolean isProtectedFrom( HazardCard hc ) {
-		for( Card c : safetyStack.getCards() ) {
+		for( Card c : safetyStack ) {
 			for( CardFamily cf : c.getFamilies() ) {
 				if ( cf == hc.getFamily() ) {
 					return true;
@@ -132,7 +132,7 @@ public abstract class Player {
 		return battleStack.initialGoRollIsPlayed();
 	}
 	
-	public int getTravelledDistance() {
+	public int getTraveledDistance() {
 		return this.distanceStack.getTraveledDistance();
 	}
 	
@@ -143,6 +143,19 @@ public abstract class Player {
 				+ "DISTANCESTACK : " + distanceStack + '\n'
 				+ "BATTLESTACK : " + battleStack + '\n'
 				+ "SAFETYSTACK : " + safetyStack ;
+	}
+	
+	public boolean canFinish( int gameDistanceGoal ) {
+		boolean canFinish = false;
+		for ( Card c : handStack ) {
+			if ( c instanceof DistanceCard ) {
+				if ( ( ( DistanceCard ) c ).getRange() + getTraveledDistance() == gameDistanceGoal ) {
+					canFinish = true;
+				}
+			}
+		}
+		
+		return canFinish;
 	}
 	
 	// ------------ GETTERS ------------ //
