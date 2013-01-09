@@ -2,7 +2,6 @@ package models.cards;
 
 import java.io.Serializable;
 
-import models.Game;
 import models.exceptions.IllegalCardTypeException;
 import models.exceptions.moveExceptions.AvailableCoupFourreException;
 import models.players.Player;
@@ -37,15 +36,14 @@ public class HazardCard extends Card implements Serializable{
 	/**
 	 * Whether the current {@link HazardCard} is playable on the chosen opponent.
 	 * 
-	 * @param p {@link Player} chosen as a target.
-	 * @param distanceGoal {@link Game} distance goal.
+	 * @param opponent {@link Player} chosen as a target.
 	 * @return Whether the current {@link DistanceCard} is playable on the chosen target.
 	 */
 	public boolean isPlayableOn( Player opponent ) {
 		if ( ! opponent.hasStarted() ) {
 			return false;
 		} else {
-			if ( opponent.isProtectedFrom( this ) ) {
+			if ( opponent.isProtectedFrom( this.getFamily() ) ) {
 				return false;
 			} else {
 				if ( opponent.isSlowed() && this.getFamily() == CardFamily.Speed ) {
@@ -68,14 +66,14 @@ public class HazardCard extends Card implements Serializable{
 	 */
 	public boolean playOn( Player p, Player opponent ) throws AvailableCoupFourreException {
 		
-		if ( opponent.getHandStack().hasSafetyFor( this.getFamily() ) ) {
-			SafetyCard c = opponent.getHandStack().getSafetyOf( this.getFamily() );
+		if ( opponent.getHand().hasSafetyFor( this.getFamily() ) ) {
+			SafetyCard c = opponent.getHand().getSafetyOf( this.getFamily() );
 			throw new AvailableCoupFourreException( c, opponent, this );
 		} else {
 			PlayerStack destination = ( this.getFamily() == CardFamily.Speed ) ? opponent.getDistanceStack() : opponent.getBattleStack();
 			
 			try {
-				p.getHandStack().shiftTo( destination, this );
+				p.getHand().shiftTo( destination, this );
 			} catch ( IllegalCardTypeException e ) {
 				e.printStackTrace();
 			}

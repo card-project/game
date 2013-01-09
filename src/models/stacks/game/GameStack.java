@@ -6,6 +6,7 @@ import java.util.Stack;
 import models.Game;
 import models.cards.Card;
 import models.cards.CardType;
+import models.cards.DistanceCard;
 import models.exceptions.IllegalCardTypeException;
 import models.stacks.CardsStack;
 
@@ -48,19 +49,24 @@ public abstract class GameStack extends CardsStack {
 		return false;
 	}
 	
+	public boolean containsDistance() {
+		for ( Card c : this.cards ) {
+			if ( c instanceof DistanceCard ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Shift a {@link Card} from the current {@link GameStack} to
 	 * the destination {@link CardsStack}.
 	 * @param destination {@link CardsStack} to shift to.
-	 * @param c {@link Card} to shift.
 	 * @throws IllegalCardTypeException Whether the move is not authorized.
 	 */
-	public void shiftTopCardTo( CardsStack destination ) {
-		try {
-			destination.push( this.cards.pop() );
-		} catch ( IllegalCardTypeException e ) {
-			e.printStackTrace();
-		}
+	public void shiftTopCardTo( CardsStack destination ) throws IllegalCardTypeException {
+		destination.push( this.cards.pop() );
 	}
 	
 	@Override

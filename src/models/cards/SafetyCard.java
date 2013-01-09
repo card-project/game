@@ -39,7 +39,7 @@ public class SafetyCard extends Card implements Serializable{
 		
 		// Move the safety to the right stack and remove it from the player's hand
 		try {
-			p.getHandStack().shiftTo( p.getSafetyStack(), this );
+			p.getHand().shiftTo( p.getSafetyStack(), this );
 		} catch ( IllegalCardTypeException e ) {
 			e.printStackTrace();
 		}
@@ -69,7 +69,7 @@ public class SafetyCard extends Card implements Serializable{
 		assailant.discard( hazardCard );
 		
 		try {
-			coupFourreInitiator.getHandStack().shiftTo( coupFourreInitiator.getSafetyStack(), this );
+			coupFourreInitiator.getHand().shiftTo( coupFourreInitiator.getSafetyStack(), this );
 		} catch ( IllegalCardTypeException e ) {
 			e.printStackTrace();
 		}

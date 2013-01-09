@@ -3,6 +3,7 @@ package models.players;
 import java.util.ArrayList;
 
 import models.cards.Card;
+import models.cards.CardType;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
@@ -10,12 +11,14 @@ import models.cards.SafetyCard;
 import models.exceptions.moveExceptions.AvailableCoupFourreException;
 
 /**
- * @version 1.1.1
- * 
  * Virtual player.
+ * 
+ * An AI player owns a brain that chooses, depending on priorities, the
+ * {@link Card} and {@link Player} to target.
  * 
  * @author Simon RENOULT
  * @author Adrien SAUNIER
+ * @version 1.1.1
  */
 public class AIPlayer extends Player {
 
@@ -77,11 +80,6 @@ public class AIPlayer extends Player {
 		super.discard( chosenCard );
 		
 		return chosenCard;
-	}
-	
-	@Override
-	public String toString() {
-		return this.alias;
 	}
 	
 	// ------------ GETTERS ------------ //

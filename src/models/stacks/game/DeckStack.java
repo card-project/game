@@ -9,6 +9,7 @@ import models.cards.CardFamily;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.cards.RemedyCard;
+import models.cards.SafetyCard;
 
 /**
  * Structure initially containing the whole {@link Game} {@link Card} objects.
@@ -16,6 +17,7 @@ import models.cards.RemedyCard;
  * 
  * @author Simon RENOULT
  * @version 1.2.1
+ * @see DeckStackTest
  */
 public class DeckStack extends GameStack {
 	
@@ -27,28 +29,28 @@ public class DeckStack extends GameStack {
 	
 	private DeckStack() {
 
-		addCard( CardFactory.createDistance( 25 ), DistanceCard.MAX_25 );
-		addCard( CardFactory.createDistance( 50 ), DistanceCard.MAX_50 );
-		addCard( CardFactory.createDistance( 75 ), DistanceCard.MAX_75 );
-		addCard( CardFactory.createDistance( 100 ), DistanceCard.MAX_100 );
-		addCard( CardFactory.createDistance( 200 ), DistanceCard.MAX_200 );
+		addCard( CardFactory.createDistance( 25 ), Card.getMax( DistanceCard.class, 25 ) );
+		addCard( CardFactory.createDistance( 50 ), Card.getMax( DistanceCard.class, 50 ) );
+		addCard( CardFactory.createDistance( 75 ), Card.getMax( DistanceCard.class, 75 ) );
+		addCard( CardFactory.createDistance( 100 ), Card.getMax( DistanceCard.class, 100 ) );
+		addCard( CardFactory.createDistance( 200 ), Card.getMax( DistanceCard.class, 200 ) );
 
-		super.cards.add( CardFactory.createSafety( CardFamily.GoStop ) );
-		super.cards.add( CardFactory.createSafety( CardFamily.Gas) );
-		super.cards.add( CardFactory.createSafety( CardFamily.StateOfCar ) );
-		super.cards.add( CardFactory.createSafety( CardFamily.Tire ) );
+		addCard( CardFactory.createSafety( CardFamily.GoStop ), Card.getMax( SafetyCard.class, CardFamily.GoStop ) );
+		addCard( CardFactory.createSafety( CardFamily.Gas ), Card.getMax( SafetyCard.class, CardFamily.Gas ) );
+		addCard( CardFactory.createSafety( CardFamily.StateOfCar ), Card.getMax( SafetyCard.class, CardFamily.StateOfCar ) );
+		addCard( CardFactory.createSafety( CardFamily.Tire ), Card.getMax( SafetyCard.class, CardFamily.Tire) );
 
-		addCard( CardFactory.createHazard( CardFamily.Gas ), HazardCard.MAX_OUT_OF_GAS );
-		addCard( CardFactory.createHazard( CardFamily.GoStop ), HazardCard.MAX_STOP );
-		addCard( CardFactory.createHazard( CardFamily.Speed ), HazardCard.MAX_SPEED_LIMIT );
-		addCard( CardFactory.createHazard( CardFamily.StateOfCar ), HazardCard.MAX_ACCIDENT );
-		addCard( CardFactory.createHazard( CardFamily.Tire ), HazardCard.MAX_FLAT_TIRE );
+		addCard( CardFactory.createHazard( CardFamily.Gas ), Card.getMax( HazardCard.class, CardFamily.Gas ) );
+		addCard( CardFactory.createHazard( CardFamily.GoStop ), Card.getMax( HazardCard.class, CardFamily.GoStop ) );
+		addCard( CardFactory.createHazard( CardFamily.Speed ), Card.getMax( HazardCard.class, CardFamily.Speed ) );
+		addCard( CardFactory.createHazard( CardFamily.StateOfCar ), Card.getMax( HazardCard.class, CardFamily.StateOfCar ) );
+		addCard( CardFactory.createHazard( CardFamily.Tire ), Card.getMax( HazardCard.class, CardFamily.Tire ) );
 
-		addCard( CardFactory.createRemedy( CardFamily.Gas ), RemedyCard.MAX_GASOLINE );
-		addCard( CardFactory.createRemedy( CardFamily.GoStop ), RemedyCard.MAX_GO_ROLL );
-		addCard( CardFactory.createRemedy( CardFamily.Speed ), RemedyCard.MAX_END_OF_LIMIT );
-		addCard( CardFactory.createRemedy( CardFamily.StateOfCar ), RemedyCard.MAX_REPAIRS );
-		addCard( CardFactory.createRemedy( CardFamily.Tire ), RemedyCard.MAX_SPARE_TIRE );
+		addCard( CardFactory.createRemedy( CardFamily.Gas ), Card.getMax( RemedyCard.class, CardFamily.Gas ) );
+		addCard( CardFactory.createRemedy( CardFamily.GoStop ), Card.getMax( RemedyCard.class, CardFamily.GoStop ) );
+		addCard( CardFactory.createRemedy( CardFamily.Speed ), Card.getMax( RemedyCard.class, CardFamily.Speed) );
+		addCard( CardFactory.createRemedy( CardFamily.StateOfCar ), Card.getMax( RemedyCard.class, CardFamily.StateOfCar ) );
+		addCard( CardFactory.createRemedy( CardFamily.Tire ), Card.getMax( RemedyCard.class, CardFamily.Tire ) );
 	}
 
 	// ------------ METHODS ------------ //

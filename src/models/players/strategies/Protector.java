@@ -85,17 +85,19 @@ public class Protector extends Behavior {
 		
 		if ( owner.isAttacked() ) {
 			CardFamily attackingFamily = owner.getBattleStack().peek().getFamily();
-			if ( ( chosenCard = owner.getHandStack().getSafetyOf( attackingFamily ) ) == null ) {
-				chosenCard = owner.getHandStack().getRemedyOf( attackingFamily );
+			if ( ( chosenCard = owner.getHand().getSafetyOf( attackingFamily ) ) == null ) {
+				chosenCard = owner.getHand().getRemedyOf( attackingFamily );
 			}
-		} else if ( owner.isSlowed() ) {
-			if ( ( chosenCard = owner.getHandStack().getSafetyOf( CardFamily.Speed ) ) == null ) {
-				chosenCard = owner.getHandStack().getRemedyOf( CardFamily.Speed );
+		} 
+		
+		if ( chosenCard == null && owner.isSlowed() ) {
+			if ( ( chosenCard = owner.getHand().getSafetyOf( CardFamily.Speed ) ) == null ) {
+				chosenCard = owner.getHand().getRemedyOf( CardFamily.Speed );
 			}
 		} 
 		
 		if ( chosenCard == null ) {
-			for ( Card c : owner.getHandStack() ) {
+			for ( Card c : owner.getHand() ) {
 				if ( c instanceof SafetyCard ) {
 					chosenCard = c;
 				}
@@ -122,7 +124,7 @@ public class Protector extends Behavior {
 			for ( Card safety : owner.getSafetyStack() ) {
 				for ( CardFamily safetyFamily : safety.getFamilies() ) {
 					if ( cardToDiscard == null ) {
-						cardToDiscard = owner.getHandStack().getRemedyOf( safetyFamily );
+						cardToDiscard = owner.getHand().getRemedyOf( safetyFamily );
 					}
 				}
 			}
@@ -130,7 +132,7 @@ public class Protector extends Behavior {
 		
 		if ( cardToDiscard == null ) {
 			Card testingCard = null;
-			for( Card handCard : owner.getHandStack() ) {
+			for( Card handCard : owner.getHand() ) {
 				if ( handCard instanceof RemedyCard ) {
 					if ( testingCard == null ) {
 						testingCard = handCard;
@@ -144,25 +146,12 @@ public class Protector extends Behavior {
 		}
 		
 		if ( cardToDiscard == null ) {
-			for ( Card handCard : owner.getHandStack() ) {
+			for ( Card handCard : owner.getHand() ) {
 				if ( handCard instanceof RemedyCard && cardToDiscard == null ) {
 					cardToDiscard = handCard;
 				}
 			}
 		}
-		
-//		if ( cardToDiscard != null ) {
-//			for ( Player opp : opponents ) {
-//				
-//				System.out.println("Battle stack : " + opp.getBattleStack());
-//				System.out.println("Remedy family : " + opp.getBattleStack().getRemedyFamily());
-//				System.out.println("Card family : " + cardToDiscard.getFamily());
-//				
-//				if ( cardToDiscard.getFamily() == opp.getBattleStack().getRemedyFamily() ) {
-//					cardToDiscard = null;
-//				}
-//			}
-//		}
 		
 		return cardToDiscard;
 	}

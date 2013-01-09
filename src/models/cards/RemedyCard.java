@@ -2,9 +2,9 @@ package models.cards;
 
 import java.io.Serializable;
 
-import models.Game;
 import models.exceptions.IllegalCardTypeException;
 import models.players.Player;
+import models.stacks.player.BattleStack;
 
 /**
  * Create a remedy card object. Allow a player to defend himself from 
@@ -37,7 +37,6 @@ public class RemedyCard extends Card implements Serializable {
 	 * Whether the current {@link HazardCard} is playable on the chosen {@link Player}.
 	 * 
 	 * @param p {@link Player} chosen as a target.
-	 * @param distanceGoal {@link Game} distance goal.
 	 * @return Whether the current {@link DistanceCard} is playable on the chosen target.
 	 */
 	public boolean isPlayableOn ( Player p ) {
@@ -77,7 +76,7 @@ public class RemedyCard extends Card implements Serializable {
 			if ( ! p.hasStarted() ) {
 				if ( this.getFamily() == CardFamily.GoStop ) {
 					try {
-						p.getHandStack().shiftTo( p.getBattleStack(), this );
+						p.getHand().shiftTo( p.getBattleStack(), this );
 					} catch ( IllegalCardTypeException e ) {
 						e.printStackTrace();
 					}

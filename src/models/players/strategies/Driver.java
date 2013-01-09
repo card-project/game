@@ -1,5 +1,6 @@
 package models.players.strategies;
 
+import models.Game;
 import models.cards.Card;
 import models.cards.CardFamily;
 import models.cards.DistanceCard;
@@ -9,7 +10,6 @@ import models.stacks.game.DiscardStack;
 import models.stacks.game.GameStack;
 
 /**
- * @version 0.1
  * 
  * AI player strategy.
  * 
@@ -19,6 +19,8 @@ import models.stacks.game.GameStack;
  * 
  * @author Adrien SAUNIER
  * @author Simon RENOULT
+ * @version 1.1
+ * @see DriverTest
  */
 public class Driver extends Behavior {
 
@@ -29,8 +31,8 @@ public class Driver extends Behavior {
 	// ------------ CONSTRUCTORS ------------ //
 
 	/**
-	 * @param player
-	 * @param gameDistanceGoal 
+	 * @param player Owner of the driver strategy
+	 * @param distanceGoal  {@link Game} distance goal.
 	 */
 	public Driver( AIPlayer player, int distanceGoal ) {
 		super( player );
@@ -77,18 +79,20 @@ public class Driver extends Behavior {
 		Card chosenCard = null;
 		
 		if ( ! owner.hasStarted() ) {
-			chosenCard = owner.getHandStack().chooseGoRoll();
-		} else if ( ! owner.isAttacked() && owner.getHandStack().containsDistance() ) {
-			for ( Card handCard : owner.getHandStack() ) {
+			chosenCard = owner.getHand().getGoRoll();
+		} else if ( ! owner.isAttacked() && owner.getHand().containsDistance() ) {
+			for ( Card handCard : owner.getHand() ) {
 				if ( chosenCard == null ) {
 					if ( handCard instanceof SafetyCard ) {
 						chosenCard = handCard;
 					} else if ( handCard instanceof DistanceCard ) {
-						if ( owner.isSlowed() && owner.getHandStack().hasRemedyFor( CardFamily.Speed ) 
-							&& owner.getHandStack().chooseMaxDistance( false ).getRange() >= 75 ) {
-							owner.getHandStack().getRemedyOf( CardFamily.Speed );
+						if ( owner.isSlowed() && owner.getHand().hasRemedyFor( CardFamily.Speed ) 
+							&& owner.getHand().getMaxDistance( false ).getRange() >= 75 ) {
+							owner.getHand().getRemedyOf( CardFamily.Speed );
+						} else if ( owner.canFinish( goal ) ) {
+							chosenCard = owner.getHand().getFinishableDistance( owner.getTraveledDistance(), goal );
 						} else {
-							chosenCard = owner.getHandStack().chooseMaxDistance( owner.isSlowed() );
+							chosenCard = owner.getHand().getMaxDistance( owner.isSlowed() );
 						}
 					}
 				}
@@ -105,7 +109,7 @@ public class Driver extends Behavior {
 	 */
 	@Override
 	public Card chooseCardToDiscard() {
-		return owner.getHandStack().chooseMinDistance();
+		return owner.getHand().getMinDistance();
 	}
 	
 }

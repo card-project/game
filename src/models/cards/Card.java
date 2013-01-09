@@ -3,6 +3,8 @@ package models.cards;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import xml.XMLParser;
+
 /**
  * <p>Create an abstract default Card having a type and some families.
  * <br />
@@ -19,6 +21,7 @@ public abstract class Card implements Serializable {
 	
 	// ------------ ATTRIBUTES ------------ //
 	
+	protected String confFilePath = "./conf.xml";
 	protected ArrayList<CardFamily> families = null;
 	protected CardType type = null;
 	private static final long serialVersionUID = -6300647029223207777L;
@@ -158,6 +161,14 @@ public abstract class Card implements Serializable {
 	}
 	
 	// ------------ GETTERS ------------ //
+
+	public static int getMax( Class c, CardFamily family ) {
+		return XMLParser.getInstance().getQty( c.getSimpleName(), family.toString() );
+	}
+
+	public static int getMax( Class c, int value ) {
+		return XMLParser.getInstance().getQty( c.getSimpleName(), String.valueOf( value ) );
+	}
 	
 	public CardFamily getFamily() {
 		return this.getFamilies().get( 0 );
@@ -170,4 +181,5 @@ public abstract class Card implements Serializable {
 	public CardType getType() {
 		return this.type;
 	}
+	
 }

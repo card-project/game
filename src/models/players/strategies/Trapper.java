@@ -32,9 +32,9 @@ public class Trapper extends Protector {
 		
 		if ( owner.isAttacked() ) {
 			CardFamily attackingFamily = owner.getBattleStack().peek().getFamily();
-			chosenCard = owner.getHandStack().getRemedyOf( attackingFamily );
+			chosenCard = owner.getHand().getRemedyOf( attackingFamily );
 		} else if ( owner.isSlowed() ) {
-			chosenCard = owner.getHandStack().getRemedyOf( CardFamily.Speed );
+			chosenCard = owner.getHand().getRemedyOf( CardFamily.Speed );
 		} 
 		
 		return chosenCard;

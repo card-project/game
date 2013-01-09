@@ -52,7 +52,7 @@ public class BattleStack extends PlayerStack {
 	public CardFamily getRemedyFamily() {
 		CardFamily cureFamily = null;
 		for ( Card c : this ) {
-			if ( c instanceof HazardCard ) {
+			if ( cureFamily == null && c instanceof HazardCard ) {
 				cureFamily = c.getFamily();
 			}
 		}

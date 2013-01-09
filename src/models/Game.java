@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import javax.swing.event.EventListenerList;
 
 import listeners.GameEventListener;
+import models.cards.Card;
+import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.exceptions.AliasAlreadyChosenException;
+import models.exceptions.IllegalCardTypeException;
 import models.exceptions.IllegalDistanceException;
 import models.exceptions.IllegalHumanPlayerNumberException;
 import models.exceptions.IllegalPlayerNumberException;
@@ -94,9 +97,9 @@ public class Game implements Serializable {
 		}
 		
 		return "Goal : " + this.goal + '\n' +
-				"Players : " + players  + '\n' +
+				"Players : \n" + players  + '\n' +
 				"DiscardStack " + this.discardStack + '\n' +
-				"DeckStack" + this.deckStack;
+				"DeckStack" + this.deckStack + '\n';
 	}
 	
 	// ------------ SETTERS ------------ // 
@@ -293,4 +296,32 @@ public class Game implements Serializable {
 		this.getCurrentPlayer().fireDiscardCardEvent();
 	}
 
+	public void switchDeckAndDiscard() {
+		if ( this.getDeckStack().isEmpty() ) {
+			Card topDiscardCard = this.getDiscardStack().pop();
+			
+			for ( int i = 0 ; i < this.getDiscardStack().size() ; i++ ) {
+				try {
+					this.getDiscardStack().shiftTopCardTo( this.getDeckStack() );
+				} catch ( IllegalCardTypeException e ) {
+					e.printStackTrace();
+				}
+			}
+			
+			this.getDiscardStack().push( topDiscardCard );
+		}		
+	}
+
+	public boolean distanceCardStillPlayable() {
+		boolean distanceCardIsStillPlayable = false;
+		for ( Player p : this.players ) {
+			for ( Card c : p.getHand() ) {
+				if ( c instanceof DistanceCard ) {
+					distanceCardIsStillPlayable = true;
+				}
+			}
+		}
+		
+		return distanceCardIsStillPlayable || this.discardStack.containsDistance() || this.deckStack.containsDistance();
+	}
 }

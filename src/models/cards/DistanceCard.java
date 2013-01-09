@@ -78,7 +78,7 @@ public class DistanceCard extends Card implements Serializable {
 	 * Play the current {@link DistanceCard} on the chosen {@link Player} and take it
 	 * off from his hand. Determine also whether this move implies the player to replay.
 	 * 
-	 * @param p {@link Player} who plays the {@link DistanceCard}.
+	 * @param args {@link Player} who plays the {@link DistanceCard}.
 	 * @return Whether the {@link Player} replay after this {@link Card} has been played. 
 	 */
 	public boolean playOn( Object... args ) {
@@ -101,7 +101,7 @@ public class DistanceCard extends Card implements Serializable {
 	
 	public boolean playOn( Player p ) {
 		try {
-			p.getHandStack().shiftTo( p.getDistanceStack(), this );
+			p.getHand().shiftTo( p.getDistanceStack(), this );
 		} catch ( IllegalCardTypeException e ) {
 			e.printStackTrace();
 		}
@@ -154,7 +154,7 @@ public class DistanceCard extends Card implements Serializable {
 	}
 
 	public void setRange( int range ) {
-		if ( range == 25 && range == 50 && range == 75 && range == 100 && range == 200 ) {
+		if ( range != 25 && range != 50 && range != 75 && range != 100 && range != 200 ) {
 			throw new IllegalAccessError();
 		} else {
 			this.range = range;

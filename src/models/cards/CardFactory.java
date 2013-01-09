@@ -63,7 +63,7 @@ public abstract class CardFactory implements Serializable{
 	/**
 	 * Return a new {@link DistanceCard}. Its family depends on the family argument.
 	 * 
-	 * @param cf {@link CardFamily} Chosen hazard family.
+	 * @param value Range {@link DistanceCard} value.
 	 * @return A new {@link DistanceCard} object.
 	 */
 	public static DistanceCard createDistance( int value ) {
@@ -78,9 +78,9 @@ public abstract class CardFactory implements Serializable{
 			return new DistanceCard( CardType.Distance100 );
 		case 200: 
 			return new DistanceCard( CardType.Distance200 );
+		default:
+			throw new IllegalAccessError();
 		}
-		
-		return null;
 	}
 
 	/**

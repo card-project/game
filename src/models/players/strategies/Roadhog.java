@@ -49,9 +49,9 @@ public class Roadhog extends Behavior {
 		GameStack chosenStack = null;
 		
 		if ( discardedCard != null ) {
-			if ( ! maxHazardIsReached() && ! owner.getHandStack().containsHazard() && discardedCard instanceof HazardCard ) {
+			if ( ! maxHazardIsReached() && ! owner.getHand().containsHazard() && discardedCard instanceof HazardCard ) {
 				for ( Player p : opponents ) {
-					if ( ! p.isProtectedFrom( (HazardCard) discardedCard ) ) {
+					if ( ! p.isProtectedFrom( ( ( HazardCard ) discardedCard ).getFamily() ) ) {
 						chosenStack = DiscardStack.getInstance();
 					}
 				}
@@ -65,7 +65,7 @@ public class Roadhog extends Behavior {
 	public Card chooseCardToPlay() {
 		Card cardToPlay = null;
 		
-		for ( Card handCard : owner.getHandStack() ) {
+		for ( Card handCard : owner.getHand() ) {
 			if ( handCard instanceof HazardCard && cardToPlay == null ) {
 				for ( Player p : opponents ) {
 					if ( ( ( HazardCard ) handCard ).isPlayableOn( p ) ) {
@@ -81,7 +81,7 @@ public class Roadhog extends Behavior {
 	public Player chooseTargetToAttack() {
 		Player target = null;
 		
-		for ( Card handCard : owner.getHandStack() ) {
+		for ( Card handCard : owner.getHand() ) {
 			if ( handCard instanceof HazardCard && target == null ) {
 				for ( Player p : opponents ) {
 					if ( ( ( HazardCard ) handCard ).isPlayableOn( p ) ) {
@@ -107,7 +107,7 @@ public class Roadhog extends Behavior {
 		if ( opponents.size() == 1 ) {
 			for ( Player p : opponents ) {
 				for ( Card safety : p.getSafetyStack() ) {
-					for ( Card handCard : owner.getHandStack() ) {
+					for ( Card handCard : owner.getHand() ) {
 						if ( ! ( handCard instanceof DistanceCard ) ) {
 							if ( safety.getFamily() == handCard.getFamily() ) {
 								cardToDiscard = handCard;
@@ -120,7 +120,7 @@ public class Roadhog extends Behavior {
 		
 		if ( cardToDiscard == null ) {
 			Card tmp = null;
-			for ( Card handCard : owner.getHandStack() ) {
+			for ( Card handCard : owner.getHand() ) {
 				if ( handCard instanceof HazardCard ) {
 					if ( tmp == null ) {
 						tmp = handCard;
@@ -134,7 +134,7 @@ public class Roadhog extends Behavior {
 		}
 		
 		if ( cardToDiscard == null ) {
-			for ( Card handCard : owner.getHandStack() ) {
+			for ( Card handCard : owner.getHand() ) {
 				if ( handCard instanceof HazardCard && cardToDiscard == null ) {
 					cardToDiscard = handCard;
 				}
@@ -146,7 +146,7 @@ public class Roadhog extends Behavior {
 	
 	private boolean maxHazardIsReached() {
 		int hazardCount = 0;
-		for ( Card c : owner.getHandStack() ) {
+		for ( Card c : owner.getHand() ) {
 			if ( c instanceof HazardCard ) {
 				hazardCount++;
 			}

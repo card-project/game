@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.event.EventListenerList;
-
 import listeners.GameEventListener;
+import models.Game;
 import models.cards.Card;
 import models.cards.CardFamily;
 import models.cards.DistanceCard;
@@ -28,7 +28,10 @@ import events.GameIsOverEvent;
 import events.PlayerHasPlayedEvend;
 
 /**
+ * Player class.
  * 
+ * Describe an actor who will interact with the {@link Game} object.
+ * A {@link Player} can draw, play or discard a {@link Card}.
  * 
  * @version 1.2.4
  * @author Simon RENOULT
@@ -73,10 +76,18 @@ public abstract class Player implements Serializable {
 		this.listeners.remove(GameEventListener.class, listener);
 	}
 	
+	/**
+	 * Pick a card on the chosen {@link GameStack}.
+	 * @param drawStackChosen The {@link GameStack} to pick on.
+	 * @return The picked {@link Card}.
+	 */
 	public Card draw( GameStack drawStackChosen ) {
-		drawStackChosen.shiftTopCardTo( this.handStack );
-		
-		this.fireCardDrawnEvent();
+		try {
+			drawStackChosen.shiftTopCardTo( this.handStack );
+			this.fireCardDrawnEvent();
+		} catch ( IllegalCardTypeException e ) {
+			e.printStackTrace();
+		}
 		
 		return handStack.peek();
 	}
@@ -135,6 +146,14 @@ public abstract class Player implements Serializable {
 	}
 	
 
+	/**
+	 * Play a {@link Card} on the target {@link Player}.
+	 * @param chosenCard {@link Card} to play.
+	 * @param target {@link Player} to target.
+	 * @param distanceGoal {@link Game} distance goal.
+	 * @return Whether the movement implies to replay.
+	 * @throws AvailableCoupFourreException
+	 */
 	public boolean play( Card chosenCard, Player target, int distanceGoal ) throws AvailableCoupFourreException {
 		boolean replay = false;
 		if ( chosenCard instanceof HazardCard ) {
@@ -183,10 +202,15 @@ public abstract class Player implements Serializable {
 		return canPlay;
 	}
 
-	public boolean isProtectedFrom( HazardCard hc ) {
+	/**
+	 * @param hazardFamily {@link CardFamily} to check.
+	 * @return Whether the player has a {@link SafetyCard} corresponding
+	 * to the {@link CardFamily}.
+	 */
+	public boolean isProtectedFrom( CardFamily hazardFamily ) {
 		for( Card c : safetyStack ) {
 			for( CardFamily cf : c.getFamilies() ) {
-				if ( cf == hc.getFamily() ) {
+				if ( cf == hazardFamily ) {
 					return true;
 				}
 			}
@@ -195,6 +219,10 @@ public abstract class Player implements Serializable {
 		return false;
 	}
 
+	/**
+	 * @return Whether the player has a {@link HazardCard} on his
+	 * {@link BattleStack}.
+	 */
 	public boolean isAttacked() {
 		for ( int i = 0; i < battleStack.size() ; i++) {
 			if ( battleStack.get( i ) instanceof HazardCard ) {
@@ -205,6 +233,10 @@ public abstract class Player implements Serializable {
 		return false;
 	}
 
+	/**
+	 * @return Whether the player has a SpeedLimit {@link HazardCard}
+	 * on his {@link DiscardStack}.
+	 */
 	public boolean isSlowed() {
 		for ( int i = 0; i < distanceStack.size() ; i++) {
 			if ( distanceStack.get( i ).isSpeedLimit() ) {
@@ -215,10 +247,19 @@ public abstract class Player implements Serializable {
 		return false;
 	}
 
+	/**
+	 * @return Whether the player has played the initial
+	 * GoRoll {@link RemedyCard}.
+	 */
 	public boolean hasStarted() {
 		return battleStack.initialGoRollIsPlayed();
 	}
 	
+	/**
+	 * @return The amount of traveled distance. This
+	 * amount is calculated using the {@link DistanceCard} 
+	 * range value sum.
+	 */
 	public int getTraveledDistance() {
 		return this.distanceStack.getTraveledDistance();
 	}
@@ -229,9 +270,14 @@ public abstract class Player implements Serializable {
 				+ "HAND : " + handStack + '\n'
 				+ "DISTANCESTACK : " + distanceStack + '\n'
 				+ "BATTLESTACK : " + battleStack + '\n'
-				+ "SAFETYSTACK : " + safetyStack ;
+				+ "SAFETYSTACK : " + safetyStack + '\n';
 	}
 	
+	/**
+	 * @param gameDistanceGoal
+	 * @return Whether the player can end the {@link Game} with the
+	 * {@link Card} in his {@link HandStack}.
+	 */
 	public boolean canFinish( int gameDistanceGoal ) {
 		boolean canFinish = false;
 		for ( Card c : handStack ) {
@@ -257,16 +303,12 @@ public abstract class Player implements Serializable {
 		return distanceStack;
 	}
 
-	public HandStack getHandStack() {
+	public HandStack getHand() {
 		return this.handStack;
 	}
 	
 	public SafetyStack getSafetyStack() {
 		return safetyStack;
-	}
-
-	public void setBattleStack( BattleStack battleStack ) {
-		this.battleStack = battleStack;
 	}
 
 	public String getAlias() {

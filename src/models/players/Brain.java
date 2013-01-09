@@ -2,11 +2,11 @@ package models.players;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
 import models.cards.Card;
+import models.cards.CardType;
 import models.players.strategies.Driver;
 import models.players.strategies.Protector;
 import models.players.strategies.Roadhog;
@@ -14,8 +14,7 @@ import models.players.strategies.Strategy;
 import models.stacks.game.DeckStack;
 import models.stacks.game.GameStack;
 
-
-public class Brain implements Strategy, Iterable<Strategy>, Serializable {
+public class Brain implements Strategy, Serializable {
 
 	// -------------- CONSTANTS -------------- //
 	
@@ -25,6 +24,7 @@ public class Brain implements Strategy, Iterable<Strategy>, Serializable {
 
 	private LinkedList<Strategy> mind = new LinkedList<Strategy>();
 	private AIPlayer owner;
+	private CardType lastDiscardedCard;
 	private Integer distanceGoal;
 	private ArrayList<Player> opponents;
 	
@@ -48,7 +48,9 @@ public class Brain implements Strategy, Iterable<Strategy>, Serializable {
 		initStrategies();
 	}
 	
-	// ------------ METHODS ------------ //
+	// -------------- PRIVATE API -------------- //
+	
+	
 	
 	private void initStrategies() {
 		switch ( new Random().nextInt( 3 ) ) {
@@ -85,10 +87,7 @@ public class Brain implements Strategy, Iterable<Strategy>, Serializable {
 		}
 	}
 	
-	@Override
-	public Iterator<Strategy> iterator() {
-		return this.mind.iterator();
-	}
+	// -------------- PUBLIC API -------------- //
 	
 	@Override
 	public GameStack chooseStackToDraw() {
@@ -98,19 +97,10 @@ public class Brain implements Strategy, Iterable<Strategy>, Serializable {
 		for( Strategy s : this.mind ) {
 			if ( chosenStack == null ) {
 				chosenStack = s.chooseStackToDraw();
-				if ( s.chooseStackToDraw() != null ) {
-					System.out.println( s );
-					System.out.println( s.chooseStackToDraw().getClass().getSimpleName() );
-				}
 			}
 		}
 		
-		if ( chosenStack == null ) {
-			chosenStack =  DeckStack.getInstance();
-		}
-		
-		
-		return chosenStack;
+		return chosenStack == null ? DeckStack.getInstance() : chosenStack;
 	}
 
 	@Override
@@ -138,14 +128,23 @@ public class Brain implements Strategy, Iterable<Strategy>, Serializable {
 			}
 		}
 		
-		if ( cardToDiscard == null ) {
-			int randomIndex = new Random().nextInt( this.owner.getHandStack().size() );
-			cardToDiscard = this.owner.getHandStack().get( randomIndex );
+		if ( lastDiscardedCard == null ) {
+			lastDiscardedCard = cardToDiscard.getType();
+		} else {
+			if ( lastDiscardedCard == cardToDiscard.getType() ) {
+				cardToDiscard = this.owner.getHand().getRandomCard();
+			} else {
+				lastDiscardedCard = cardToDiscard.getType();
+			}
 		}
 		
-		return cardToDiscard;
+		return cardToDiscard == null ? this.owner.getHand().getRandomCard() : cardToDiscard;
 	}
 
+	/**
+	 * Get the target chosen by the strategy algorithm.
+	 * @return The chosen {@link Player}.
+	 */
 	public Player chooseTargetToAttack() {
 		Player chosenTarget = null;
 		for( Strategy s : this.mind ) {

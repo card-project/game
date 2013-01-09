@@ -1,8 +1,9 @@
 package models.players.strategies;
 
 import java.io.Serializable;
-
+import models.cards.Card;
 import models.players.AIPlayer;
+import models.stacks.game.GameStack;
 
 public abstract class Behavior implements Strategy, Serializable{
 
@@ -19,6 +20,15 @@ public abstract class Behavior implements Strategy, Serializable{
 	}
 	
 	// -------------- METHODS -------------- //
+	
+	@Override
+	public abstract GameStack chooseStackToDraw();
+	
+	@Override
+	public abstract Card chooseCardToPlay();
+
+	@Override
+	public abstract Card chooseCardToDiscard();
 	
 	@Override
 	public String toString() {
