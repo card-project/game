@@ -2,11 +2,9 @@ package view.gui.threads;
 
 import java.awt.Point;
 
-import org.apache.batik.swing.JSVGCanvas;
-
-import controller.MainController;
 import view.gui.panel.assets.CarAsset;
 import view.gui.panel.global.GamePanel;
+import controller.MainController;
 
 public class MovingAnimation extends Animation {
 

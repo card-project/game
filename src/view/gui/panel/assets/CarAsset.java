@@ -1,18 +1,11 @@
 package view.gui.panel.assets;
 
 import java.awt.Dimension;
-import java.awt.Point;
-import java.io.File;
 import java.net.URISyntaxException;
 
 import javax.swing.JLabel;
 
-import org.apache.batik.transcoder.TranscoderException;
-
-import controller.MainController;
-
 import view.gui.manipulations.SVGIcon;
-import view.gui.threads.MovingAnimation;
 
 public class CarAsset extends JLabel {
 

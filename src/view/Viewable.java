@@ -1,10 +1,5 @@
 package view;
 
-import java.util.ArrayList;
-
-import org.apache.batik.gvt.text.ArabicTextHandler;
-
-import server.instructions.ConnectedToLounge;
 
 public interface Viewable {
 	
