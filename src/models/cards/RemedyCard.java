@@ -1,9 +1,10 @@
 package models.cards;
 
+import java.io.Serializable;
+
 import models.Game;
 import models.exceptions.IllegalCardTypeException;
 import models.players.Player;
-import models.stacks.player.BattleStack;
 
 /**
  * Create a remedy card object. Allow a player to defend himself from 
@@ -12,7 +13,7 @@ import models.stacks.player.BattleStack;
  * @author Simon RENOULT
  * @version 1.0
  */
-public class RemedyCard extends Card {
+public class RemedyCard extends Card implements Serializable {
 
 	// ------------ CONSTANTS ------------ //
 	
@@ -21,6 +22,8 @@ public class RemedyCard extends Card {
 	public static final int MAX_GASOLINE = 4;
 	public static final int MAX_REPAIRS = 4;
 	public static final int MAX_SPARE_TIRE = 4;
+	
+	private static final long serialVersionUID = 8454511428283236271L;	
 	
 	// ------------ CONSTRUCTORS ------------ //
 

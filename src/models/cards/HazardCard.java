@@ -1,5 +1,7 @@
 package models.cards;
 
+import java.io.Serializable;
+
 import models.Game;
 import models.exceptions.IllegalCardTypeException;
 import models.exceptions.moveExceptions.AvailableCoupFourreException;
@@ -12,7 +14,7 @@ import models.stacks.player.PlayerStack;
  * @author Simon RENOULT
  * @version 1.0
  */
-public class HazardCard extends Card {
+public class HazardCard extends Card implements Serializable{
 
 	// ------------ ATTRIBUTES ------------ //
 
@@ -28,6 +30,7 @@ public class HazardCard extends Card {
 		super( initialFamily, cardType );
 	}
 	
+	private static final long serialVersionUID = -8040643519581431370L;
 	
 	// ------------ METHODS ------------ //
 

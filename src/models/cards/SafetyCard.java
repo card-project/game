@@ -1,5 +1,7 @@
 package models.cards;
 
+import java.io.Serializable;
+
 import models.exceptions.IllegalCardTypeException;
 import models.players.Player;
 import models.stacks.player.DistanceStack;
@@ -8,8 +10,12 @@ import models.stacks.player.DistanceStack;
  * @author Simon RENOULT
  * @version 1.0
  */
-public class SafetyCard extends Card {
+public class SafetyCard extends Card implements Serializable{
 
+	// ------------ ATTRIBUTES ------------ //
+	
+	private static final long serialVersionUID = -6457539955870758101L;	
+	
 	// ------------ CONSTRUCTORS ------------ //
 
 	protected SafetyCard( CardFamily initialFamily, CardType cardType ) {

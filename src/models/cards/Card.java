@@ -1,5 +1,6 @@
 package models.cards;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -14,12 +15,13 @@ import java.util.ArrayList;
  * @author Simon RENOULT
  * @version 1.0
  */
-public abstract class Card {
+public abstract class Card implements Serializable {
 	
 	// ------------ ATTRIBUTES ------------ //
 	
 	protected ArrayList<CardFamily> families = null;
 	protected CardType type = null;
+	private static final long serialVersionUID = -6300647029223207777L;
 	
 	// ------------ CONSTRUCTORS ------------ //
 	

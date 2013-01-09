@@ -1,5 +1,6 @@
 package models.stacks.player;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import models.cards.Card;
@@ -15,11 +16,13 @@ import models.stacks.CardsStack;
  * @author Simon RENOULT
  * @version 1.0
  */
-public abstract class PlayerStack extends CardsStack {
+public abstract class PlayerStack extends CardsStack implements Serializable {
+
 
 	// ------------ ATTRIBUTES ------------ //
 
 	protected LinkedList<Card> cards;
+	private static final long serialVersionUID = 451651676405961396L;	
 
 	// ------------ CONSTRUCTORS ------------ //
 

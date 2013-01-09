@@ -1,5 +1,7 @@
 package models.cards;
 
+import java.io.Serializable;
+
 import models.Game;
 import models.exceptions.IllegalCardTypeException;
 import models.players.Player;
@@ -11,8 +13,8 @@ import models.players.Player;
  * @author Simon RENOULT
  * @version 1.1.1
  */
-public class DistanceCard extends Card {
-	
+public class DistanceCard extends Card implements Serializable {
+
 	// ------------ CONSTANTS ------------ //
 	
 	// Number of distance card per range value.
@@ -27,6 +29,7 @@ public class DistanceCard extends Card {
 	// ------------ ATTRIBUTES ------------ //
 	
 	private int range;
+	private static final long serialVersionUID = -6039625278519431806L;
 
 	// ------------ CONSTRUCTORS ------------ //
 	

@@ -1,11 +1,14 @@
 package models.players.strategies;
 
+import java.io.Serializable;
+
 import models.players.AIPlayer;
 
-public abstract class Behavior implements Strategy {
+public abstract class Behavior implements Strategy, Serializable{
 
 	// -------------- ATTRIBUTES -------------- //
 	
+	private static final long serialVersionUID = -6357219457855430986L;
 	protected AIPlayer owner;
 
 	// -------------- CONSTRUCTORS -------------- //

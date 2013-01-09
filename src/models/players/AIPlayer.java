@@ -25,8 +25,8 @@ public class AIPlayer extends Player {
 	
 	// ------------ CONSTRUCTORS ------------ //
 
-	public AIPlayer() {
-
+	public AIPlayer(int bib) {
+		super(bib);
 	}
 
 	// ------------ METHODS ------------ //
@@ -45,8 +45,9 @@ public class AIPlayer extends Player {
 	 * implies to replay.
 	 * @return Return whether the played card implies to replay.
 	 */
-	public boolean play() {
+	public boolean play() throws AvailableCoupFourreException {
 		Card chosenCard = brain.chooseCardToPlay();
+		System.out.println("ChosenCard " + chosenCard);
 		boolean replay = false;
 		
 		if ( chosenCard instanceof DistanceCard ) {

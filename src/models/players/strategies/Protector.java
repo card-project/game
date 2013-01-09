@@ -151,13 +151,18 @@ public class Protector extends Behavior {
 			}
 		}
 		
-		if ( cardToDiscard != null ) {
-			for ( Player opp : opponents ) {
-				if ( cardToDiscard.getFamily() == opp.getBattleStack().getRemedyFamily() ) {
-					cardToDiscard = null;
-				}
-			}
-		}
+//		if ( cardToDiscard != null ) {
+//			for ( Player opp : opponents ) {
+//				
+//				System.out.println("Battle stack : " + opp.getBattleStack());
+//				System.out.println("Remedy family : " + opp.getBattleStack().getRemedyFamily());
+//				System.out.println("Card family : " + cardToDiscard.getFamily());
+//				
+//				if ( cardToDiscard.getFamily() == opp.getBattleStack().getRemedyFamily() ) {
+//					cardToDiscard = null;
+//				}
+//			}
+//		}
 		
 		return cardToDiscard;
 	}

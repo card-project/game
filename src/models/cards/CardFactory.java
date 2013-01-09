@@ -1,5 +1,7 @@
 package models.cards;
 
+import java.io.Serializable;
+
 /**
  * Allow lighter/softer dependencies between classes.
  * Create a new card object depending on the parameter passed.
@@ -7,7 +9,10 @@ package models.cards;
  * @author Simon RENOULT
  * @version 1.2.1
  */
-public abstract class CardFactory {
+public abstract class CardFactory implements Serializable{
+	
+	// ------------ ATTRIBUTES ------------ //
+	private static final long serialVersionUID = 6701765241429142626L;
 
 	/**
 	 * Return a new {@link HazardCard}. Its family depends on the family argument.

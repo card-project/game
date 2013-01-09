@@ -1,5 +1,6 @@
 package models.players;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,7 +14,8 @@ import models.players.strategies.Strategy;
 import models.stacks.game.DeckStack;
 import models.stacks.game.GameStack;
 
-public class Brain implements Strategy, Iterable<Strategy> {
+
+public class Brain implements Strategy, Iterable<Strategy>, Serializable {
 
 	// -------------- CONSTANTS -------------- //
 	
@@ -25,6 +27,8 @@ public class Brain implements Strategy, Iterable<Strategy> {
 	private AIPlayer owner;
 	private Integer distanceGoal;
 	private ArrayList<Player> opponents;
+	
+	private static final long serialVersionUID = 867853853096479509L;
 	
 	// ------------ CONSTRUCTORS ------------ //
 	

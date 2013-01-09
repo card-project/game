@@ -22,7 +22,7 @@ public enum CardType {
 	DrivingAce, PunctureProof, ExtraTank, RightOfWay;
 	
 	public ArrayList<CardFamily> getFamilies() {
-		ArrayList<CardFamily> families = new ArrayList<>();
+		ArrayList<CardFamily> families = new ArrayList<CardFamily>();
 		
 		if ( this == Distance25 || this == Distance50 || this == Distance75 || this == Distance100 || this == Distance200 ) {
 			families.add( CardFamily.Speed );

@@ -42,7 +42,7 @@ public class Driver extends Behavior {
 	/**
 	 * Draw a {@link DistanceCard} as soon as possible.
 	 * 
-	 * @see models.players.strategies.Strategy#chooseStackToDraw()
+	 * @see models.game.players.strategies.Strategy#chooseStackToDraw()
 	 * @return the {@link GameStack} to draw on.
 	 */
 	@Override
@@ -70,7 +70,7 @@ public class Driver extends Behavior {
 	 * 3 - EndOfLimit if more than 500 distance exists.
 	 * 4 - Maximum available distance.
 	 * 
-	 * @see models.players.strategies.Strategy#chooseCardToPlay()
+	 * @see models.game.players.strategies.Strategy#chooseCardToPlay()
 	 */
 	@Override
 	public Card chooseCardToPlay() {
@@ -101,7 +101,7 @@ public class Driver extends Behavior {
 	/**
 	 * Discard the minimum distance card.
 	 * 
-	 * @see models.players.strategies.Strategy#chooseCardToDiscard()
+	 * @see models.game.players.strategies.Strategy#chooseCardToDiscard()
 	 */
 	@Override
 	public Card chooseCardToDiscard() {
