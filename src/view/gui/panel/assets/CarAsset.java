@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 
 import javax.swing.JLabel;
 
+import org.apache.batik.transcoder.TranscoderException;
+
 import view.gui.manipulations.SVGIcon;
 
 public class CarAsset extends JLabel {
