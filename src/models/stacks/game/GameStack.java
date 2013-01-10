@@ -19,26 +19,29 @@ import models.stacks.CardsStack;
 public abstract class GameStack extends CardsStack {
 
 	// ------------ ATTRIBUTES ------------ //
-	
+
 	protected Stack<Card> cards;
-	
+
 	// ------------ CONSTRUCTORS ------------ //
-	
-	public GameStack() {
+
+	public GameStack () {
 		this.cards = new Stack<Card>();
 	}
-	
+
 	// ------------ METHODS ------------ //
 
 	@Override
 	public Iterator<Card> iterator() {
 		return cards.iterator();
 	}
-	
+
 	/**
-	 * Determine whether the selected {@link CardType} exists. 
-	 * @param ct {@link CardType} searched.
-	 * @return Whether the {@link CardType} exists in the current {@link GameStack}.
+	 * Determine whether the selected {@link CardType} exists.
+	 * 
+	 * @param ct
+	 *            {@link CardType} searched.
+	 * @return Whether the {@link CardType} exists in the current
+	 *         {@link GameStack}.
 	 */
 	public boolean exists( CardType ct ) {
 		for ( Card c : this.cards ) {
@@ -48,52 +51,55 @@ public abstract class GameStack extends CardsStack {
 		}
 		return false;
 	}
-	
+
 	public boolean containsDistance() {
 		for ( Card c : this.cards ) {
 			if ( c instanceof DistanceCard ) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
-	 * Shift a {@link Card} from the current {@link GameStack} to
-	 * the destination {@link CardsStack}.
-	 * @param destination {@link CardsStack} to shift to.
-	 * @throws IllegalCardTypeException Whether the move is not authorized.
+	 * Shift a {@link Card} from the current {@link GameStack} to the
+	 * destination {@link CardsStack}.
+	 * 
+	 * @param destination
+	 *            {@link CardsStack} to shift to.
+	 * @throws IllegalCardTypeException
+	 *             Whether the move is not authorized.
 	 */
 	public void shiftTopCardTo( CardsStack destination ) throws IllegalCardTypeException {
 		destination.push( this.cards.pop() );
 	}
-	
+
 	@Override
 	public boolean isEmpty() {
 		return this.cards.isEmpty();
 	}
-	
+
 	@Override
 	public Card pop() {
 		return cards.pop();
 	}
-	
+
 	@Override
 	public void push( Card item ) {
 		this.cards.push( item );
 	}
-	
+
 	@Override
 	public Card peek() {
 		return ( this.isEmpty() ) ? null : this.cards.peek();
 	}
-	
+
 	@Override
 	public int size() {
 		return this.cards.size();
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.cards.toString();

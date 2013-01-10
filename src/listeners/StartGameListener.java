@@ -8,13 +8,13 @@ import controller.MainController;
 public class StartGameListener implements ActionListener {
 
 	private MainController controller;
-	
-	public StartGameListener(MainController controller) {
+
+	public StartGameListener ( MainController controller ) {
 		this.controller = controller;
 	}
-	
+
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed( ActionEvent arg0 ) {
 		this.controller.startGame();
 	}
 

@@ -21,8 +21,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * XML parser used to parse the conf.xml file.
- * This file contains the number of {@link Card} instances contained within a deck.
+ * XML parser used to parse the conf.xml file. This file contains the number of
+ * {@link Card} instances contained within a deck.
  * 
  * @author Simon RENOULT
  * @version 1.0
@@ -44,7 +44,7 @@ public class XMLParser {
 	private static class XMLParserHolder {
 		private final static XMLParser INSTANCE = new XMLParser();
 	}
-	
+
 	private XMLParser () {
 
 		try {
@@ -52,10 +52,10 @@ public class XMLParser {
 		} catch ( ParserConfigurationException e ) {
 			e.printStackTrace();
 		}
-		
+
 		fileToParse = new File( pathToConfFile );
-		
-		if ( ! fileToParse.exists() ) {
+
+		if ( !fileToParse.exists() ) {
 			try {
 				throw new FileNotFoundException();
 			} catch ( FileNotFoundException e ) {
@@ -63,21 +63,23 @@ public class XMLParser {
 			}
 		}
 	}
-	
+
 	// -------------- GETTERS -------------- //
-	
+
 	public static XMLParser getInstance() {
 		return XMLParserHolder.INSTANCE;
 	}
-	
+
 	/**
-	 * Return the number of {@link Card} instances specified 
-	 * within the configuration file.
+	 * Return the number of {@link Card} instances specified within the
+	 * configuration file.
 	 * 
-	 * @param className Name of the class we are looking for.
-	 * @param value Name of the {@link Card} instance we are looking for 
-	 * (e.g. 25/50/... for {@link DistanceCard} or {@link CardType}.Speed 
-	 * for {@link HazardCard}/{@link SafetyCard}/{@link RemedyCard}).
+	 * @param className
+	 *            Name of the class we are looking for.
+	 * @param value
+	 *            Name of the {@link Card} instance we are looking for (e.g.
+	 *            25/50/... for {@link DistanceCard} or {@link CardType}.Speed
+	 *            for {@link HazardCard}/{@link SafetyCard}/{@link RemedyCard}).
 	 * @return The number of authorized instance.
 	 */
 	public int getQty( String className, String value ) {
@@ -92,26 +94,27 @@ public class XMLParser {
 		NodeList cards = rootTag.getElementsByTagName( "card" );
 
 		for ( int i = 0 ; i < cards.getLength() ; i++ ) {
-			
+
 			Node card = cards.item( i );
 			Node nodeClass = card.getAttributes().getNamedItem( "class" );
-			
+
 			if ( nodeClass.getNodeValue().equals( className ) ) {
-				
+
 				for ( int j = 0 ; j < card.getChildNodes().getLength() ; j++ ) {
 					if ( card.getChildNodes().item( j ).hasAttributes() ) {
-				
+
 						Node instance = card.getChildNodes().item( j );
-						String tag = ( className.equals ( "DistanceCard" ) ) ? "value" : "family";
-						
+						String tag = ( className.equals( "DistanceCard" ) ) ? "value" : "family";
+
 						if ( instance.getAttributes().getNamedItem( tag ).getNodeValue().equals( value ) ) {
-							return Integer.parseInt( instance.getAttributes().getNamedItem( "quantity" ).getNodeValue() );
+							return Integer
+									.parseInt( instance.getAttributes().getNamedItem( "quantity" ).getNodeValue() );
 						}
 					}
 				}
 			}
 		}
-		
+
 		return -1;
 	}
 }

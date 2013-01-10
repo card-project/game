@@ -9,7 +9,7 @@ import models.cards.Card;
  * @version 1.0
  */
 public class DiscardStack extends GameStack {
-	
+
 	private static class DiscardStackHolder {
 		private static final DiscardStack INSTANCE = new DiscardStack();
 	}
@@ -18,6 +18,6 @@ public class DiscardStack extends GameStack {
 		return DiscardStackHolder.INSTANCE;
 	}
 
-	private DiscardStack() {
+	private DiscardStack () {
 	}
 }

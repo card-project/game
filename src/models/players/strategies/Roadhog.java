@@ -13,9 +13,8 @@ import models.stacks.game.GameStack;
 /**
  * {@link AIPlayer} strategy.
  * 
- * Draw a hazard as soon as possible.
- * Play a hazard as soon as possible.
- * Discard a duplicate hazard.
+ * Draw a hazard as soon as possible. Play a hazard as soon as possible. Discard
+ * a duplicate hazard.
  * 
  * @author Adrien SAUNIER
  * @author Simon RENOULT
@@ -24,22 +23,22 @@ import models.stacks.game.GameStack;
 public class Roadhog extends Behavior {
 
 	// -------------- CONSTANTS -------------- //
-	
+
 	private static final int MAX_HAZARD = 2;
-	
+
 	// ------------ ATTRIBUTES ------------ //
-	
+
 	private ArrayList<Player> opponents;
-	
+
 	// ------------ CONSTRUCTORS ------------ //
-	
-	public Roadhog(AIPlayer player, ArrayList<Player> opponents) {
+
+	public Roadhog ( AIPlayer player, ArrayList<Player> opponents ) {
 		super( player );
 		this.opponents = opponents;
 	}
-	 	
+
 	// ------------ METHODS ------------ //
-	
+
 	/**
 	 * If no hazard in hand, draw a hazard if possible.
 	 */
@@ -47,24 +46,24 @@ public class Roadhog extends Behavior {
 	public GameStack chooseStackToDraw() {
 		Card discardedCard = DiscardStack.getInstance().peek();
 		GameStack chosenStack = null;
-		
+
 		if ( discardedCard != null ) {
-			if ( ! maxHazardIsReached() && ! owner.getHand().containsHazard() && discardedCard instanceof HazardCard ) {
+			if ( !maxHazardIsReached() && !owner.getHand().containsHazard() && discardedCard instanceof HazardCard ) {
 				for ( Player p : opponents ) {
-					if ( ! p.isProtectedFrom( ( ( HazardCard ) discardedCard ).getFamily() ) ) {
+					if ( !p.isProtectedFrom( ( ( HazardCard ) discardedCard ).getFamily() ) ) {
 						chosenStack = DiscardStack.getInstance();
 					}
 				}
 			}
-		} 
-		
+		}
+
 		return chosenStack;
 	}
 
 	@Override
 	public Card chooseCardToPlay() {
 		Card cardToPlay = null;
-		
+
 		for ( Card handCard : owner.getHand() ) {
 			if ( handCard instanceof HazardCard && cardToPlay == null ) {
 				for ( Player p : opponents ) {
@@ -74,13 +73,13 @@ public class Roadhog extends Behavior {
 				}
 			}
 		}
-		
+
 		return cardToPlay;
 	}
 
 	public Player chooseTargetToAttack() {
 		Player target = null;
-		
+
 		for ( Card handCard : owner.getHand() ) {
 			if ( handCard instanceof HazardCard && target == null ) {
 				for ( Player p : opponents ) {
@@ -90,15 +89,12 @@ public class Roadhog extends Behavior {
 				}
 			}
 		}
-		
+
 		return target;
 	}
 
 	/**
-	 * Priorities :
-	 * 1 : Protected types
-	 * 2 : Duplicate
-	 * 3 : 1st Hazard (~Random).
+	 * Priorities : 1 : Protected types 2 : Duplicate 3 : 1st Hazard (~Random).
 	 */
 	@Override
 	public Card chooseCardToDiscard() {
@@ -115,9 +111,9 @@ public class Roadhog extends Behavior {
 						}
 					}
 				}
-			}	
+			}
 		}
-		
+
 		if ( cardToDiscard == null ) {
 			Card tmp = null;
 			for ( Card handCard : owner.getHand() ) {
@@ -132,7 +128,7 @@ public class Roadhog extends Behavior {
 				}
 			}
 		}
-		
+
 		if ( cardToDiscard == null ) {
 			for ( Card handCard : owner.getHand() ) {
 				if ( handCard instanceof HazardCard && cardToDiscard == null ) {
@@ -143,7 +139,7 @@ public class Roadhog extends Behavior {
 
 		return cardToDiscard;
 	}
-	
+
 	private boolean maxHazardIsReached() {
 		int hazardCount = 0;
 		for ( Card c : owner.getHand() ) {
@@ -151,7 +147,7 @@ public class Roadhog extends Behavior {
 				hazardCount++;
 			}
 		}
-		
+
 		return hazardCount >= MAX_HAZARD;
 	}
 

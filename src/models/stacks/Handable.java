@@ -14,11 +14,11 @@ public interface Handable {
 	public boolean isEmpty();
 
 	public Card pop();
-	
+
 	public void push( Card item ) throws IllegalCardTypeException;
-	
+
 	public Card peek();
-	
+
 	public int size();
 
 	public String toString();

@@ -1,27 +1,26 @@
 package views.tui;
 
-
 /**
  * @author Simon RENOULT
  * @version 0.2.3
  */
 public class TUIGameView extends TUIView {
-	
+
 	// ------------ ATTRIBUTES ------------ //
-		
+
 	// ------------ CONSTRUCTORS ------------ //
-	
+
 	// ------------ METHODS ------------ //
 
 	public void tickBox( boolean isTrue ) {
 		super.inform( "[" + ( isTrue ? "V" : "X" ) + "]" );
 	}
-	
-	public void tickBox ( boolean isTrue, String information ) {
+
+	public void tickBox( boolean isTrue, String information ) {
 		tickBox( isTrue );
 		super.inform( " " + information );
 	}
-	
+
 	public String askDrawingStack( String topDiscardCard ) {
 		super.inform( "Discard stack : " + topDiscardCard + '\n' );
 		super.ask( "Which stack do you choose to draw on : [D]eck or [d]iscard ?" );
@@ -37,10 +36,10 @@ public class TUIGameView extends TUIView {
 		super.ask( playerListString, "What player do you target ? Please choose his or her index." );
 		return super.getAnswerAsInteger();
 	}
-	
+
 	public int askDiscardingCardChoice( String cardList ) {
-		super.ask( cardList, "Too many card in your hand. Which one do you discard ?" +
-				" Choose its index." );
+		super.ask( cardList, "Too many card in your hand. Which one do you discard ?" + " Choose its index." );
 		return Integer.valueOf( super.input.nextLine() );
 	}
+
 }

@@ -8,8 +8,7 @@ import models.players.Player;
 import models.stacks.game.DiscardStack;
 
 /**
- * Structure containing {@link Card} objects and belonging to a 
- * {@link Player}.
+ * Structure containing {@link Card} objects and belonging to a {@link Player}.
  * 
  * @author Simon RENOULT
  * @version 1.0
@@ -35,10 +34,11 @@ public class BattleStack extends PlayerStack {
 	}
 
 	/**
-	 * Discard every {@link HazardCard} existing in the current {@link BattleStack}.
+	 * Discard every {@link HazardCard} existing in the current
+	 * {@link BattleStack}.
 	 */
 	public void discardHazards() {
-		for ( int i = 0; i < super.cards.size(); i++ ) {
+		for ( int i = 0 ; i < super.cards.size() ; i++ ) {
 			if ( super.cards.get( i ) instanceof HazardCard ) {
 				try {
 					this.shiftTo( DiscardStack.getInstance(), super.cards.get( i ) );
@@ -48,7 +48,7 @@ public class BattleStack extends PlayerStack {
 			}
 		}
 	}
-	
+
 	public CardFamily getRemedyFamily() {
 		CardFamily cureFamily = null;
 		for ( Card c : this ) {
@@ -56,7 +56,7 @@ public class BattleStack extends PlayerStack {
 				cureFamily = c.getFamily();
 			}
 		}
-		
+
 		return cureFamily;
 	}
 

@@ -1,5 +1,5 @@
 package controller.gameProcessing;
 
-public class NetworkGameController{
+public class NetworkGameController {
 
 }

@@ -8,20 +8,20 @@ import controller.BasicController;
 public class BackToMenuListener implements ActionListener {
 
 	// ------------ ATTRIBUTES ------------ //
-	
+
 	private BasicController controller;
-	
+
 	// ------------ CONSTRUCTORS ------------ //
-	
-	public BackToMenuListener(BasicController b) {
+
+	public BackToMenuListener ( BasicController b ) {
 		this.controller = b;
 	}
-	
+
 	// ------------ METHODS ------------ //
-	
+
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed( ActionEvent arg0 ) {
 		this.controller.displayMenuView();
 	}
-	
+
 }

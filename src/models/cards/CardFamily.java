@@ -14,22 +14,22 @@ public enum CardFamily {
 		CardType type = null;
 		if ( c.isAssignableFrom( DistanceCard.class ) && this == Speed ) {
 			switch ( rangeValue ) {
-			case 25:
+			case 25 :
 				type = CardType.Distance25;
 				break;
-			case 50:
+			case 50 :
 				type = CardType.Distance50;
 				break;
-			case 75:
+			case 75 :
 				type = CardType.Distance75;
 				break;
-			case 100:
+			case 100 :
 				type = CardType.Distance100;
 				break;
-			case 200:
+			case 200 :
 				type = CardType.Distance200;
 				break;
-			} 
+			}
 		}
 		return type;
 	}

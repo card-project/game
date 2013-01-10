@@ -13,7 +13,7 @@ import models.stacks.player.PlayerStack;
  * @author Simon RENOULT
  * @version 1.0
  */
-public class HazardCard extends Card implements Serializable{
+public class HazardCard extends Card implements Serializable {
 
 	// ------------ ATTRIBUTES ------------ //
 
@@ -25,22 +25,25 @@ public class HazardCard extends Card implements Serializable{
 
 	// ------------ CONSTRUCTORS ------------ //
 
-	protected HazardCard( CardFamily initialFamily, CardType cardType ) {
+	protected HazardCard ( CardFamily initialFamily, CardType cardType ) {
 		super( initialFamily, cardType );
 	}
-	
+
 	private static final long serialVersionUID = -8040643519581431370L;
-	
+
 	// ------------ METHODS ------------ //
 
 	/**
-	 * Whether the current {@link HazardCard} is playable on the chosen opponent.
+	 * Whether the current {@link HazardCard} is playable on the chosen
+	 * opponent.
 	 * 
-	 * @param opponent {@link Player} chosen as a target.
-	 * @return Whether the current {@link DistanceCard} is playable on the chosen target.
+	 * @param opponent
+	 *            {@link Player} chosen as a target.
+	 * @return Whether the current {@link DistanceCard} is playable on the
+	 *         chosen target.
 	 */
 	public boolean isPlayableOn( Player opponent ) {
-		if ( ! opponent.hasStarted() ) {
+		if ( !opponent.hasStarted() ) {
 			return false;
 		} else {
 			if ( opponent.isProtectedFrom( this.getFamily() ) ) {
@@ -53,32 +56,36 @@ public class HazardCard extends Card implements Serializable{
 				}
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * Play the current {@link HazardCard} on the chosen {@link Player} and take it
-	 * off from his hand. Determine also whether this move implies the player to replay.
+	 * Play the current {@link HazardCard} on the chosen {@link Player} and take
+	 * it off from his hand. Determine also whether this move implies the player
+	 * to replay.
 	 * 
-	 * @param p {@link Player} who plays the {@link HazardCard}.
-	 * @return Whether the {@link Player} replay after this {@link Card} has been played. 
+	 * @param p
+	 *            {@link Player} who plays the {@link HazardCard}.
+	 * @return Whether the {@link Player} replay after this {@link Card} has
+	 *         been played.
 	 */
 	public boolean playOn( Player p, Player opponent ) throws AvailableCoupFourreException {
-		
+
 		if ( opponent.getHand().hasSafetyFor( this.getFamily() ) ) {
 			SafetyCard c = opponent.getHand().getSafetyOf( this.getFamily() );
 			throw new AvailableCoupFourreException( c, opponent, this );
 		} else {
-			PlayerStack destination = ( this.getFamily() == CardFamily.Speed ) ? opponent.getDistanceStack() : opponent.getBattleStack();
-			
+			PlayerStack destination = ( this.getFamily() == CardFamily.Speed ) ? opponent.getDistanceStack() : opponent
+					.getBattleStack();
+
 			try {
 				p.getHand().shiftTo( destination, this );
 			} catch ( IllegalCardTypeException e ) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return false;
 	}
 }

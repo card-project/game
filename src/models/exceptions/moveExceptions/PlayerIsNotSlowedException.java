@@ -2,7 +2,7 @@ package models.exceptions.moveExceptions;
 
 public class PlayerIsNotSlowedException extends IllegalMoveException {
 
-	public PlayerIsNotSlowedException( String string ) {
+	public PlayerIsNotSlowedException ( String string ) {
 		super( string );
 	}
 

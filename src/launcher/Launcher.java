@@ -1,16 +1,16 @@
 package launcher;
 
 import models.Game;
-import controller.MainController;
+import controllers.tui.TUIController;
 
 public class Launcher {
 
-	public static void main(String[] args) {
-		
+	public static void main( String[] args ) {
+
 		Game gameModel = new Game();
-		/*MainController controller = new MainController(gameModel);*/
-		
-		
+		/* MainController controller = new MainController(gameModel); */
+		new TUIController( gameModel ).run();
+
 	}
-	
+
 }

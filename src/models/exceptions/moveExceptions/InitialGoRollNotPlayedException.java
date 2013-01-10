@@ -2,11 +2,11 @@ package models.exceptions.moveExceptions;
 
 public class InitialGoRollNotPlayedException extends IllegalMoveException {
 
-	public InitialGoRollNotPlayedException() {
+	public InitialGoRollNotPlayedException () {
 		super( "Initial GoRoll card has not been played yet." );
 	}
-	
-	public InitialGoRollNotPlayedException( String string ) {
+
+	public InitialGoRollNotPlayedException ( String string ) {
 		super( string );
 	}
 

@@ -9,8 +9,7 @@ import models.players.Player;
 import models.stacks.game.DiscardStack;
 
 /**
- * Structure containing {@link Card} objects and belonging
- * to a {@link Player}.
+ * Structure containing {@link Card} objects and belonging to a {@link Player}.
  * 
  * @author Simon RENOULT
  * @version 1.0.1
@@ -18,16 +17,16 @@ import models.stacks.game.DiscardStack;
 public class DistanceStack extends PlayerStack {
 
 	// ------------ CONSTANTS ------------ //
-	
+
 	public static final int MAX_DISTANCE200 = 2;
 	public static final int BONUS_100 = 100;
 	public static final int BONUS_300 = 300;
-	
+
 	// ------------ ATTRIBUTES ------------ //
 
 	private int BONUS_100_CPT = 0;
 	private int BONUS_300_CPT = 0;
-	
+
 	// ------------ METHODS ------------ //
 
 	@Override
@@ -40,24 +39,26 @@ public class DistanceStack extends PlayerStack {
 
 		super.cards.push( item );
 	}
-	
+
 	/**
 	 * Get the amount of driven kilometers.
+	 * 
 	 * @return The amount of driven kilometers.
 	 */
 	public int getTraveledDistance() {
 		int currentDistance = 0;
-		for( Card c : super.cards ) {
+		for ( Card c : super.cards ) {
 			if ( c instanceof DistanceCard ) {
-				currentDistance += ( (DistanceCard ) c ).getRange();
+				currentDistance += ( ( DistanceCard ) c ).getRange();
 			}
 		}
-		
+
 		return currentDistance + BONUS_100 * BONUS_100_CPT + BONUS_300 * BONUS_300_CPT;
 	}
-	
+
 	/**
 	 * Check whether the max number of Distance 200 is reached.
+	 * 
 	 * @return Whether the maximum distance 200 is reached.
 	 */
 	public Boolean maxNumberOfDistance200IsReached() {
@@ -69,15 +70,16 @@ public class DistanceStack extends PlayerStack {
 				}
 			}
 		}
-		
+
 		return distances200Counter == MAX_DISTANCE200;
 	}
 
 	/**
-	 * Discard every {@link HazardCard} existing in the current {@link DistanceStack}.
+	 * Discard every {@link HazardCard} existing in the current
+	 * {@link DistanceStack}.
 	 */
 	public void discardHazards() {
-		for ( int i = 0; i < super.cards.size() ; i++ ) {
+		for ( int i = 0 ; i < super.cards.size() ; i++ ) {
 			if ( super.cards.get( i ) instanceof HazardCard ) {
 				try {
 					shiftTo( DiscardStack.getInstance(), super.cards.get( i ) );
@@ -87,7 +89,7 @@ public class DistanceStack extends PlayerStack {
 			}
 		}
 	}
-	
+
 	public void increaseBy100() {
 		BONUS_100_CPT++;
 	}
@@ -95,18 +97,18 @@ public class DistanceStack extends PlayerStack {
 	public void increaseBy300() {
 		BONUS_300_CPT++;
 	}
-	
+
 	public int getBonus100() {
 		return this.BONUS_100_CPT;
 	}
-	
+
 	public int getBonus300() {
 		return this.BONUS_300_CPT;
 	}
-	
+
 	public void resetBonuses() {
 		BONUS_100_CPT = 0;
 		BONUS_300_CPT = 0;
 	}
-	
+
 }

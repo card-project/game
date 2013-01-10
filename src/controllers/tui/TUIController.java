@@ -27,9 +27,10 @@ public class TUIController {
 	 * Build the unique TUIController object and assign the predefined Game
 	 * object to the object attribute.
 	 * 
-	 * @param g Game object to work on.
+	 * @param g
+	 *            Game object to work on.
 	 */
-	public TUIController( Game g ) {
+	public TUIController ( Game g ) {
 		this.currentGame = g;
 	}
 
@@ -43,7 +44,7 @@ public class TUIController {
 
 		TUIGamePreparationController tgpc = new TUIGamePreparationController( new TUIGamePreparationView(), currentGame );
 		tgpc.run();
-		
+
 		new TUIGameController( new TUIGameView(), currentGame ).run( tgpc.getFirstPlayerIndex() );
 	}
 

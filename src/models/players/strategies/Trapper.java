@@ -19,24 +19,24 @@ import models.players.Player;
 public class Trapper extends Protector {
 
 	// ------------ CONSTRUCTORS ------------ //
-	
-	public Trapper( AIPlayer player, ArrayList<Player> opponents ) {
+
+	public Trapper ( AIPlayer player, ArrayList<Player> opponents ) {
 		super( player, opponents );
 	}
-	
+
 	// ------------ METHODS ------------ //
 
 	@Override
 	public Card chooseCardToPlay() {
 		Card chosenCard = null;
-		
+
 		if ( owner.isAttacked() ) {
 			CardFamily attackingFamily = owner.getBattleStack().peek().getFamily();
 			chosenCard = owner.getHand().getRemedyOf( attackingFamily );
 		} else if ( owner.isSlowed() ) {
 			chosenCard = owner.getHand().getRemedyOf( CardFamily.Speed );
-		} 
-		
+		}
+
 		return chosenCard;
 	}
 }

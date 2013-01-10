@@ -1,9 +1,8 @@
 package models.exceptions.moveExceptions;
 
-
 public class UnsuitableRemedyException extends IllegalMoveException {
 
-	public UnsuitableRemedyException( String string ) {
+	public UnsuitableRemedyException ( String string ) {
 		super( string );
 	}
 

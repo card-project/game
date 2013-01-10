@@ -2,12 +2,12 @@ package models.exceptions.moveExceptions;
 
 public class PlayerIsProtectedException extends IllegalMoveException {
 
-	public PlayerIsProtectedException( String string ) {
+	public PlayerIsProtectedException ( String string ) {
 		super( string );
 	}
 
-	public PlayerIsProtectedException() {
-		this("Your opponent is protected from this kind of attack.");
+	public PlayerIsProtectedException () {
+		this( "Your opponent is protected from this kind of attack." );
 	}
 
 	/**

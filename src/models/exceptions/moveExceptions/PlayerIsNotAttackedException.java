@@ -2,7 +2,7 @@ package models.exceptions.moveExceptions;
 
 public class PlayerIsNotAttackedException extends IllegalMoveException {
 
-	public PlayerIsNotAttackedException( String string ) {
+	public PlayerIsNotAttackedException ( String string ) {
 		super( string );
 	}
 
