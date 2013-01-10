@@ -17,7 +17,7 @@ import server.instructions.ConnectedToLounge;
 import server.instructions.Instruction;
 import server.instructions.JoinLounge;
 import server.instructions.LoungeNoLongerExists;
-import view.BasicView;
+import views.BasicView;
 import controller.gameProcessing.GameController;
 
 public class NetworkGameController extends GameController {

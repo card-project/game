@@ -10,8 +10,8 @@ import listeners.LoungeListener;
 
 import events.LoungeFoundEvent;
 
-import view.BasicView;
-import view.gui.GameWindow;
+import views.BasicView;
+import views.gui.GameWindow;
 
 public class FindServerThread extends BasicControllerThread {
 	

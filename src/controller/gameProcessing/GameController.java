@@ -6,7 +6,7 @@ import models.Game;
 import models.cards.Card;
 import models.players.Player;
 import models.stacks.game.GameStack;
-import view.BasicView;
+import views.BasicView;
 import controller.MainController;
 
 

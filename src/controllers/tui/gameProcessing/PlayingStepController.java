@@ -57,7 +57,7 @@ public class PlayingStepController extends StepController {
 		return replay;
 	}
 	
-	private boolean performAIPlayingStep() {
+	private boolean performAIPlayingStep() throws AvailableCoupFourreException {
 		boolean replay = ( ( AIPlayer ) super.currentPlayer ).play( );
 		
 		tui.inform( "Battle stack : " + currentPlayer.getBattleStack().toString() + '\n' );

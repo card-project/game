@@ -8,7 +8,8 @@ public class Launcher {
 	public static void main(String[] args) {
 		
 		Game gameModel = new Game();
-		MainController controller = new MainController(gameModel);
+		/*MainController controller = new MainController(gameModel);*/
+		
 		
 	}
 	

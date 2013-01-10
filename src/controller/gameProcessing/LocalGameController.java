@@ -9,7 +9,7 @@ import models.players.AIPlayer;
 import models.players.HumanPlayer;
 import models.players.Player;
 import models.stacks.game.GameStack;
-import view.BasicView;
+import views.BasicView;
 import controller.MainController;
 import controller.gamePreparator.OnePlayerGamePreparator;
 

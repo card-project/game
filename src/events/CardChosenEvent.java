@@ -2,7 +2,7 @@ package events;
 
 import java.util.EventObject;
 
-import view.gui.panel.assets.CardIcon;
+import views.gui.panel.assets.CardIcon;
 
 public class CardChosenEvent extends EventObject {
 

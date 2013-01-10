@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import models.Game;
 import models.players.HumanPlayer;
-import view.Viewable;
+import views.Viewable;
 import controller.gameProcessing.GameController;
 import controller.threads.BasicControllerThread;
 
