@@ -56,14 +56,14 @@ public class Brain implements Strategy, Serializable {
 	private void initStrategies() {
 		switch ( new Random().nextInt( 3 ) ) {
 		case 0 :
+			this.mind.add( new Roadhog( this.owner, opponents ) );
 			this.mind.add( new Driver( this.owner, distanceGoal ) );
 			this.mind.add( new Protector( this.owner, opponents ) );
-			this.mind.add( new Roadhog( this.owner, opponents ) );
 			break;
 		case 1 :
 			this.mind.add( new Roadhog( this.owner, opponents ) );
-			this.mind.add( new Driver( this.owner, distanceGoal ) );
 			this.mind.add( new Protector( this.owner, opponents ) );
+			this.mind.add( new Driver( this.owner, distanceGoal ) );
 			break;
 		case 2 :
 			this.mind.add( new Driver( this.owner, distanceGoal ) );
