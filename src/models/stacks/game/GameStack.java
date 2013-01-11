@@ -104,4 +104,9 @@ public abstract class GameStack extends CardsStack {
 	public String toString() {
 		return this.cards.toString();
 	}
+
+	public void removeAll() {
+		this.cards.clear();
+	}
+
 }

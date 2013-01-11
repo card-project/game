@@ -8,24 +8,13 @@
 		<instance value="200" quantity="3"></instance>
 	</card>
 	<card class="HazardCard">
-		<instance family="Speed" value="SpeedLimit" quantity="2"></instance>
-		<instance family="GoStop" value="Stop" quantity="2"></instance>
-		<instance family="Tire" value="FlatTire" quantity="2"></instance>
-		<instance family="Gas" value="OutOfGas" quantity="2"></instance>
-		<instance family="StateOfCar" value="Accident" quantity="2"></instance>
+		<instance family="GoStop" value="Stop" quantity="10"></instance>
 	</card>
 	<card class="RemedyCard">
-		<instance family="Speed" value="EndOfLimit" quantity="4"></instance>
-		<instance family="GoStop" value="GoRoll" quantity="5"></instance>
-		<instance family="Tire" value="SpareTire" quantity="4"></instance>
-		<instance family="Gas" value="Gasoline" quantity="4"></instance>
-		<instance family="StateOfCar" value="Repairs" quantity="4"></instance>
+		<instance family="GoStop" value="GoRoll" quantity="10"></instance>
 	</card>
 	<card class="SafetyCard">
-		<instance family="Speed" value="RightOfWay" quantity="1"></instance>
-		<instance family="GoStop" value="RightOfWay" quantity="1"></instance>
-		<instance family="Tire" value="PunctureProof" quantity="1"></instance>
-		<instance family="Gas" value="ExtraTank" quantity="1"></instance>
-		<instance family="StateOfCar" value="DrivingAce" quantity="1"></instance>
+		<instance family="Speed" value="RightOfWay" quantity="20"></instance>
+		<instance family="GoStop" value="RightOfWay" quantity="20"></instance>
 	</card>
 </game>

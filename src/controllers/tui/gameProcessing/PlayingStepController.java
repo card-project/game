@@ -85,7 +85,11 @@ public class PlayingStepController extends StepController {
 
 				if ( chosenCard instanceof HazardCard ) {
 					chosenTarget = this.chooseTarget( super.currentPlayer, ( HazardCard ) chosenCard );
-					userChoiceIsCorrect = ( ( HazardCard ) chosenCard ).isPlayableOn( chosenTarget );
+					if ( chosenTarget == null ) {
+						userChoiceIsCorrect = false;
+					} else {
+						userChoiceIsCorrect = ( ( HazardCard ) chosenCard ).isPlayableOn( chosenTarget );
+					}
 				} else {
 					chosenTarget = super.currentPlayer;
 					if ( chosenCard instanceof DistanceCard ) {
@@ -162,24 +166,29 @@ public class PlayingStepController extends StepController {
 		boolean userChoiceIsCorrect = true;
 		int opponentIndex = 0;
 		ArrayList<Player> opponents = this.currentGame.getAttackableOpponents( currentPlayer, c );
+		
+		if ( opponents.size() == 0 ) {
+			return null;
+		} else {
+			do {
 
-		do {
+				userChoiceIsCorrect = true;
 
-			userChoiceIsCorrect = true;
+				try {
+					opponentIndex = tui.askTargetingOpponent( this.getAliases( opponents ) );
+				} catch ( NumberFormatException e ) {
+					tui.warn( "Please enter a number." );
+					userChoiceIsCorrect = false;
+				}
 
-			try {
-				opponentIndex = tui.askTargetingOpponent( this.getAliases( opponents ) );
-			} catch ( NumberFormatException e ) {
-				tui.warn( "Please enter a number." );
-				userChoiceIsCorrect = false;
-			}
+				if ( opponents.get( opponentIndex - 1 ) == null ) {
+					tui.warn( "Please choose a correct index." );
+					userChoiceIsCorrect = false;
+				}
 
-			if ( opponents.get( opponentIndex - 1 ) == null ) {
-				tui.warn( "Please choose a correct index." );
-				userChoiceIsCorrect = false;
-			}
-
-		} while ( !userChoiceIsCorrect );
+			} while ( !userChoiceIsCorrect );
+		}
+		
 
 		return opponents.get( opponentIndex - 1 );
 	}

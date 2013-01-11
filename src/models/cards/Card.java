@@ -21,7 +21,6 @@ public abstract class Card implements Serializable {
 
 	// ------------ ATTRIBUTES ------------ //
 
-	protected String confFilePath = "./conf.xml";
 	protected ArrayList<CardFamily> families = null;
 	protected CardType type = null;
 	private static final long serialVersionUID = -6300647029223207777L;

@@ -10,7 +10,6 @@ import models.cards.Card;
 import models.cards.DistanceCard;
 import models.cards.HazardCard;
 import models.exceptions.AliasAlreadyChosenException;
-import models.exceptions.IllegalCardTypeException;
 import models.exceptions.IllegalDistanceException;
 import models.exceptions.IllegalHumanPlayerNumberException;
 import models.exceptions.IllegalPlayerNumberException;
@@ -253,6 +252,21 @@ public class Game implements Serializable {
 		return this.getCurrentPlayer().getTraveledDistance() == this.getGoal();
 	}
 
+	public Player getFurthestPlayer() {
+		Player winner = null;
+		for ( Player p : this.players ) {
+			if ( winner == null ) {
+				winner = p;
+			} else {
+				if ( p.getTraveledDistance() > winner.getTraveledDistance() ) {
+					winner = p;
+				}
+			}
+		}
+		
+		return winner;
+	}
+	
 	// ------------ EVENT && LISTENERS ------------ //
 
 	public void addEventListener( GameEventListener listener ) {
@@ -293,19 +307,20 @@ public class Game implements Serializable {
 		this.getCurrentPlayer().fireDiscardCardEvent();
 	}
 
-	public void switchDeckAndDiscard() {
-		if ( this.getDeckStack().isEmpty() ) {
-			Card topDiscardCard = this.getDiscardStack().pop();
-
-			for ( int i = 0 ; i < this.getDiscardStack().size() ; i++ ) {
-				try {
-					this.getDiscardStack().shiftTopCardTo( this.getDeckStack() );
-				} catch ( IllegalCardTypeException e ) {
-					e.printStackTrace();
-				}
-			}
-
-			this.getDiscardStack().push( topDiscardCard );
+	public void setDiscardCardsAsDeckStack() {
+		Card topDiscardedCard = null;
+		
+		if ( ! this.discardStack.isEmpty() ) {
+			topDiscardedCard = this.discardStack.pop();
+		}
+		
+		int size = this.getDiscardStack().size();
+		for ( int i = 0 ; i < size ; i++ ) {
+			this.getDeckStack().push( this.getDiscardStack().pop() );
+		}
+		
+		if ( topDiscardedCard != null ) {
+			this.discardStack.push( topDiscardedCard );
 		}
 	}
 

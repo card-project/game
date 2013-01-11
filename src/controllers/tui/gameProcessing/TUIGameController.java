@@ -97,21 +97,30 @@ public class TUIGameController {
 
 			this.discardCard( currentPlayer );
 
-			gameIsOver = currentPlayer.getTraveledDistance() == currentGame.getGoal();
-
-			if ( !gameIsOver && !replay ) {
-				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getPlayers().length - 1 ) ? 0
-						: currentPlayerIndex;
+			if ( currentPlayer.getTraveledDistance() == currentGame.getGoal() ) {
+				gameIsOver = true;
+			} else if ( ! currentGame.distanceCardStillPlayable() ) {
+				gameIsOver = true;
+			} else {
+				gameIsOver = false;
+			}
+			
+			if ( ! gameIsOver && !replay ) {
+				currentPlayerIndex = ( ++currentPlayerIndex > currentGame.getPlayers().length - 1 ) ? 0 : currentPlayerIndex;
 				currentPlayer = currentGame.getPlayers()[currentPlayerIndex];
 
 				if ( currentGame.getDeckStack().isEmpty() ) {
-					this.currentGame.switchDeckAndDiscard();
+					this.currentGame.setDiscardCardsAsDeckStack();
 				}
 			}
 
-		} while ( !gameIsOver /* || this.currentGame.distanceCardStillPlayable() */);
+		} while ( ! gameIsOver );
 
-		tui.inform( currentPlayer.getAlias() + " has won !" );
+		if ( currentPlayer.getTraveledDistance() == currentGame.getGoal() ) {
+			tui.inform( currentPlayer.getAlias() + " has won !" );
+		} else if ( ! currentGame.distanceCardStillPlayable() ) {
+			tui.inform( currentGame.getFurthestPlayer().getAlias() + " has won !" );
+		}
 	}
 
 	private void showTitle( Player p ) {

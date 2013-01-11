@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import models.cards.CardFactory;
 import models.exceptions.AliasAlreadyChosenException;
+import models.exceptions.IllegalCardTypeException;
 import models.exceptions.IllegalDistanceException;
 import models.exceptions.IllegalHumanPlayerNumberException;
 import models.exceptions.IllegalPlayerNumberException;
@@ -30,7 +32,7 @@ public class GameTest {
 
 	// ------------ ATTRIBUTES ------------ //
 
-	private static Game testGame;
+	private Game testGame;
 
 	// ------------ METHODS ------------ //
 
@@ -226,4 +228,11 @@ public class GameTest {
 		assertNotNull( testGame.getGoal() );
 	}
 
+	@Test public void testDistanceCardStillPlayable() throws IllegalCardTypeException {
+		System.out.println( this.testGame.distanceCardStillPlayable() );
+		this.testGame.getDeckStack().removeAll();
+		System.out.println( this.testGame.distanceCardStillPlayable() );
+		this.testGame.getPlayers()[0].getHand().push( CardFactory.createDistance( 25 ) );
+		System.out.println( this.testGame.distanceCardStillPlayable() );	
+	}
 }
