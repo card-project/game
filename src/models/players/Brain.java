@@ -54,7 +54,7 @@ public class Brain implements Strategy, Serializable {
 	// -------------- PRIVATE API -------------- //
 
 	private void initStrategies() {
-		switch ( new Random().nextInt( 3 ) ) {
+		switch ( new Random().nextInt( 1 ) ) {
 		case 0 :
 			this.mind.add( new Roadhog( this.owner, opponents ) );
 			this.mind.add( new Driver( this.owner, distanceGoal ) );

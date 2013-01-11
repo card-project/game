@@ -66,7 +66,6 @@ public class AIPlayer extends Player {
 			try {
 				replay = ( ( HazardCard ) chosenCard ).playOn( this, target );
 			} catch ( AvailableCoupFourreException e ) {
-				e.printStackTrace();
 			}
 		}
 
